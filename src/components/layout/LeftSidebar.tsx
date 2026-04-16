@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getAuthState, subscribeAuthChanged, logout, type AuthState } from "../../features/Login/auth";
+import footerLogo from '../../assets/images/footer/footer.png';
 
 type LeftSidebarProps = {
     isHome: boolean;
@@ -194,7 +195,7 @@ export default function LeftSidebar( {isHome }: LeftSidebarProps) {
                 </div>
             </div>
             <div className="">
-                <img src="../src/assets/images/footer/footer.png" className="w-[150px] h-[200px] object-contain" alt="푸터이미지"/>
+                <img src={footerLogo} className="w-[150px] h-[200px] object-contain" alt="푸터이미지"/>
             </div>
         </div>
 

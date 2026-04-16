@@ -8,7 +8,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                cic: ['"CIC Sans"', 'sans-serif'],
+                cic: ['CIC-Sans', 'sans-serif'],
             },
         },
     },
