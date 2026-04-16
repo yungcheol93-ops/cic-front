@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getAuthState, subscribeAuthChanged, logout, type AuthState } from "../../api/auth.api.ts";
-import footerLogo from '../../../public/images/footer/footer.png';
+import footerLogo from "../../../public/images/footer/footer.png";
 
 type LeftSidebarProps = {
     isHome: boolean;
@@ -38,27 +38,12 @@ function buildMenus(auth: AuthState | null): Menu[] {
                 { label: "Contract", path: "/Studio/Contract" },
             ],
         },
-        {
-            key: "Contact",
-            label: "Contact", path: "/Contact"
-
-        },
-        {
-            key: "About",
-            label: "About", path: "/About"
-
-        },
+        { key: "Contact", label: "Contact", path: "/Contact" },
+        { key: "About", label: "About", path: "/About" },
     ];
 
     if (!auth) {
-        return [
-            ...base,
-            {
-                key: "Login",
-                label: "Login",
-                path: "/Login",
-            },
-        ];
+        return [...base, { key: "Login", label: "Login", path: "/Login" }];
     }
 
     if (auth.role === "admin") {
@@ -72,41 +57,27 @@ function buildMenus(auth: AuthState | null): Menu[] {
                     { label: "일정표", path: "/Admin/Schedule" },
                 ],
             },
-            {
-                key: "Logout",
-                label: "로그아웃",
-                path: "/Login",
-            },
+            { key: "Logout", label: "로그아웃", path: "/Login" },
         ];
     }
 
     return [
         ...base,
         { key: "MyProject", label: "내프로젝트", path: "/MyProject" },
-        {
-            key: "Logout",
-            label: "로그아웃",
-            path: "/Login",
-        },
+        { key: "Logout", label: "로그아웃", path: "/Login" },
     ];
 }
 
-export default function LeftSidebar( {isHome }: LeftSidebarProps) {
+export default function LeftSidebar({ isHome }: LeftSidebarProps) {
     const [auth, setAuth] = useState<AuthState | null>(null);
     const menus = useMemo(() => buildMenus(auth), [auth]);
-    const [active, setActive] = useState<string>(menus[0]?.key ?? "Works");
 
-    const activeMenu = menus.find((m) => m.key === active);
+    const [hovered, setHovered] = useState<string | null>(null);
+
     const navigate = useNavigate();
     const location = useLocation();
 
-    useEffect(() => {
-        setAuth(getAuthState());
-        return subscribeAuthChanged(() => {
-            setAuth(getAuthState());
-        });
-    }, []);
-
+    //  현재 라우트 기준
     const routeMainKey = useMemo(() => {
         if (location.pathname.startsWith("/Works")) return "Works";
         if (location.pathname.startsWith("/Studio")) return "Studio";
@@ -115,29 +86,41 @@ export default function LeftSidebar( {isHome }: LeftSidebarProps) {
         if (location.pathname.startsWith("/Admin")) return "Admin";
         if (location.pathname.startsWith("/Login")) return "Login";
         if (location.pathname.startsWith("/MyProject")) return "MyProject";
-        return menus[0]?.key ?? "Works";
-    }, [location.pathname, menus]);
+        return null;
+    }, [location.pathname]);
+
+    // ✅ hover 우선, 없으면 route
+    const currentMenuKey = hovered ?? routeMainKey;
+    const activeMenu = menus.find((m) => m.key === currentMenuKey);
 
     useEffect(() => {
-        setActive(routeMainKey);
-    }, [routeMainKey]);
+        setAuth(getAuthState());
+        return subscribeAuthChanged(() => {
+            setAuth(getAuthState());
+        });
+    }, []);
 
     return (
         <div className="flex flex-col justify-between h-full">
             <div className="pt-16">
                 {/* 로고 */}
                 <div className="mb-10">
-                    <p className="font-cic tracking-wide text-2xl">
+                    <p
+                        className="font-cic tracking-wide text-2xl text-black cursor-pointer"
+                        onClick={() => navigate("/")}
+                    >
                         CIC Studio
                     </p>
                 </div>
 
-                {/* 메인 + 서브를 가로로 나란히 */}
-                <div className="flex pt-4 gap-10 ">
+                <div
+                    className="flex pt-4 gap-5"
+                    onMouseLeave={() => setHovered(null)}
+                >
                     {/* 메인 메뉴 */}
                     <nav className="space-y-3">
                         {menus.map((menu) => {
-                            const isActiveMain = routeMainKey === menu.key;
+                            const isActive = currentMenuKey === menu.key;
 
                             const baseColor = isHome ? "text-white" : "text-zinc-400";
                             const activeColor = isHome ? "text-zinc-500" : "text-zinc-700";
@@ -145,7 +128,7 @@ export default function LeftSidebar( {isHome }: LeftSidebarProps) {
                             return (
                                 <button
                                     key={menu.key}
-                                    onMouseEnter={() => setActive(menu.key)}
+                                    onMouseEnter={() => setHovered(menu.key)}
                                     onClick={() => {
                                         if (menu.key === "Logout") {
                                             logout();
@@ -156,7 +139,9 @@ export default function LeftSidebar( {isHome }: LeftSidebarProps) {
                                     }}
                                     className={
                                         "font-cic font-light tracking-wide block text-left text-l uppercase transition " +
-                                        (isActiveMain ? activeColor : baseColor)
+                                        (isActive
+                                            ? activeColor
+                                            : baseColor + " hover:text-zinc-500")
                                     }
                                 >
                                     {menu.label}
@@ -165,9 +150,16 @@ export default function LeftSidebar( {isHome }: LeftSidebarProps) {
                         })}
                     </nav>
 
-                    {/* 서브 메뉴 (옆에) */}
-                    <div className="min-w-[120px]">
-                        {activeMenu?.sub && activeMenu.sub.length > 0 && (
+                    {/* 서브 메뉴 */}
+                    <div
+                        className="min-w-[120px]"
+                        onMouseEnter={() => {
+                            if (!hovered && routeMainKey) {
+                                setHovered(routeMainKey);
+                            }
+                        }}
+                    >
+                        {activeMenu?.sub && (
                             <ul className="space-y-1 text-md">
                                 {activeMenu.sub.map((item) => {
                                     const isActive = location.pathname === item.path;
@@ -190,15 +182,17 @@ export default function LeftSidebar( {isHome }: LeftSidebarProps) {
                             </ul>
                         )}
                     </div>
-
-
                 </div>
             </div>
-            <div className="">
-                <img src={footerLogo} className="w-[150px] h-[200px] object-contain" alt="푸터이미지"/>
+
+            {/* 하단 이미지 */}
+            <div>
+                <img
+                    src={footerLogo}
+                    className="w-[150px] h-[200px] object-contain"
+                    alt="푸터이미지"
+                />
             </div>
         </div>
-
-
     );
 }

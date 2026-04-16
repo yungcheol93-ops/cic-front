@@ -191,126 +191,128 @@ export default function AdminProjectDetailPage() {
     };
 
     return (
-        <div className="h-full min-h-screen px-16 py-16">
+        <div className="h-full min-h-screen px-4 md:px-16 py-10 md:py-16">
             {/* 상단 */}
-            <section className="bg-white border rounded-xl p-6 mb-6 shadow-sm flex justify-between items-start">
+            <section className="bg-white border rounded-xl p-4 md:p-6 mb-6 shadow-sm
+                flex flex-col md:flex-row md:justify-between md:items-start gap-6">
 
-                {/* 좌측: 정보 */}
-                <div className="space-y-5 w-full max-w-xl">
+                {/* 좌측 */}
+                <div className="space-y-5 w-full md:max-w-xl">
 
-                    <div className="flex items-center gap-4">
-                        <p className="w-24 text-sm text-gray-500">프로젝트</p>
+                    {/* 프로젝트 */}
+                    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                        <p className="text-sm text-gray-500 md:w-24">프로젝트</p>
 
-                        <div className="flex-1 flex items-center gap-2">
-
-                            {/* 코드 */}
+                        <div className="flex flex-col md:flex-row gap-2 w-full">
                             {isEdit ? (
-                                <input
-                                    value={project.projectCode}
-                                    onChange={(e) =>
-                                        setProject({ ...project, projectCode: e.target.value })
-                                    }
-                                    className="flex-1 border rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-black"
-                                />
+                                <>
+                                    <input
+                                        value={project.projectCode}
+                                        onChange={(e) =>
+                                            setProject({ ...project, projectCode: e.target.value })
+                                        }
+                                        className="w-full border px-3 py-2 rounded text-gray-500"
+                                    />
+                                    <input
+                                        value={project.name}
+                                        onChange={(e) =>
+                                            setProject({ ...project, name: e.target.value })
+                                        }
+                                        className="w-full border px-3 py-2 rounded text-gray-500"
+                                    />
+                                </>
                             ) : (
-                                <p className="flex-1 px-3 py-2 text-gray-700 border rounded-md bg-gray-50">
-                                    {project.projectCode}
-                                </p>
-                            )}
-
-                            {/* 이름 */}
-                            {isEdit ? (
-
-                                <input
-                                    value={project.name}
-                                    onChange={(e) =>
-                                        setProject({ ...project, name: e.target.value })
-                                    }
-                                    className="flex-1 border rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-black"
-                                />
-                            ) : (
-                                <p className="flex-1 px-3 py-2 text-gray-700 border rounded-md bg-gray-50">
-                                    {project.name}
-                                </p>
+                                <>
+                                    <p className="w-full px-3 py-2 border bg-gray-50 rounded text-gray-500">
+                                        {project.projectCode}
+                                    </p>
+                                    <p className="w-full px-3 py-2 border bg-gray-50 rounded text-gray-500">
+                                        {project.name}
+                                    </p>
+                                </>
                             )}
                         </div>
                     </div>
 
                     {/* 기간 */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                        <p className="text-sm text-gray-500 md:w-24">기간</p>
 
-                        {/* 기간 */}
-                        <div className="flex-1 flex items-center gap-2">
-                            <p className="w-24 text-sm text-gray-500">기간</p>
+                        {isEdit ? (
+                            <div className="flex flex-col md:flex-row gap-2 w-full ">
+                                <input
+                                    type="date"
+                                    value={project.startDate || ""}
+                                    onChange={(e) =>
+                                        setProject({ ...project, startDate: e.target.value })
+                                    }
+                                    className="w-full border px-3 py-2 rounded text-gray-500"
+                                />
+                                <input
+                                    type="date"
+                                    value={project.endDate || ""}
+                                    onChange={(e) =>
+                                        setProject({ ...project, endDate: e.target.value })
+                                    }
+                                    className="w-full border px-3 py-2 rounded text-gray-500"
+                                />
+                            </div>
+                        ) : (
+                            <p className="w-full px-3 py-2 border bg-gray-50 rounded text-gray-500">
+                                {project.startDate} ~ {project.endDate}
+                            </p>
+                        )}
+
+                        {/* 공개 */}
+                        <div className="flex items-center gap-2 md:ml-auto shrink-0 whitespace-nowrap">
 
                             {isEdit ? (
-                                <div className="flex items-center gap-2 flex-1">
-                                    <input
-                                        type="date"
-                                        value={project.startDate || ""}
-                                        onChange={(e) =>
-                                            setProject({ ...project, startDate: e.target.value })
-                                        }
-                                        className="border rounded-md px-3 py-2 text-gray-700 w-full focus:outline-none focus:ring-2 focus:ring-black"
-                                    />
+                                <div className="flex items-center gap-2 md:ml-auto shrink-0 whitespace-nowrap">
 
-                                    <span className="text-gray-400">~</span>
+                                    {/* 텍스트 */}
+                                    <span className={project.isPublic ? "text-green-600" : "text-gray-400"}>
+                                        {project.isPublic ? "공개" : "비공개"}
+                                    </span>
 
-                                    <input
-                                        type="date"
-                                        value={project.endDate || ""}
-                                        onChange={(e) =>
-                                            setProject({ ...project, endDate: e.target.value })
-                                        }
-                                        className="border rounded-md px-3 py-2 text-gray-700 w-full focus:outline-none focus:ring-2 focus:ring-black"
-                                    />
+                                    {/* 토글 */}
+                                    <div
+                                        onClick={() => {
+                                            if (!isEdit) return;
+                                            setProject({ ...project, isPublic: !project.isPublic });
+                                        }}
+                                        className={`w-12 h-6 flex items-center rounded-full p-1 transition
+                                        ${project.isPublic ? "bg-green-500" : "bg-gray-300"}
+                                        ${isEdit ? "cursor-pointer" : "opacity-50 cursor-not-allowed"}
+                                        `}
+                                        >
+                                        <div
+                                            className={`w-4 h-4 bg-white rounded-full transition
+                                            ${project.isPublic ? "translate-x-6" : ""}
+                                            `}
+                                        />
+                                    </div>
                                 </div>
                             ) : (
-                                <p className="flex-1 px-3 py-2 text-gray-700 border rounded-md bg-gray-50">
-                                    {project.startDate || "-"} ~ {project.endDate || "-"}
-                                </p>
-                            )}
-                        </div>
-
-                        {/*  공개 상태 (오른쪽) */}
-                        <div className="flex items-center gap-2 ml-4 w-[120px] justify-end">
-
-                            {/* 텍스트 */}
-                            <span className={`text-sm font-medium ${
-                                project.isPublic ? "text-green-600" : "text-gray-400"
-                            }`}>
+                                <span className={`px-2 py-1 text-xs rounded ${
+                                    project.isPublic
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-gray-200 text-gray-600"
+                                }`}>
                                 {project.isPublic ? "공개" : "비공개"}
                             </span>
-
-                            {/* 토글 */}
-                            {isEdit && (
-                                <div
-                                    onClick={() =>
-                                        setProject({ ...project, isPublic: !project.isPublic })
-                                    }
-                                    className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition
-                                        ${project.isPublic ? "bg-green-500" : "bg-gray-300"}
-                                    `}
-                                >
-                                    <div
-                                        className={`w-4 h-4 bg-white rounded-full shadow transform transition
-                                        ${project.isPublic ? "translate-x-6" : ""}
-                                    `}
-                                    />
-                                </div>
                             )}
+
                         </div>
-
                     </div>
-
                 </div>
 
-                {/* 우측 버튼 */}
-                <div className="flex gap-2 ml-6">
+                {/* 버튼 */}
+                <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto md:ml-6">
+
                     {!isEdit ? (
                         <button
                             onClick={() => setIsEdit(true)}
-                            className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
+                            className="w-full md:w-auto px-4 py-2 bg-black text-white rounded"
                         >
                             수정
                         </button>
@@ -318,13 +320,13 @@ export default function AdminProjectDetailPage() {
                         <>
                             <button
                                 onClick={handleSave}
-                                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                                className="w-full md:w-auto px-4 py-2 bg-blue-500 text-white rounded"
                             >
                                 저장
                             </button>
                             <button
                                 onClick={() => setIsEdit(false)}
-                                className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100 transition"
+                                className="w-full md:w-auto px-4 py-2 border rounded bg-red-500 text-black"
                             >
                                 취소
                             </button>
@@ -333,16 +335,15 @@ export default function AdminProjectDetailPage() {
 
                     <button
                         onClick={() => navigate("/Admin/ProjectList")}
-                        className="px-4 py-2 border rounded-md text-gray-500 hover:bg-gray-100 transition"
+                        className="w-full md:w-auto px-4 py-2 border rounded bg-gray-300 text-black"
                     >
                         목록
                     </button>
                 </div>
-
             </section>
 
             {/* 썸네일 */}
-            <section className="border rounded-xl p-4 bg-white shadow-sm">
+            <section className="border rounded-xl p-4 bg-white shadow-sm mb-5">
                 <p className="text-sm text-gray-500 mb-3">썸네일</p>
 
                 <div className="relative w-full bg-gray-100 rounded-lg overflow-hidden group cursor-pointer">
@@ -386,22 +387,26 @@ export default function AdminProjectDetailPage() {
             </section>
 
             {/* 이미지 */}
-            <section className="border p-5 mb-6">
+            <section className="border rounded-xl p-4 bg-white shadow-sm mb-5">
                 <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                     <SortableContext
                         items={project.images.map((img: any) => img.id)}
                         strategy={rectSortingStrategy }
                     >
                         {/*  슬라이드 */}
-                        <div className="relative w-full h-[650px] flex items-center justify-center bg-gray-200 rounded mb-4">
-
+                        <div className="relative w-full aspect-[16/9] md:h-[650px] bg-gray-200">
                             {/* 좌 버튼 */}
                             <button
                                 onClick={handlePrev}
-                                className="absolute left-6 top-1/2 -translate-y-1/2
-                   bg-black/20 hover:bg-black/40 text-white
-                   rounded-lg w-12 h-16 flex items-center justify-center
-                   backdrop-blur-sm transition z-10"
+                                className="
+                                absolute left-2 md:left-6 top-1/2 -translate-y-1/2
+                                bg-black/20 hover:bg-black/40 text-white
+                                rounded-md md:rounded-lg
+                                w-8 h-10 md:w-12 md:h-16
+                                text-sm md:text-base
+                                flex items-center justify-center
+                                backdrop-blur-sm transition z-10
+                                "
                             >
                                 {"<"}
                             </button>
@@ -416,17 +421,22 @@ export default function AdminProjectDetailPage() {
                                         project.images[currentIndex]?.preview ||
                                         undefined
                                     }
-                                    className="h-full max-w-full object-contain"
+                                    className="w-full h-full object-contain "
                                 />
                             )}
 
                             {/* 우 버튼 */}
                             <button
                                 onClick={handleNext}
-                                className="absolute right-6 top-1/2 -translate-y-1/2
-                   bg-black/20 hover:bg-black/40 text-white
-                   rounded-lg w-12 h-16 flex items-center justify-center
-                   backdrop-blur-sm transition z-10"
+                                className="
+                                absolute right-2 md:right-6 top-1/2 -translate-y-1/2
+                                bg-black/20 hover:bg-black/40 text-white
+                                rounded-md md:rounded-lg
+                                w-8 h-10 md:w-12 md:h-16
+                                text-sm md:text-base
+                                flex items-center justify-center
+                                backdrop-blur-sm transition z-10
+                                "
                             >
                                 {">"}
                             </button>
@@ -474,49 +484,7 @@ export default function AdminProjectDetailPage() {
                 </DndContext>
             </section>
 
-            {/* 계약서 */}
-            <section className="border rounded-xl p-4 bg-white shadow-sm">
-                <p className="text-sm text-gray-500 mb-3">계약서</p>
 
-                <div className="relative w-full bg-gray-100 rounded-lg overflow-hidden group cursor-pointer">
-
-                    {thumbnailSrc ? (
-                        <img
-                            src={thumbnailSrc}
-                            className="w-full h-full object-cover"
-                        />
-                    ) : (
-                        <div className="flex items-center justify-center h-full text-gray-400">
-                            썸네일 업로드
-                        </div>
-                    )}
-
-                    {isEdit && (
-                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-sm transition cursor-pointer">
-                            이미지 변경
-                            <input
-                                type="file"
-                                className="hidden"
-                                onChange={(e: any) => {
-                                    const file = e.target.files[0];
-                                    setThumbnail({
-                                        file,
-                                        preview: URL.createObjectURL(file),
-                                    });
-                                }}
-                            />
-                        </label>
-                    )}
-                    {isEdit && thumbnail && (
-                        <button
-                            onClick={removeThumbnail}
-                            className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded"
-                        >
-                            삭제
-                        </button>
-                    )}
-                </div>
-            </section>
 
             {/* 공사 일정표 */}
             <section className="border rounded-xl p-4 bg-white shadow-sm">

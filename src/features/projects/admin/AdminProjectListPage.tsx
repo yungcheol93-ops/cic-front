@@ -57,55 +57,56 @@ export default function AdminProjectListPage() {
                     {projects.map((p) => (
                         <section
                             key={p.id}
-                            className="grid grid-cols-2 gap-10 items-start cursor-pointer py-6"
+                            className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-start cursor-pointer py-6"
                             onClick={() => navigate(`/Admin/Project/${p.id}`)}
                         >
-                        <img
-                            src={p.thumbnailUrl}
-                            className="w-full h-[240px] object-cover rounded"
-                            alt={p.name}
-                        />
-                        <div
-                            className="w-full text-left rounded p-4 flex items-start justify-between gap-4 hover:bg-zinc-50 transition"
-                        >
+                            {/* 이미지 */}
+                            <img
+                                src={p.thumbnailUrl}
+                                className="w-full h-[200px] md:h-[240px] object-cover rounded"
+                                alt={p.name}
+                            />
 
-                            <div className="flex flex-col justify-center space-y-3">
-                                <p className="text-md text-zinc-700">{p.projectCode}.</p>
-                                <p className="text-sm text-zinc-500">{p.name}</p>
-                                <p className="text-sm text-zinc-500">{p.startDate}</p>
-                                <div className="flex items-center gap-2">
+                            {/* 텍스트 */}
+                            <div className="w-full text-left rounded p-2 md:p-4 flex flex-col justify-between gap-4 hover:bg-zinc-50 transition">
 
-                                    {/* 공개 토글 */}
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleToggle(p.id, p.isPublic);
-                                        }}
-                                        className={`px-2 py-1 text-xs rounded ${
-                                            p.isPublic
-                                                ? "bg-green-100 text-green-700"
-                                                : "bg-gray-200 text-gray-600"
-                                        }`}
-                                    >
-                                        {p.isPublic ? "공개" : "비공개"}
-                                    </button>
+                                <div className="flex flex-col justify-center space-y-2 md:space-y-3">
+                                    <p className="text-sm md:text-md text-zinc-700">{p.projectCode}.</p>
+                                    <p className="text-sm text-zinc-500">{p.name}</p>
+                                    <p className="text-sm text-zinc-500">{p.startDate}</p>
 
-                                    {/* 삭제 버튼 */}
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleDelete(p.id);
-                                        }}
-                                        className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded"  >
-                                        삭제
-                                    </button>
+                                    <div className="flex items-center gap-2 mt-2">
 
+                                        {/* 공개 토글 */}
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleToggle(p.id, p.isPublic);
+                                            }}
+                                            className={`px-2 py-1 text-xs rounded ${
+                                                p.isPublic
+                                                    ? "bg-green-100 text-green-700"
+                                                    : "bg-gray-200 text-gray-600"
+                                            }`}
+                                        >
+                                            {p.isPublic ? "공개" : "비공개"}
+                                        </button>
+
+                                        {/* 삭제 */}
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDelete(p.id);
+                                            }}
+                                            className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded"
+                                        >
+                                            삭제
+                                        </button>
+
+                                    </div>
                                 </div>
                             </div>
-
-
-                        </div>
-                    </section>
+                        </section>
                     ))}
                 </div>
             </div>
