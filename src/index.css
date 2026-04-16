@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 전체 문서 높이 100%로 고정 */
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+}
+
+@font-face {
+    font-family: "CIC Sans";
+    src: url("/src/assets/fonts/CIC-Sans-Light.otf") format("opentype");
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: "CIC Sans";
+    src: url("/src/assets/fonts/CIC Sans Regular.otf") format("opentype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "CIC Sans";
+    src: url("/src/assets/fonts/CIC Sans Bold.otf") format("opentype");
+    font-weight: 700;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE, Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+}
