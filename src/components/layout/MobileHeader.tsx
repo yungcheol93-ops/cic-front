@@ -35,8 +35,7 @@ export default function MobileHeader({ isHome }: { isHome: boolean }) {
                         >
                             ✕
                         </button>
-
-                        <LeftSidebar isHome={false} />
+                        <LeftSidebar isHome={false} onClose={() => setOpen(false)} />
                     </div>
                 </div>
             )}

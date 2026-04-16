@@ -57,50 +57,54 @@ export default function PublicProjectDetailPage() {
                 </div>
 
                 {/* 웹: 슬라이드 */}
-                <div className="hidden md:block relative w-full  bg-gray-200">
-
-                    {/* 좌 버튼 */}
-                    <button
-                        onClick={handlePrev}
-                        className="
-                        absolute left-6 top-1/2 -translate-y-1/2
-                        bg-black/20 hover:bg-black/40 text-white
-                        rounded-lg w-12 h-16 flex items-center justify-center
-                        backdrop-blur-sm transition z-10
-                        "
-                    >
-                        {"<"}
-                    </button>
-
+                <div className="hidden md:flex relative w-[1200px] h-[800px] mx-auto items-center justify-center group">
                     {/* 이미지 */}
                     <img
                         src={images[currentIndex]}
                         className="w-full h-full object-contain"
+                        alt={`슬라이드 이미지 ${currentIndex + 1}`}
                     />
 
-                    {/* 우 버튼 */}
-                    <button
-                        onClick={handleNext}
-                        className="
-                        absolute right-6 top-1/2 -translate-y-1/2
-                        bg-black/20 hover:bg-black/40 text-white
-                        rounded-lg w-12 h-16 flex items-center justify-center
-                        backdrop-blur-sm transition z-10
-                        "
+                    {/* 왼쪽 클릭 영역 */}
+                    <div
+                        className="absolute left-0 top-0 w-1/2 h-full cursor-pointer flex items-center justify-start group/left"
+                        onClick={handlePrev}
                     >
-                        {">"}
-                    </button>
-                </div>
+                        {/* 화살표 박스 */}
+                        <div className="ml-6 opacity-0 group-hover/left:opacity-100
+                            text-white w-24 h-52 flex items-center justify-center backdrop-blur-sm
+                            transition-opacity duration-300 rounded-lg">
 
+                            {/* 화살표 텍스트: text-6xl로 크기 조절 */}
+                            <span className="text-6xl font-light select-none">
+                            {"<"}
+                        </span>
+                        </div>
+                    </div>
+
+                    {/* 오른쪽 클릭 영역 */}
+                    <div
+                        className="absolute right-0 top-0 w-1/2 h-full cursor-pointer flex items-center justify-end group/right"
+                        onClick={handleNext}
+                    >
+                        {/* 화살표 박스 */}
+                        <div className="mr-6 opacity-0 group-hover/right:opacity-100
+                        text-white w-24 h-52 flex items-center justify-center backdrop-blur-sm
+                        transition-opacity duration-300 rounded-lg">
+
+                            {/* 화살표 텍스트: text-6xl로 크기 조절 */}
+                            <span className="text-6xl font-light select-none">
+                            {">"}
+                        </span>
+                        </div>
+                    </div>
+                </div>
                 {/* 하단 정보 */}
                 <div className="mt-6 text-sm text-right text-zinc-500 px-2 md:px-0">
                     <p className="text-lg font-semibold">{project.projectCode}.</p>
                     <p className="text-sm ">Work scope
                         : schematic design, working design, construction</p>
-                    {/*<p className="text-xl">{project.name}</p>*/}
-                    {/*<p className="text-sm">*/}
-                    {/*    {project.startDate || "-"} ~ {project.endDate || "-"}*/}
-                    {/*</p>*/}
+
                 </div>
 
             </section>

@@ -6,6 +6,7 @@ import footerLogo from "../../../public/images/footer/footer.png";
 
 type LeftSidebarProps = {
     isHome: boolean;
+    onClose?: () => void;
 };
 
 type SubMenu = {
@@ -68,7 +69,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
     ];
 }
 
-export default function LeftSidebar({ isHome }: LeftSidebarProps) {
+export default function LeftSidebar({ isHome ,onClose}: LeftSidebarProps) {
     const [auth, setAuth] = useState<AuthState | null>(null);
     const menus = useMemo(() => buildMenus(auth), [auth]);
 
@@ -100,6 +101,12 @@ export default function LeftSidebar({ isHome }: LeftSidebarProps) {
         });
     }, []);
 
+    // 클릭 시 이동과 동시에 사이드바를 닫는 함수
+    const handleNavigate = (path: string) => {
+        navigate(path);
+        if (onClose) onClose(); // onClose가 있으면(모바일이면) 닫기 실행
+    };
+
     return (
         <div className="flex flex-col justify-between h-full">
             <div className="pt-16">
@@ -107,7 +114,7 @@ export default function LeftSidebar({ isHome }: LeftSidebarProps) {
                 <div className="mb-10">
                     <p
                         className="font-cic tracking-wide text-3xl text-black cursor-pointer"
-                        onClick={() => navigate("/")}
+                        onClick={() => handleNavigate("/")}
                     >
                         CIC Studio
                     </p>
@@ -132,13 +139,13 @@ export default function LeftSidebar({ isHome }: LeftSidebarProps) {
                                     onClick={() => {
                                         if (menu.key === "Logout") {
                                             logout();
-                                            navigate(menu.path ?? "/Login", { replace: true });
+                                            handleNavigate(menu.path ?? "/Login");
                                             return;
                                         }
-                                        if (menu.path) navigate(menu.path);
+                                        if (menu.path) handleNavigate(menu.path);
                                     }}
                                     className={
-                                        "font-cic font-light tracking-wide block text-left text-xl uppercase transition " +
+                                        "font-cic font-light tracking-wide block text-left text-xl transition " +
                                         (isActive
                                             ? activeColor
                                             : baseColor + " hover:text-zinc-500")
@@ -173,7 +180,7 @@ export default function LeftSidebar({ isHome }: LeftSidebarProps) {
                                                     ? "text-zinc-700"
                                                     : "text-zinc-400 hover:text-zinc-700")
                                             }
-                                            onClick={() => navigate(item.path)}
+                                            onClick={() => handleNavigate(item.path)}
                                         >
                                             {item.label}
                                         </li>
@@ -186,10 +193,11 @@ export default function LeftSidebar({ isHome }: LeftSidebarProps) {
             </div>
 
             {/* 하단 이미지 */}
-            <div>
+            <div className="flex justify-end md:block">
+                {/* 부모 div: 모바일(flex justify-end)로 오른쪽 정렬, 데스크탑(md:block)은 기본 배치 */}
                 <img
                     src={footerLogo}
-                    className="w-[150px] h-[200px] object-contain"
+                    className="w-[100px] h-[130px] md:w-[150px] md:h-[200px] object-contain mb-10 md:mb-0"
                     alt="푸터이미지"
                 />
             </div>
