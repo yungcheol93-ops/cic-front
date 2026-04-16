@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { getAuthState } from "../../Login/auth.ts";
+import { getAuthState } from "../../../api/auth.api.ts";
 import { getUserProject } from "../../../api/project.api";
 import {useEffect, useState} from "react";
 

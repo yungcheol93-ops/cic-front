@@ -1,7 +1,7 @@
 // src/components/layout/LeftSidebar.tsx
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getAuthState, subscribeAuthChanged, logout, type AuthState } from "../../features/Login/auth";
+import { getAuthState, subscribeAuthChanged, logout, type AuthState } from "../../api/auth.api.ts";
 import footerLogo from '../../../public/images/footer/footer.png';
 
 type LeftSidebarProps = {

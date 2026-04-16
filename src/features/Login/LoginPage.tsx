@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAuthState, login, logout, type AuthState } from "./auth";
+import { getAuthState, login, logout, type AuthState } from "../../api/auth.api.ts";
 
 export default function LoginPage() {
     const navigate = useNavigate();

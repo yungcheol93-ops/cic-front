@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { getAuthState } from "../../Login/auth.ts";
+import { getAuthState } from "../../../api/auth.api.ts";
 import {
     createEmptyEstimateDraft,
     getEstimateDraft,

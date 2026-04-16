@@ -1,41 +1,17 @@
-import axios from "axios";
+import api from './axiosInstance';
 
-const API = import.meta.env.VITE_API_URL + "/api";
-
-// 관리자
-export const getAdminProjectList = () =>
-    axios.get(`${API}/admin/project`);
-
-export const getAdminProject = (projectId:number) =>
-    axios.get(`${API}/admin/project/${projectId}`);
-
-export const patchAdminProject  = (projectId: number, data: any) =>
-    axios.patch(`${API}/admin/project/${projectId}`, data);
-
-export const deleteAdminProject = (projectId: number) =>
-    axios.patch(`${API}/admin/project/${projectId}/delete`);
-
-export const restoreProject = (projectId: number) =>
-    axios.patch(`${API}/admin/project/${projectId}/restore`);
-
-export const getDeletedProjects = () =>
-    axios.get(`${API}/admin/project/trash`);
-
+// 관리자 관련
+export const getAdminProjectList = () => api.get('/admin/project');
+export const getAdminProject = (projectId: number) => api.get(`/admin/project/${projectId}`);
+export const patchAdminProject = (projectId: number, data: any) => api.patch(`/admin/project/${projectId}`, data);
+export const deleteAdminProject = (projectId: number) => api.patch(`/admin/project/${projectId}/delete`);
+export const restoreProject = (projectId: number) => api.patch(`/admin/project/${projectId}/restore`);
+export const getDeletedProjects = () => api.get('/admin/project/trash');
 export const togglePublic = (projectId: number, isPublic: boolean) =>
-    axios.patch(`${API}/admin/project/${projectId}/public?isPublic=${isPublic}`);
+    api.patch(`/admin/project/${projectId}/public`, null, { params: { isPublic } });
 
-// 사용자
-export const getUserProjectList = () =>
-    axios.get(`${API}/user/project`);
-
-export const getUserProject = (projectId: number) =>
-    axios.get(`${API}/user/project/${projectId}`);
-
-// 공개
-export const getPublicProjectList = () =>
-    axios.get(`${API}/public/project`);
-
-export const getPublicProject = (projectId:number) =>
-    axios.get(`${API}/public/project/${projectId}`);
-
-
+// 사용자/공개 관련
+export const getUserProjectList = () => api.get('/user/project');
+export const getUserProject = (projectId: number) => api.get(`/user/project/${projectId}`);
+export const getPublicProjectList = () => api.get('/public/project');
+export const getPublicProject = (projectId: number) => api.get(`/public/project/${projectId}`);

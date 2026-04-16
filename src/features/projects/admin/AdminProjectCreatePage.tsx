@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
-import { getAuthState } from "../../Login/auth.ts";
+import { getAuthState } from "../../../api/auth.api.ts";
 import {getEstimateDraft, subscribeEstimateDraftChanged} from "../estimateStore.ts";
 
 function formatBytes(bytes: number) {

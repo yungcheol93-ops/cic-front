@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { getAuthState } from "../Login/auth";
+import { getAuthState } from "../../api/auth.api.ts";
 import { getScheduleState, setScheduleState, subscribeScheduleChanged, type ScheduleTask } from "./scheduleStore";
 import { getAdminProjectList, subscribeAdminProjectsChanged, type AdminProject } from "./adminProjectStore";
 

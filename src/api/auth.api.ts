@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from './axiosInstance';
 
 /**
  * 로그인 상태 타입
@@ -29,13 +29,9 @@ export async function login(code: string): Promise<AuthState> {
     }
 
     try {
-        const res = await axios.post(
-            "REACT_APP_API_URL/api/auth/login",
-            null,
-            {
-                params: { code: trimmed },
-            }
-        );
+        const res = await api.post("/auth/login", null, {
+            params: { code: trimmed },
+        });
 
         const user = res.data;
         console.log("user:", user);

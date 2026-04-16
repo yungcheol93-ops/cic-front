@@ -1,6 +1,6 @@
 import {  useState, useEffect } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { getAuthState } from "../../Login/auth.ts";
+import { getAuthState } from "../../../api/auth.api.ts";
 import {getPublicProject} from "../../../api/project.api.ts";
 
 export default function PublicProjectDetailPage() {
