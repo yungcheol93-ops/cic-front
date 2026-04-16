@@ -32,7 +32,7 @@ export default function Layout({ children }: PropsWithChildren) {
                     {children}
                 </main>
                 {/*오른쪽 사이드바 바닥*/}
-                <footer className="w-[20vw] h-full flex flex-col justify-end">
+                <footer className="w-[20vw] h-full px-12 py-6 flex flex-col  justify-end">
                     <RightSideBar isHome={isHome} />
                 </footer>
             </div>

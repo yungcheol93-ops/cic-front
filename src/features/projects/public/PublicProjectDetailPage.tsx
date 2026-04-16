@@ -41,7 +41,7 @@ export default function PublicProjectDetailPage() {
 
 
     return (
-        <div className="h-full min-h-screen px-4 md:px-16 py-10 md:py-16">
+        <div className="h-full min-h-screen md:px-16 py-10 md:py-16">
 
             <section className="bg-white shadow-sm mb-5">
 
@@ -51,7 +51,7 @@ export default function PublicProjectDetailPage() {
                         <img
                             key={index}
                             src={img}
-                            className="w-full object-cover rounded-lg"
+                            className="w-full object-cover"
                         />
                     ))}
                 </div>
@@ -93,12 +93,14 @@ export default function PublicProjectDetailPage() {
                 </div>
 
                 {/* 하단 정보 */}
-                <div className="mt-6 space-y-2 text-sm text-zinc-500 px-2 md:px-0">
-                    <p className="text-lg font-semibold">{project.projectCode}</p>
-                    <p className="text-xl">{project.name}</p>
-                    <p className="text-sm">
-                        {project.startDate || "-"} ~ {project.endDate || "-"}
-                    </p>
+                <div className="mt-6 text-sm text-right text-zinc-500 px-2 md:px-0">
+                    <p className="text-lg font-semibold">{project.projectCode}.</p>
+                    <p className="text-sm ">Work scope
+                        : schematic design, working design, construction</p>
+                    {/*<p className="text-xl">{project.name}</p>*/}
+                    {/*<p className="text-sm">*/}
+                    {/*    {project.startDate || "-"} ~ {project.endDate || "-"}*/}
+                    {/*</p>*/}
                 </div>
 
             </section>

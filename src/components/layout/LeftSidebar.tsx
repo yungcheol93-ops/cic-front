@@ -89,7 +89,7 @@ export default function LeftSidebar({ isHome }: LeftSidebarProps) {
         return null;
     }, [location.pathname]);
 
-    // ✅ hover 우선, 없으면 route
+    // hover 우선, 없으면 route
     const currentMenuKey = hovered ?? routeMainKey;
     const activeMenu = menus.find((m) => m.key === currentMenuKey);
 
@@ -106,7 +106,7 @@ export default function LeftSidebar({ isHome }: LeftSidebarProps) {
                 {/* 로고 */}
                 <div className="mb-10">
                     <p
-                        className="font-cic tracking-wide text-2xl text-black cursor-pointer"
+                        className="font-cic tracking-wide text-3xl text-black cursor-pointer"
                         onClick={() => navigate("/")}
                     >
                         CIC Studio
@@ -122,7 +122,7 @@ export default function LeftSidebar({ isHome }: LeftSidebarProps) {
                         {menus.map((menu) => {
                             const isActive = currentMenuKey === menu.key;
 
-                            const baseColor = isHome ? "text-white" : "text-zinc-400";
+                            const baseColor = isHome ? "text-black" : "text-zinc-500";
                             const activeColor = isHome ? "text-zinc-500" : "text-zinc-700";
 
                             return (
@@ -138,7 +138,7 @@ export default function LeftSidebar({ isHome }: LeftSidebarProps) {
                                         if (menu.path) navigate(menu.path);
                                     }}
                                     className={
-                                        "font-cic font-light tracking-wide block text-left text-l uppercase transition " +
+                                        "font-cic font-light tracking-wide block text-left text-xl uppercase transition " +
                                         (isActive
                                             ? activeColor
                                             : baseColor + " hover:text-zinc-500")

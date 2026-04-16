@@ -24,18 +24,19 @@ console.log(projects);
                     {projects.map((p) => (
                         <section
                             key={p.id}
-                            className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-start cursor-pointer py-6"
+                            className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-10 items-start cursor-pointer py-6"
                             onClick={() => navigate(`/Works/Interior/${p.id}`)}
                         >
                             <img
                                 src={p.thumbnailUrl}
-                                className="w-full h-[200px] md:h-[340px] object-cover rounded"
+                                className="w-full h-[200px] md:h-[340px] object-cover "
                                 alt={p.name}
                             />
-                            <div className="flex flex-col justify-center space-y-2 md:space-y-3">
-                                <p className="text-md md:text-md text-zinc-800">{p.projectCode}.</p>
-                                <p className="text-md text-zinc-500">{p.name}</p>
-                                <p className="text-md text-zinc-500">{p.startDate}</p>
+                            <div className="flex flex-col justify-center p-2">
+                                <p className="text-sm md:text-md text-zinc-800 mb-2">{p.projectCode}.</p>
+                                <p></p>
+                                {/*<p className="text-sm text-zinc-500">{p.name}</p>*/}
+                                <p className="text-sm text-zinc-500">{p.startDate}</p>
                             </div>
                         </section>
                     ))}
