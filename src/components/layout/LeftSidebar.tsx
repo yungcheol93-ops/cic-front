@@ -70,138 +70,123 @@ function buildMenus(auth: AuthState | null): Menu[] {
     ];
 }
 
-export default function LeftSidebar({ isHome ,onClose}: LeftSidebarProps) {
-    const [auth, setAuth] = useState<AuthState | null>(null);
-    const menus = useMemo(() => buildMenus(auth), [auth]);
+    export default function LeftSidebar({ isHome, onClose }: LeftSidebarProps) {
+        const [auth, setAuth] = useState<AuthState | null>(null);
+        const menus = useMemo(() => buildMenus(auth), [auth]);
+        const [hovered, setHovered] = useState<string | null>(null);
 
-    const [hovered, setHovered] = useState<string | null>(null);
+        const navigate = useNavigate();
+        const location = useLocation();
 
-    const navigate = useNavigate();
-    const location = useLocation();
+        const routeMainKey = useMemo(() => {
+            const path = location.pathname;
+            if (path.startsWith("/Works")) return "Works";
+            if (path.startsWith("/Studio")) return "Studio";
+            if (path.startsWith("/Contact")) return "Contact";
+            if (path.startsWith("/About")) return "About";
+            if (path.startsWith("/Admin")) return "Admin";
+            if (path.startsWith("/Login")) return "Login";
+            if (path.startsWith("/MyProject")) return "MyProject";
+            return null;
+        }, [location.pathname]);
 
-    //  현재 라우트 기준
-    const routeMainKey = useMemo(() => {
-        if (location.pathname.startsWith("/Works")) return "Works";
-        if (location.pathname.startsWith("/Studio")) return "Studio";
-        if (location.pathname.startsWith("/Contact")) return "Contact";
-        if (location.pathname.startsWith("/About")) return "About";
-        if (location.pathname.startsWith("/Admin")) return "Admin";
-        if (location.pathname.startsWith("/Login")) return "Login";
-        if (location.pathname.startsWith("/MyProject")) return "MyProject";
-        return null;
-    }, [location.pathname]);
+        const currentMenuKey = hovered ?? routeMainKey;
+        const activeMenu = menus.find((m) => m.key === currentMenuKey);
 
-    // hover 우선, 없으면 route
-    const currentMenuKey = hovered ?? routeMainKey;
-    const activeMenu = menus.find((m) => m.key === currentMenuKey);
-
-    useEffect(() => {
-        setAuth(getAuthState());
-        return subscribeAuthChanged(() => {
+        useEffect(() => {
             setAuth(getAuthState());
-        });
-    }, []);
+            return subscribeAuthChanged(() => setAuth(getAuthState()));
+        }, []);
 
-    // 클릭 시 이동과 동시에 사이드바를 닫는 함수
-    const handleNavigate = (path: string) => {
-        navigate(path);
-        if (onClose) onClose(); // onClose가 있으면(모바일이면) 닫기 실행
-    };
+        const handleNavigate = (path: string) => {
+            navigate(path);
+            if (onClose) onClose();
+        };
 
-    return (
-        <div className="flex flex-col justify-between h-full">
-            <div className="pt-16">
-                {/* 로고 */}
-                <div className="mb-10">
-                    <p
-                        className="font-cic tracking-wide text-3xl text-black cursor-pointer"
-                        onClick={() => handleNavigate("/")}
-                    >
-                        CIC Studio
-                    </p>
-                </div>
+        return (
+            <div className="flex flex-col justify-between h-full select-none">
+                <div className="pt-10 lg:pt-16">
+                    {/* 로고: 해상도별 폰트 크기 최적화 */}
+                    <div className="mb-8 lg:mb-12">
+                        <p
+                            className="font-cic tracking-tight text-2xl lg:text-3xl text-black cursor-pointer leading-none"
+                            onClick={() => handleNavigate("/")}
+                        >
+                            CIC Studio
+                        </p>
+                    </div>
 
-                <div
-                    className="flex pt-4 gap-5"
-                    onMouseLeave={() => setHovered(null)}
-                >
-                    {/* 메인 메뉴 */}
-                    <nav className="space-y-3">
-                        {menus.map((menu) => {
-                            const isActive = currentMenuKey === menu.key;
-
-                            const baseColor = isHome ? "text-black" : "text-zinc-500";
-                            const activeColor = isHome ? "text-zinc-500" : "text-zinc-700";
-
-                            return (
-                                <button
-                                    key={menu.key}
-                                    onMouseEnter={() => setHovered(menu.key)}
-                                    onClick={() => {
-                                        if (menu.key === "Logout") {
-                                            logout();
-                                            handleNavigate(menu.path ?? "/Login");
-                                            return;
-                                        }
-                                        if (menu.path) handleNavigate(menu.path);
-                                    }}
-                                    className={
-                                        "font-cic font-light tracking-wide block text-left text-xl transition " +
-                                        (isActive
-                                            ? activeColor
-                                            : baseColor + " hover:text-zinc-500")
-                                    }
-                                >
-                                    {menu.label}
-                                </button>
-                            );
-                        })}
-                    </nav>
-
-                    {/* 서브 메뉴 */}
                     <div
-                        className="min-w-[120px]"
-                        onMouseEnter={() => {
-                            if (!hovered && routeMainKey) {
-                                setHovered(routeMainKey);
-                            }
-                        }}
+                        className="flex pt-2 gap-4 lg:gap-8"
+                        onMouseLeave={() => setHovered(null)}
                     >
-                        {activeMenu?.sub && (
-                            <ul className="space-y-1 text-md">
-                                {activeMenu.sub.map((item) => {
-                                    const isActive = location.pathname === item.path;
+                        {/* 메인 메뉴: 고정 너비를 주어 서브메뉴 위치가 변하지 않게 함 */}
+                        <nav className="space-y-2 lg:space-y-4 min-w-[100px] lg:min-w-[120px]">
+                            {menus.map((menu) => {
+                                const isActive = currentMenuKey === menu.key;
+                                // 색상 대비를 명확히 하여 시인성 확보
+                                const baseColor = isHome ? "text-black" : "text-zinc-400";
+                                const activeColor = isHome ? "text-zinc-400" : "text-zinc-900";
 
-                                    return (
-                                        <li
-                                            key={item.path}
-                                            className={
-                                                "cursor-pointer transition " +
-                                                (isActive
-                                                    ? "text-zinc-700"
-                                                    : "text-zinc-400 hover:text-zinc-700")
+                                return (
+                                    <button
+                                        key={menu.key}
+                                        onMouseEnter={() => setHovered(menu.key)}
+                                        onClick={() => {
+                                            if (menu.key === "Logout") {
+                                                logout();
+                                                handleNavigate("/Login");
+                                                return;
                                             }
-                                            onClick={() => handleNavigate(item.path)}
-                                        >
-                                            {item.label}
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        )}
+                                            if (menu.path) handleNavigate(menu.path);
+                                        }}
+                                        className={
+                                            "font-cic font-light tracking-wide block text-left text-lg lg:text-xl transition-all duration-300 " +
+                                            (isActive ? activeColor : `${baseColor} hover:text-zinc-600`)
+                                        }
+                                    >
+                                        {menu.label}
+                                    </button>
+                                );
+                            })}
+                        </nav>
+
+                        {/* 서브 메뉴: 메인 메뉴 옆에 배치 */}
+                        <div
+                            className="min-w-[100px] lg:min-w-[140px]"
+                            onMouseEnter={() => !hovered && routeMainKey && setHovered(routeMainKey)}
+                        >
+                            {activeMenu?.sub && (
+                                <ul className="space-y-1 lg:space-y-2">
+                                    {activeMenu.sub.map((item) => {
+                                        const isActive = location.pathname === item.path;
+                                        return (
+                                            <li
+                                                key={item.path}
+                                                className={
+                                                    "cursor-pointer transition-colors text-sm lg:text-base " +
+                                                    (isActive ? "text-zinc-900 font-medium" : "text-zinc-400 hover:text-zinc-800")
+                                                }
+                                                onClick={() => handleNavigate(item.path)}
+                                            >
+                                                {item.label}
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* 하단 이미지 */}
-            <div className="flex justify-end md:block">
-                {/* 부모 div: 모바일(flex justify-end)로 오른쪽 정렬, 데스크탑(md:block)은 기본 배치 */}
-                <img
-                    src={footerLogo}
-                    className="w-[100px] h-[130px] md:w-[150px] md:h-[200px] object-contain mb-10 md:mb-0"
-                    alt="푸터이미지"
-                />
+                {/* 하단 푸터 로고: vw 대신 고정 px 사용 */}
+                <div className="flex justify-start items-end pb-6 lg:pb-10">
+                    <img
+                        src={footerLogo}
+                        className="w-[80px] h-auto lg:w-[120px] object-contain transition-all"
+                        alt="Footer Logo"
+                    />
+                </div>
             </div>
-        </div>
-    );
-}
+        );
+    }
