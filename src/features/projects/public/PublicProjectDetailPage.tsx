@@ -42,24 +42,19 @@ export default function PublicProjectDetailPage() {
 
 
     return (
-        <div className="h-full min-h-screen md:px-16 py-10 md:py-16">
+        <div className="w-full h-screen overflow-hidden bg-white">
+            <section className="h-full flex flex-col p-4 md:p-10">
 
-            <section className="bg-white shadow-sm mb-5">
-
-                {/* 모바일: 이미지 리스트 */}
-                <div className="block md:hidden space-y-4">
+                {/* 모바일: 이미지 리스트 (모바일은 스크롤이 필요하므로 예외 처리) */}
+                <div className="block md:hidden space-y-4 overflow-y-auto h-full">
                     {images.map((img: string, index: number) => (
-                        <img
-                            key={index}
-                            src={img}
-                            className="w-full object-cover"
-                        />
+                        <img key={index} src={img} className="w-full object-cover" alt="mobile-img" />
                     ))}
                 </div>
 
-                {/* 웹: 슬라이드 */}
-                <div className="hidden md:flex relative w-[1200px] h-[800px] mx-auto items-center justify-center group">
-                    {/* 이미지 */}
+                {/* 웹: 슬라이드 영역 (높이를 화면 비례로 조절) */}
+                <div className="hidden md:flex relative flex-1 w-full max-w-[1000px] max-h-[70vh] mx-auto items-center justify-center group bg-zinc-50">
+                    {/* 2. object-contain을 사용하여 이미지가 잘리지 않으면서 고정된 높이 내에 들어오게 함 */}
                     <img
                         src={images[currentIndex]}
                         className="w-full h-full object-contain"
@@ -73,11 +68,11 @@ export default function PublicProjectDetailPage() {
                     >
                         {/* 화살표 박스 */}
                         <div className="ml-6 opacity-0 group-hover/left:opacity-100
-                            text-white w-24 h-52 flex items-center justify-center backdrop-blur-sm
+                            text-white w-24 h-42 flex items-center justify-center
                             transition-opacity duration-300 rounded-lg">
 
                             {/* 화살표 텍스트: text-6xl로 크기 조절 */}
-                            <span className="text-6xl font-light select-none">
+                            <span className="text-4xl font-light select-none">
                             {"<"}
                         </span>
                         </div>
@@ -90,11 +85,11 @@ export default function PublicProjectDetailPage() {
                     >
                         {/* 화살표 박스 */}
                         <div className="mr-6 opacity-0 group-hover/right:opacity-100
-                        text-white w-24 h-52 flex items-center justify-center backdrop-blur-sm
+                        text-white w-24 h-40 flex items-center justify-center
                         transition-opacity duration-300 rounded-lg">
 
                             {/* 화살표 텍스트: text-6xl로 크기 조절 */}
-                            <span className="text-6xl font-light select-none">
+                            <span className="text-4xl font-light select-none">
                             {">"}
                         </span>
                         </div>

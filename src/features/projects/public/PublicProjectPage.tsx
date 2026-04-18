@@ -19,28 +19,24 @@ console.log(projects);
 
     return (
         <div className="h-full min-h-screen py-16">
-            <div className="flex items-start justify-between gap-6 mb-6">
-
-            </div>
-
             <div className="space-y-6">
                 <div className="space-y-4">
                     {projects.map((p) => (
                         <section
                             key={p.id}
                             // 1. items-center 대신 items-start를 사용하여 윗부분을 맞춤
-                            className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10 items-start cursor-pointer py-10"
+                            className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10 items-start cursor-pointer pb-10"
                             onClick={() => navigate(`/Works/Interior/${p.id}`)}
                         >
                             {/* 왼쪽 여백 */}
                             <div className="hidden md:block"></div>
 
                             {/* 중앙 이미지 */}
-                            <div className="w-full">
+                            <div className="w-full aspect-square overflow-hidden bg-zinc-50">
                                 <img
                                     src={getThumbnail(p.thumbnailUrl)}
                                     loading="lazy"
-                                    className="w-full h-[250px] md:h-[400px] object-cover"
+                                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                                     alt={p.name}
                                 />
                             </div>

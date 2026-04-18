@@ -105,11 +105,11 @@ function buildMenus(auth: AuthState | null): Menu[] {
 
         return (
             <div className="flex flex-col justify-between h-full select-none">
-                <div className="pt-10 lg:pt-16">
+                <div className="pt-6 lg:pt-10">
                     {/* 로고: 해상도별 폰트 크기 최적화 */}
-                    <div className="mb-8 lg:mb-12">
+                    <div className="mb-6 lg:mb-8">
                         <p
-                            className="font-cic tracking-tight text-2xl lg:text-3xl text-black cursor-pointer leading-none"
+                            className="font-cic tracking-tight text-lg lg:text-xl text-black cursor-pointer leading-none"
                             onClick={() => handleNavigate("/")}
                         >
                             CIC Studio
@@ -121,7 +121,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
                         onMouseLeave={() => setHovered(null)}
                     >
                         {/* 메인 메뉴: 고정 너비를 주어 서브메뉴 위치가 변하지 않게 함 */}
-                        <nav className="space-y-2 lg:space-y-4 min-w-[100px] lg:min-w-[120px]">
+                        <nav className="space-y-1 lg:space-y-2 min-w-[90px] lg:min-w-[100px]">
                             {menus.map((menu) => {
                                 const isActive = currentMenuKey === menu.key;
                                 // 색상 대비를 명확히 하여 시인성 확보
@@ -141,7 +141,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
                                             if (menu.path) handleNavigate(menu.path);
                                         }}
                                         className={
-                                            "font-cic font-light tracking-wide block text-left text-lg lg:text-xl transition-all duration-300 " +
+                                            "font-cic font-light tracking-wide block text-left text-sm lg:text-md transition-all duration-300 " +
                                             (isActive ? activeColor : `${baseColor} hover:text-zinc-600`)
                                         }
                                     >
@@ -164,7 +164,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
                                             <li
                                                 key={item.path}
                                                 className={
-                                                    "cursor-pointer transition-colors text-sm lg:text-base " +
+                                                    "cursor-pointer transition-colors text-xs lg:text-base " +
                                                     (isActive ? "text-zinc-900 font-medium" : "text-zinc-400 hover:text-zinc-800")
                                                 }
                                                 onClick={() => handleNavigate(item.path)}
@@ -180,10 +180,10 @@ function buildMenus(auth: AuthState | null): Menu[] {
                 </div>
 
                 {/* 하단 푸터 로고: vw 대신 고정 px 사용 */}
-                <div className="flex justify-start items-end pb-6 lg:pb-10">
+                <div className="flex justify-end">
                     <img
                         src={footerLogo}
-                        className="w-[80px] h-auto lg:w-[120px] object-contain transition-all"
+                        className="w-[80px] h-auto lg:w-[100px] object-contain transition-all"
                         alt="Footer Logo"
                     />
                 </div>

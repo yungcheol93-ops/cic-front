@@ -13,7 +13,7 @@ export default function Layout({ children }: PropsWithChildren) {
         <div className={`w-full h-screen overflow-hidden ${isHome ? "bg-transparent" : "bg-white"}`}>
 
             {/* 1. 모바일 헤더 (768px 미만에서만 보임) */}
-            <header className="md:hidden h-[60px] border-b flex items-center px-4">
+            <header className="md:hidden h-[60px] flex items-center">
                 <MobileHeader isHome={isHome} />
             </header>
 
@@ -21,7 +21,7 @@ export default function Layout({ children }: PropsWithChildren) {
             <div className="hidden md:flex w-full h-full">
 
                 {/* 왼쪽 사이드바: vw 대신 고정 너비 사용 (화면 크기에 따라 너비 조절) */}
-                <aside className="flex-none w-[200px] lg:w-[250px] xl:w-[300px] h-full px-6 py-8 flex flex-col justify-between ">
+                <aside className="flex-none w-[200px] lg:w-[250px] xl:w-[300px] h-full px-8 py-8 flex flex-col justify-between ">
                     <LeftSidebar isHome={isHome} />
                 </aside>
 
