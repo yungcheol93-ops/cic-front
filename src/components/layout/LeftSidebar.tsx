@@ -54,6 +54,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
                 key: "Admin",
                 label: "관리자페이지",
                 sub: [
+                    { label: "홈이미지", path: "/Admin/HomeImage" },
                     { label: "프로젝트리스트", path: "/Admin/ProjectList" },
                     { label: "일정표", path: "/Admin/Schedule" },
                 ],

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { getAuthState } from "../../../api/auth.api.ts";
-import {deleteAdminProject, getAdminProjectList, togglePublic} from "../../../api/project.api";
+import {deleteAdminProject, getAdminProjectList, togglePublic} from "../../../api/project.api.ts";
 
 export default function AdminProjectListPage() {
     const auth = getAuthState();

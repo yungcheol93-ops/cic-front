@@ -8,6 +8,7 @@ export default function PublicProjectDetailPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const images = project?.imageUrls || [];
 
+
     useEffect(() => {
         if (!projectId) return;
 

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 import { getAuthState } from "../../../api/auth.api.ts";
-import {getEstimateDraft, subscribeEstimateDraftChanged} from "../estimateStore.ts";
+import {getEstimateDraft, subscribeEstimateDraftChanged} from "../../projects/estimateStore.ts";
 
 function formatBytes(bytes: number) {
     if (!Number.isFinite(bytes) || bytes <= 0) return "0 B";
@@ -195,19 +195,7 @@ export default function AdminProjectCreatePage() {
                         </div>
                     )}
                 </div>
-                <div className="space-y-3">
-                    <p className="text-sm text-zinc-500">계약서 등록</p>
-                    <input
-                        type="file"
-                        className="block w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-zinc-100 file:text-zinc-700 hover:file:bg-zinc-200"
-                        onChange={(e) => setContract(e.target.files?.item(0) ?? null)}
-                    />
-                    {contract && (
-                        <p className="text-xs text-zinc-500">
-                            선택됨: {contract.name} ({formatBytes(contract.size)})
-                        </p>
-                    )}
-                </div>
+
 
                 <div className="space-y-3">
                     <p className="text-sm text-zinc-500">견적서 등록</p>
@@ -242,10 +230,6 @@ export default function AdminProjectCreatePage() {
 
                 {error && <p className="text-sm text-red-600">{error}</p>}
 
-                <p className="text-xs text-zinc-500 leading-relaxed">
-                    현재는 임시 저장(localStorage)입니다. 파일은 업로드 선택은 되지만, 브라우저 저장소 용량 이슈 때문에
-                    파일 자체가 아니라 파일명/용량 같은 메타정보만 저장됩니다.
-                </p>
             </div>
         </div>
     );

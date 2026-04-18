@@ -9,12 +9,13 @@ import FurniturePage from "./features/works/pages/FurniturePage";
 import PublicProjectPage from "./features/projects/public/PublicProjectPage.tsx";
 import PublicProjectDetailPage from "./features/projects/public/PublicProjectDetailPage.tsx";
 import MyProjectPage from "./features/projects/user/MyProjectPage.tsx";
-import AdminProjectListPage from "./features/projects/admin/AdminProjectListPage.tsx";
+import AdminProjectListPage from "./features/admin/projects/AdminProjectListPage.tsx";
 import AdminSchedulePage from "./features/projects/AdminSchedulePage.tsx";
-import AdminEstimateCreatePage from "./features/projects/admin/AdminEstimateCreatePage.tsx";
-import AdminProjectDetailPage from "./features/projects/admin/AdminProjectDetailPage.tsx";
-import AdminProjectCreatePage from "./features/projects/admin/AdminProjectCreatePage.tsx";
+import AdminEstimateCreatePage from "./features/admin/schedule/AdminEstimateCreatePage.tsx";
+import AdminProjectDetailPage from "./features/admin/projects/AdminProjectDetailPage.tsx";
+import AdminProjectCreatePage from "./features/admin/projects/AdminProjectCreatePage.tsx";
 import AboutPage from "./features/about/AboutPage.tsx";
+import AdminHomeImagesPage from "./features/admin/home/AdminHomeImagesPage.tsx";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
                 {/* Projects */}
                 <Route path="/MyProject" element={<MyProjectPage />} />
                 {/* Admin */}
+                <Route path="/Admin/HomeImage" element={<AdminHomeImagesPage />} />
                 <Route path="/Admin/ProjectList" element={<AdminProjectListPage />} />
                 <Route path="/Admin/Schedule" element={<AdminSchedulePage />} />
                 <Route path="/Admin/ProjectCreate" element={<AdminProjectCreatePage />} />

@@ -3,7 +3,11 @@ import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getPublicProjectList} from "../../../api/project.api.ts";
 
-
+//썸네일 리스트는 저해상도
+const getThumbnail = (url?: string) => {
+    if (!url) return "https://via.placeholder.com/800x600?text=No+Image";
+    return url.replace("/upload/", "/upload/f_auto,q_auto,w_800/");
+};
 export default function PublicProjectPage() {
     const navigate = useNavigate();
     const [projects, setProjects] = useState<any[]>([]);
@@ -34,7 +38,8 @@ console.log(projects);
                             {/* 중앙 이미지 */}
                             <div className="w-full">
                                 <img
-                                    src={p.thumbnailUrl}
+                                    src={getThumbnail(p.thumbnailUrl)}
+                                    loading="lazy"
                                     className="w-full h-[250px] md:h-[400px] object-cover"
                                     alt={p.name}
                                 />
