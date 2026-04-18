@@ -43,7 +43,7 @@ export default function PublicProjectDetailPage() {
 
     return (
         <div className="w-full h-screen overflow-hidden bg-white">
-            <section className="h-full flex flex-col p-4 md:p-10">
+            <section className="h-full flex flex-col pt-8 md:pt-14">
 
                 {/* 모바일: 이미지 리스트 (모바일은 스크롤이 필요하므로 예외 처리) */}
                 <div className="block md:hidden space-y-4 overflow-y-auto h-full">

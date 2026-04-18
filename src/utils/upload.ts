@@ -3,6 +3,8 @@ export const uploadImage = async (file: File) => {
     formData.append("file", file);
     formData.append("upload_preset", "project-images");
 
+    // formData.append("folder", "project");
+
     const res = await fetch(
         "https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUD_NAME}/image/upload",
         {

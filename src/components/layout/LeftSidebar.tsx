@@ -179,11 +179,10 @@ function buildMenus(auth: AuthState | null): Menu[] {
                     </div>
                 </div>
 
-                {/* 하단 푸터 로고: vw 대신 고정 px 사용 */}
-                <div className="flex justify-end">
+                <div className="flex justify-end lg:justify-start">
                     <img
                         src={footerLogo}
-                        className="w-[80px] h-auto lg:w-[100px] object-contain transition-all"
+                        className="w-[60px] h-auto lg:w-[80px] object-contain transition-all"
                         alt="Footer Logo"
                     />
                 </div>
