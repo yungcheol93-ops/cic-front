@@ -5,11 +5,16 @@
 html {
     font-size: 16px; /* rem의 기준점을 16px로 강제 고정 */
     -webkit-text-size-adjust: 100%; /* 아이폰 등에서 가로 모드 시 폰트 커짐 방지 */
-    height: 100%;
-    margin: 0;
 }
 /* 전체 문서 높이 100%로 고정 */
-body,
+body {
+    margin: 0;
+    padding: 0;
+    /* 배포 환경에서 폰트가 두껍게/크게 보이는 것 방지 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 #root {
     height: 100%;
     margin: 0;
