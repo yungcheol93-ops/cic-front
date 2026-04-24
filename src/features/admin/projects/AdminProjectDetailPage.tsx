@@ -27,6 +27,7 @@ export default function AdminProjectDetailPage() {
             description: "",
             images: [],
             isPublic: true,
+            status:"COMPLETED"
         },
         thumbnail: null,
     });
@@ -87,7 +88,7 @@ export default function AdminProjectDetailPage() {
                 type: project.type,
                 scope: project.scope,
                 photography: project.photography,
-
+                description:project.description,
                 status: project.status,
                 isPublic: project.isPublic,
                 thumbnailUrl:thumbnailUrl,
@@ -152,6 +153,44 @@ export default function AdminProjectDetailPage() {
                             </button>
                         </>
                     )}
+                </div>
+                {/* 우측 공개 상태 */}
+                <div className="flex items-center gap-3">
+
+                    <span className="text-sm text-gray-500">공개여부</span>
+
+                    {isEdit ? (
+                        <div
+                            onClick={() =>
+                                setForm((prev) => ({
+                                    ...prev,
+                                    project: {
+                                        ...prev.project,
+                                        isPublic: !prev.project.isPublic,
+                                    },
+                                }))
+                            }
+                            className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition
+                            ${form.project.isPublic ? "bg-green-500" : "bg-gray-300"}`}
+                        >
+                            <div
+                                className={`w-4 h-4 bg-white rounded-full transition
+                            ${form.project.isPublic ? "translate-x-6" : ""}`}
+                            />
+                        </div>
+                    ) : (
+                        <span
+                            className={`px-3 py-1 text-xs rounded-full font-medium
+                    ${
+                                form.project.isPublic
+                                    ? "bg-green-100 text-green-700"
+                                    : "bg-gray-200 text-gray-600"
+                            }`}
+                        >
+                            {form.project.isPublic ? "공개" : "비공개"}
+                        </span>
+                    )}
+
                 </div>
 
             </section>

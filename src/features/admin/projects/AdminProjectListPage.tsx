@@ -70,9 +70,9 @@ export default function AdminProjectListPage() {
                             {/* 텍스트 */}
                             <div className="w-full text-left rounded p-2 md:p-4 flex flex-col justify-between gap-4 hover:bg-zinc-50 transition">
 
-                                <div className="flex flex-col justify-center space-y-2 md:space-y-3">
+                                <div className="flex flex-col justify-center space-y-2 md:space-y-2">
                                     <p className="text-sm md:text-md text-zinc-700">{p.projectCode}.</p>
-                                    <p className="text-sm text-zinc-500">{p.completion}</p>
+                                    <p className="text-sm md:text-md text-zinc-700">{p.completion}</p>
 
                                     <div className="flex items-center gap-2 mt-2">
 

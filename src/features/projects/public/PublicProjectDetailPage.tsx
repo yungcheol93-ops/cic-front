@@ -32,11 +32,11 @@ export default function PublicProjectDetailPage() {
     return (
         <div className="w-full h-screen bg-white flex justify-center py-16">
 
-            <section className="w-full max-w-[650px] h-full flex flex-col px-4 md:px-0">
+            <section className="w-full max-w-[650px] h-full flex flex-col">
 
 
             {/* ================= 모바일 ================= */}
-                <div className="block md:hidden space-y-4 overflow-y-auto h-full px-4">
+                <div className="block md:hidden space-y-4">
                     {images.map((img: string, index: number) => (
                         <img
                             key={index}
@@ -49,7 +49,7 @@ export default function PublicProjectDetailPage() {
                 </div>
 
                 {/* ================= 웹 ================= */}
-                <div className="hidden md:flex flex-col min-h-0">
+                <div className="hidden md:flex flex-col">
 
                     {/* 이미지 영역 (남은 공간 자동 사용) */}
                     <div className="relative flex-1 flex items-center justify-center ">
@@ -91,28 +91,27 @@ export default function PublicProjectDetailPage() {
                         </div>
                     </div>
 
-                    {/* 하단 정보 (고정 영역) */}
-                    <section className="py-6 px-4 md:px-0">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-
-                            {/* 좌측 */}
-                            <div className="space-y-2 text-sm text-gray-700">
-                                <div><span className="text-gray-400">완공 </span>{project.completion}</div>
-                                <div><span className="text-gray-400">소재지 </span>{project.location}</div>
-                                <div><span className="text-gray-400">용도 </span>{project.type}</div>
-                                <div><span className="text-gray-400">작업 </span>{project.scope}</div>
-                                <div><span className="text-gray-400">사진촬영 </span>{project.photography}</div>
-                            </div>
-
-                            {/* 우측 */}
-                            <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
-                                {project.description}
-                            </div>
-
-                        </div>
-                    </section>
-
                 </div>
+                {/* 하단 정보 (고정 영역) */}
+                <section className="py-6 px-4 md:px-0">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+                        {/* 좌측 */}
+                        <div className="space-y-2 text-sm text-gray-700">
+                            <div><span className="text-gray-400">완공 </span>{project.completion}</div>
+                            <div><span className="text-gray-400">소재지 </span>{project.location}</div>
+                            <div><span className="text-gray-400">용도 </span>{project.type}</div>
+                            <div><span className="text-gray-400">작업 </span>{project.scope}</div>
+                            <div><span className="text-gray-400">사진촬영 </span>{project.photography}</div>
+                        </div>
+
+                        {/* 우측 */}
+                        <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+                            {project.description}
+                        </div>
+
+                    </div>
+                </section>
             </section>
         </div>
     );

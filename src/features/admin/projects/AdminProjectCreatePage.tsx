@@ -25,6 +25,7 @@ export default function AdminProjectCreatePage() {
             description: "",
             images: [],
             isPublic: true,
+            status:"COMPLETED"
         },
         thumbnail: null,
     });

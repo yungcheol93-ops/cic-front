@@ -13,6 +13,7 @@ export interface IProject {
     description: string;
 
     thumbnailUrl?: string;
+    status:string;
     isPublic:boolean;
     images: IProjectImage[];
 }
