@@ -47,41 +47,47 @@ export default function PublicProjectDetailPage() {
                 </div>
 
                 {/* 웹 슬라이드 영역 */}
-                <div className="hidden md:flex relative flex-1 w-full max-h-[75vh] items-center justify-center bg-zinc-50 overflow-hidden group rounded-md">
-                    {/* 메인 이미지 */}
+                <div className="hidden md:flex relative flex-1 w-full max-h-[75vh] items-center justify-center bg-zinc-50 overflow-hidden rounded-md">   {/* 메인 이미지 */}
                     <img
                         src={optimizeImage(images[currentIndex], 1600)}
-                        className="w-full h-full object-contain transition-all duration-500"
+                        className="w-full h-full object-contain"
                         alt={`Project Image ${currentIndex + 1}`}
                         fetchPriority="high"
                     />
 
-                    {/* 왼쪽 화살표 (이미지 안쪽 오버레이) */}
-                    <button
+                    {/* 왼쪽 감지 영역 (50%) */}
+                    <div
+                        className="absolute left-0 top-0 w-1/2 h-full z-20 group/left cursor-pointer"
                         onClick={handlePrev}
-                        // absolute로 이미지 위에 띄움. 좌측 끝에서 약간 띄움(left-4)
-                        className="absolute left-4 top-1/2 -translate-y-1/2 z-20
-                               p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                               hover:bg-black/10 rounded-full text-zinc-900/60 hover:text-zinc-900"
-                        aria-label="Previous"
                     >
-                        <span className="text-5xl font-extralight">{"<"}</span>
-                    </button>
+                        <button
+                            className="absolute left-4 top-1/2 -translate-y-1/2
+                       opacity-0 group-hover/left:opacity-100 transition-opacity duration-300
+                       text-zinc-900/40 hover:text-zinc-900"
+                            aria-label="Previous"
+                        >
+                            <span className="text-5xl font-extralight">{"<"}</span>
+                        </button>
+                    </div>
 
-                    {/* 오른쪽 화살표 (이미지 안쪽 오버레이) */}
-                    <button
+                    {/* --- 오른쪽 감지 영역 (50%) --- */}
+                    <div
+                        className="absolute right-0 top-0 w-1/2 h-full z-20 group/right cursor-pointer"
                         onClick={handleNext}
-                        // absolute로 이미지 위에 띄움. 우측 끝에서 약간 띄움(right-4)
-                        className="absolute right-4 top-1/2 -translate-y-1/2 z-20
-                               p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                               hover:bg-black/10 rounded-full text-zinc-900/60 hover:text-zinc-900"
-                        aria-label="Next"
                     >
-                        <span className="text-5xl font-extralight">{">"}</span>
-                    </button>
+                        <button
+                            className="absolute right-4 top-1/2 -translate-y-1/2
+                       opacity-0 group-hover/right:opacity-100 transition-opacity duration-300
+                       text-zinc-900/40 hover:text-zinc-900"
+                            aria-label="Next"
+                        >
+                            <span className="text-5xl font-extralight">{">"}</span>
+                        </button>
+                    </div>
 
                     {/* 페이지 인디케이터 (선택사항: 현재 몇번째인지 표시) */}
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/20 text-white px-3 py-1 rounded-full text-xs z-20">
+                    <div
+                        className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/20 text-white px-3 py-1 rounded-full text-xs z-20">
                         {currentIndex + 1} / {images.length}
                     </div>
                 </div>
