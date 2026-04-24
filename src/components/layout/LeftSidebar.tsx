@@ -49,8 +49,8 @@ function buildMenus(auth: AuthState | null): Menu[] {
                 key: "Admin",
                 label: "Admin",
                 sub: [
-                    { label: "홈이미지", path: "/Admin/HomeImage" },
-                    { label: "프로젝트리스트", path: "/Admin/ProjectList" },
+                    { label: "HomeImage", path: "/Admin/HomeImage" },
+                    { label: "ProjectList", path: "/Admin/ProjectList" },
                     // { label: "일정표", path: "/Admin/Schedule" },
                 ],
             },
@@ -186,7 +186,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
 
                 <div className="flex justify-end lg:justify-start">
                     <img
-                        src="/src/images/footer/footer.png"
+                        src="/images/footer/footer.png"
                         className="w-[60px] h-auto lg:w-[80px] object-contain transition-all cursor-pointer"
                         onClick={() => handleNavigate("/")}
                         alt="Footer Logo"

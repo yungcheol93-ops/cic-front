@@ -39,7 +39,7 @@ export default function ContactPage() {
 
                 {/*  좌측 (2) - 폼 */}
                 <div className="md:col-span-2">
-                    <form ref={formRef} onSubmit={handleSubmit} className="max-w-xl space-y-2">
+                    <form ref={formRef} onSubmit={handleSubmit} className="max-w-lg space-y-2">
                         <div>
                             <p className="text-sm mb-1">고객명</p>
                             <input
