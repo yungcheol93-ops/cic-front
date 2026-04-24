@@ -12,9 +12,9 @@ export default function ContactPage() {
         try {
             await emailjs.sendForm(
                 'service_cic_contact',   // 서비스 ID
-                'template_oesf8ys',  // 템플릿 ID
+                import.meta.env.VITE_EMAILJS_TEMPLATEID,  // 템플릿 ID
                 formRef.current!,
-                'xpv32StUDYZ9Fkibm'    // 공개 키
+                import.meta.env.VITE_EMAILJS_KEY    // 공개 키
             );
             alert("상담 문의가 성공적으로 전송되었습니다.");
             formRef.current?.reset(); // 폼 초기화
@@ -30,7 +30,6 @@ export default function ContactPage() {
         <div className="px-4 md:px-16 py-12 md:py-12 space-y-12 md:space-y-16">
             <section className="text-center space-y-3 md:space-y-4">
                 <h1 className="text-2xl md:text-3xl font-light tracking-wide">CONTACT</h1>
-                <p className="text-sm md:text-base text-gray-500">공간 상담을 신청해보세요</p>
             </section>
 
             {/* form 태그로 감싸고 ref와 name 속성을 추가합니다 */}

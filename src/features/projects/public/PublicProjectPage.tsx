@@ -37,7 +37,7 @@ console.log(projects);
                                     src={getThumbnail(p.thumbnailUrl)}
                                     loading="lazy"
                                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                                    alt={p.name}
+                                    alt={p.projectCode}
                                 />
                             </div>
 
@@ -47,8 +47,8 @@ console.log(projects);
                                 <p className="text-sm md:text-md text-zinc-800 mb-1 font-medium leading-none">
                                     {p.projectCode}.
                                 </p>
-                                <p className="text-xs md:text-sm text-zinc-500 leading-none">
-                                    {p.startDate}
+                                <p className="text-xs md:text-sm text-zinc-800 leading-none">
+                                    {p.completion}
                                 </p>
                             </div>
                         </section>

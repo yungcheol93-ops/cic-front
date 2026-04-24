@@ -64,7 +64,7 @@ export default function AdminProjectListPage() {
                             <img
                                 src={p.thumbnailUrl}
                                 className="w-full h-[200px] md:h-[240px] object-cover rounded"
-                                alt={p.name}
+                                alt={p.projectCode}
                             />
 
                             {/* 텍스트 */}
@@ -72,8 +72,7 @@ export default function AdminProjectListPage() {
 
                                 <div className="flex flex-col justify-center space-y-2 md:space-y-3">
                                     <p className="text-sm md:text-md text-zinc-700">{p.projectCode}.</p>
-                                    <p className="text-sm text-zinc-500">{p.name}</p>
-                                    <p className="text-sm text-zinc-500">{p.startDate}</p>
+                                    <p className="text-sm text-zinc-500">{p.completion}</p>
 
                                     <div className="flex items-center gap-2 mt-2">
 

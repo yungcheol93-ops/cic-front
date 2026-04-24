@@ -1,0 +1,18 @@
+import type {IProjectImage} from "./IProjectImage.ts";
+
+export interface IProject {
+    id?: number;
+
+    projectCode: string;
+
+    completion: string;
+    location: string;
+    type: string;
+    scope: string;
+    photography: string;
+    description: string;
+
+    thumbnailUrl?: string;
+    isPublic:boolean;
+    images: IProjectImage[];
+}

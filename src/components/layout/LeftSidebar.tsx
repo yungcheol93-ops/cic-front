@@ -15,7 +15,7 @@ type SubMenu = {
 };
 
 type Menu = {
-    key: "Works" | "Media" | "Contact" | "About" | "Admin" | "Login" | "MyProject" | "Logout";
+    key: "Works" | "News" | "Contact" | "About" | "Admin" | "Login" | "MyProject" | "Logout";
     label: string;
     sub?: SubMenu[];
     path?: string;
@@ -31,7 +31,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
                 { label: "Furniture", path: "/Works/Furniture" },
             ],
         },
-        { key: "Media", label: "Media", path: "/Media" },
+        { key: "News", label: "News", path: "/News" },
         { key: "Contact", label: "Contact", path: "/Contact" },
         { key: "About", label: "About", path: "/About" },
     ];
@@ -74,7 +74,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
         const routeMainKey = useMemo(() => {
             const path = location.pathname;
             if (path.startsWith("/Works")) return "Works";
-            if (path.startsWith("/Media")) return "Media";
+            if (path.startsWith("/News")) return "News";
             if (path.startsWith("/Contact")) return "Contact";
             if (path.startsWith("/About")) return "About";
             if (path.startsWith("/Admin")) return "Admin";
@@ -175,7 +175,8 @@ function buildMenus(auth: AuthState | null): Menu[] {
                 <div className="flex justify-end lg:justify-start">
                     <img
                         src={footerLogo}
-                        className="w-[60px] h-auto lg:w-[80px] object-contain transition-all"
+                        className="w-[60px] h-auto lg:w-[80px] object-contain transition-all cursor-pointer"
+                        onClick={() => handleNavigate("/")}
                         alt="Footer Logo"
                     />
                 </div>
