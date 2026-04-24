@@ -1,6 +1,6 @@
 // src/features/home/pages/HomePage.tsx
 import { useEffect, useState } from "react";
-import {getHomeImageList} from "../../api/home.api.ts";
+import {getHomeImage} from "../../api/home.api.ts";
 import {optimizeImage} from "../../utils/imageUtils.ts";
 
 
@@ -21,7 +21,7 @@ export default function HomePage() {
     useEffect(() => {
         const fetchSlides = async () => {
             try {
-                const res = await getHomeImageList();
+                const res = await getHomeImage();
                 // 활성화된 이미지만 필터링하고 순서대로 정렬
                 const activeSlides = (Array.isArray(res.data) ? res.data : [])
                     .filter((s: Slide) => s.isActive)
