@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { getAuthState } from "../../api/auth.api.ts";
+import {  useNavigate } from "react-router-dom";
 import { getScheduleState, setScheduleState, subscribeScheduleChanged, type ScheduleTask } from "./scheduleStore";
 import { getAdminProjectList, subscribeAdminProjectsChanged, type AdminProject } from "./adminProjectStore";
 
@@ -78,10 +77,7 @@ type DragState = {
 };
 
 export default function AdminSchedulePage() {
-    const auth = getAuthState();
-    if (!auth) return <Navigate to="/Login" replace />;
 
-    const isAdmin = auth.role === "admin";
     const navigate = useNavigate();
 
     const [tab, setTab] = useState<"calendar" | "gantt">("calendar");
@@ -144,7 +140,7 @@ export default function AdminSchedulePage() {
     }
 
     function onBarPointerDown(e: React.PointerEvent, task: ScheduleTask) {
-        if (!isAdmin) return;
+
         const startMs = parseYmd(task.start);
         const endMs = parseYmd(task.end);
         if (!Number.isFinite(startMs) || !Number.isFinite(endMs)) return;
@@ -159,7 +155,7 @@ export default function AdminSchedulePage() {
     }
 
     function onBarPointerMove(e: React.PointerEvent) {
-        if (!isAdmin) return;
+
         const drag = dragRef.current;
         if (!drag) return;
 
@@ -187,7 +183,6 @@ export default function AdminSchedulePage() {
     }
 
     function onBarPointerUp(e: React.PointerEvent) {
-        if (!isAdmin) return;
         if (!dragRef.current) return;
         (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
         dragRef.current = null;
@@ -270,11 +265,7 @@ export default function AdminSchedulePage() {
                 <div className="space-y-1">
                     <h1 className="text-3xl font-cic font-light uppercase">시공 스케쥴표</h1>
                     <p className="text-xs text-zinc-500">
-                        {tab === "calendar"
-                            ? "프로젝트 기간을 달력에서 한눈에 확인합니다."
-                            : isAdmin
-                                ? "바를 드래그해서 일정 이동이 가능합니다."
-                                : "관리자만 수정할 수 있습니다."}
+                              바를 드래그해서 일정 이동이 가능합니다.
                     </p>
                 </div>
                 <button
@@ -433,38 +424,37 @@ export default function AdminSchedulePage() {
                                     <div className="space-y-2">
                                         <input
                                             value={t.name}
-                                            disabled={!isAdmin}
+
                                             onChange={(e) => updateTask(t.id, { name: e.target.value })}
                                             className={
-                                                "w-full bg-transparent outline-none text-sm " +
-                                                (isAdmin ? "text-zinc-700" : "text-zinc-400")
+                                                "w-full bg-transparent outline-none text-sm "
+
                                             }
                                         />
                                         <div className="grid grid-cols-2 gap-2">
                                             <input
                                                 type="date"
                                                 value={t.start}
-                                                disabled={!isAdmin}
                                                 onChange={(e) => {
                                                     const next = normalizeStartEnd(e.target.value, t.end);
                                                     updateTask(t.id, next);
                                                 }}
                                                 className={
-                                                    "w-full px-2 py-1 rounded border border-zinc-200 bg-transparent text-xs outline-none " +
-                                                    (isAdmin ? "text-zinc-700" : "text-zinc-400")
+                                                    "w-full px-2 py-1 rounded border border-zinc-200 bg-transparent text-xs outline-none "
+
                                                 }
                                             />
                                             <input
                                                 type="date"
                                                 value={t.end}
-                                                disabled={!isAdmin}
+
                                                 onChange={(e) => {
                                                     const next = normalizeStartEnd(t.start, e.target.value);
                                                     updateTask(t.id, next);
                                                 }}
                                                 className={
-                                                    "w-full px-2 py-1 rounded border border-zinc-200 bg-transparent text-xs outline-none " +
-                                                    (isAdmin ? "text-zinc-700" : "text-zinc-400")
+                                                    "w-full px-2 py-1 rounded border border-zinc-200 bg-transparent text-xs outline-none "
+
                                                 }
                                             />
                                         </div>
@@ -502,12 +492,9 @@ export default function AdminSchedulePage() {
                                             <div key={t.id} className="h-[72px] relative">
                                                 {valid && (
                                                     <div
-                                                        role={isAdmin ? "button" : undefined}
-                                                        tabIndex={isAdmin ? 0 : -1}
                                                         className={
                                                             "absolute top-1/2 -translate-y-1/2 h-6 rounded " +
-                                                            (isAdmin ? "cursor-grab active:cursor-grabbing" : "cursor-default") +
-                                                            " bg-zinc-800/90"
+                                                           "cursor-grab active:cursor-grabbing bg-zinc-800/90"
                                                         }
                                                         style={{ left, width }}
                                                         onPointerDown={(e) => onBarPointerDown(e, t)}

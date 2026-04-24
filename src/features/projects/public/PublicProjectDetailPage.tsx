@@ -98,11 +98,12 @@ export default function PublicProjectDetailPage() {
 
                         {/* 좌측 */}
                         <div className="space-y-2 text-sm text-gray-700">
-                            <div><span className="text-gray-400">완공 </span>{project.completion}</div>
-                            <div><span className="text-gray-400">소재지 </span>{project.location}</div>
-                            <div><span className="text-gray-400">용도 </span>{project.type}</div>
-                            <div><span className="text-gray-400">작업 </span>{project.scope}</div>
-                            <div><span className="text-gray-400">사진촬영 </span>{project.photography}</div>
+                            {/*<div><span className="text-gray-400">코드 : </span>{project.projectCode}</div>*/}
+                            <div><span className="text-gray-700">완공 : </span>{project.completion}</div>
+                            <div><span className="text-gray-700">소재지 : </span>{project.location}</div>
+                            <div><span className="text-gray-700">용도 : </span>{project.type}</div>
+                            <div><span className="text-gray-700">작업 : </span>{project.scope}</div>
+                            <div><span className="text-gray-700">사진촬영 : </span>{project.photography}</div>
                         </div>
 
                         {/* 우측 */}

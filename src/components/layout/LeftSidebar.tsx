@@ -1,8 +1,8 @@
 // src/components/layout/LeftSidebar.tsx
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getAuthState, subscribeAuthChanged, logout, type AuthState } from "../../api/auth.api.ts";
-import footerLogo from "../../../public/images/footer/footer.png";
+import {getMe, getToken, logout} from "../../api/auth.api.ts";
+
 
 type LeftSidebarProps = {
     isHome: boolean;
@@ -21,6 +21,10 @@ type Menu = {
     path?: string;
 };
 
+type AuthState = {
+    role: "admin" | "user";
+};
+
 function buildMenus(auth: AuthState | null): Menu[] {
     const base: Menu[] = [
         {
@@ -31,36 +35,29 @@ function buildMenus(auth: AuthState | null): Menu[] {
                 { label: "Furniture", path: "/Works/Furniture" },
             ],
         },
-        { key: "News", label: "News", path: "/News" },
         { key: "Contact", label: "Contact", path: "/Contact" },
         { key: "About", label: "About", path: "/About" },
+        { key: "News", label: "News", path: "/News" },
     ];
 
-    if (!auth) {
-        return [...base, { key: "Login", label: "Login", path: "/Login" }];
-    }
 
-    if (auth.role === "admin") {
+    // 로그인 했으면 관리자 메뉴 추가
+    if (auth?.role === "admin") {
         return [
             ...base,
             {
                 key: "Admin",
-                label: "관리자페이지",
+                label: "Admin",
                 sub: [
                     { label: "홈이미지", path: "/Admin/HomeImage" },
                     { label: "프로젝트리스트", path: "/Admin/ProjectList" },
-                    { label: "일정표", path: "/Admin/Schedule" },
+                    // { label: "일정표", path: "/Admin/Schedule" },
                 ],
             },
-            { key: "Logout", label: "로그아웃", path: "/Login" },
+            { key: "Logout", label: "Logout", path: "/Login" },
         ];
     }
-
-    return [
-        ...base,
-        { key: "MyProject", label: "내프로젝트", path: "/MyProject" },
-        { key: "Logout", label: "로그아웃", path: "/Login" },
-    ];
+    return base;
 }
 
     export default function LeftSidebar({ isHome, onClose }: LeftSidebarProps) {
@@ -70,6 +67,24 @@ function buildMenus(auth: AuthState | null): Menu[] {
 
         const navigate = useNavigate();
         const location = useLocation();
+
+        useEffect(() => {
+            async function fetchMe() {
+                try {
+                    const token = getToken();
+                    if (!token) return;
+
+                    const me = await getMe();
+                    console.log("me:", me);
+                    setAuth(me); // { role: "admin" }
+                } catch (e) {
+                    setAuth(null);
+                }
+            }
+
+            fetchMe();
+        }, []);
+
 
         const routeMainKey = useMemo(() => {
             const path = location.pathname;
@@ -86,15 +101,12 @@ function buildMenus(auth: AuthState | null): Menu[] {
         const currentMenuKey = hovered ?? routeMainKey;
         const activeMenu = menus.find((m) => m.key === currentMenuKey);
 
-        useEffect(() => {
-            setAuth(getAuthState());
-            return subscribeAuthChanged(() => setAuth(getAuthState()));
-        }, []);
 
         const handleNavigate = (path: string) => {
             navigate(path);
             if (onClose) onClose();
         };
+
 
         return (
             <div className="flex flex-col justify-between h-full select-none">
@@ -134,7 +146,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
                                             if (menu.path) handleNavigate(menu.path);
                                         }}
                                         className={
-                                            "font-cic font-light tracking-wide block text-left text-sm lg:text-md transition-all duration-300 " +
+                                            "font-cic font-regular tracking-wide block text-left text-sm lg:text-md transition-all duration-300 " +
                                             (isActive ? activeColor : `${baseColor} hover:text-zinc-600`)
                                         }
                                     >
@@ -157,7 +169,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
                                             <li
                                                 key={item.path}
                                                 className={
-                                                    "cursor-pointer transition-colors text-xs lg:text-base " +
+                                                    "font-cic font-regular cursor-pointer transition-colors text-xs lg:text-base " +
                                                     (isActive ? "text-zinc-900 font-medium" : "text-zinc-400 hover:text-zinc-800")
                                                 }
                                                 onClick={() => handleNavigate(item.path)}
@@ -174,7 +186,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
 
                 <div className="flex justify-end lg:justify-start">
                     <img
-                        src={footerLogo}
+                        src="/src/images/footer/footer.png"
                         className="w-[60px] h-auto lg:w-[80px] object-contain transition-all cursor-pointer"
                         onClick={() => handleNavigate("/")}
                         alt="Footer Logo"

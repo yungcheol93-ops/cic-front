@@ -1,5 +1,5 @@
 // src/App.tsx
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import HomePage from "./features/home/HomePage";
 import ContactPage from "./features/contact/ContactPage";
@@ -16,6 +16,7 @@ import AdminProjectDetailPage from "./features/admin/projects/AdminProjectDetail
 import AdminProjectCreatePage from "./features/admin/projects/AdminProjectCreatePage.tsx";
 import AboutPage from "./features/about/AboutPage.tsx";
 import AdminHomeImagesPage from "./features/admin/home/AdminHomeImagesPage.tsx";
+import AdminRoute from "./routes/AdminRoute.tsx";
 
 
 
@@ -33,14 +34,16 @@ function App() {
                 {/* Projects */}
                 <Route path="/MyProject" element={<MyProjectPage />} />
                 {/* Admin */}
-                <Route path="/Admin/HomeImage" element={<AdminHomeImagesPage />} />
-                <Route path="/Admin/ProjectList" element={<AdminProjectListPage />} />
-                <Route path="/Admin/Schedule" element={<AdminSchedulePage />} />
-                <Route path="/Admin/ProjectCreate" element={<AdminProjectCreatePage />} />
-                <Route path="/Admin/EstimateCreate" element={<AdminEstimateCreatePage />} />
-                <Route path="/Admin/Project/:projectId" element={<AdminProjectDetailPage />} />
-                {/* Backward compatibility */}
-                <Route path="/ProjectList" element={<Navigate to="/Admin/ProjectList" replace />} />
+                <Route path="/Admin" element={<AdminRoute />}>
+                    <Route path="HomeImage" element={<AdminHomeImagesPage />} />
+                    <Route path="ProjectList" element={<AdminProjectListPage />} />
+                    <Route path="Schedule" element={<AdminSchedulePage />} />
+                    <Route path="ProjectCreate" element={<AdminProjectCreatePage />} />
+                    <Route path="EstimateCreate" element={<AdminEstimateCreatePage />} />
+                    <Route path="Project/:projectId" element={<AdminProjectDetailPage />}/>
+
+                </Route>
+
 
                 {/* Works - Furniture (리스트 + 디테일) */}
                 <Route path="/Works/Furniture" element={<FurniturePage />} />

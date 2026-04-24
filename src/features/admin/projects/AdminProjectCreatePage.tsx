@@ -1,15 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
-import { getAuthState } from "../../../api/auth.api.ts";
+import { useNavigate } from "react-router-dom";
 import ProjectForm from "./ProjectForm.tsx";
 import type {IProjectFormState} from "../../../types/admin/project/projectForm.ts";
 import {uploadImages} from "../../../api/cloudinary.project.api.ts";
 
 export default function AdminProjectCreatePage() {
-    const auth = getAuthState();
-    if (!auth) return <Navigate to="/Login" replace />;
-    if (auth.role !== "admin") return <Navigate to="/MyProject" replace />;
 
     const navigate = useNavigate();
 

@@ -1,12 +1,5 @@
-import api from './axiosInstance';
-
-/**
- * 로그인 상태 타입
- */
-export type AuthState = {
-    userId: number;
-    role: "admin" | "user";
-};
+import {supabase} from "../utils/supabase.ts";
+import api from "./axiosInstance.ts";
 
 /**
  * 로컬스토리지 키
@@ -14,82 +7,51 @@ export type AuthState = {
 const STORAGE_KEY = "cic.auth";
 
 /**
- * 로그인 이벤트 (옵션)
- */
-const AUTH_CHANGED_EVENT = "cic-auth-changed";
-
-/**
  * 로그인 요청 (DB 기반)
  */
-export async function login(code: string): Promise<AuthState> {
-    const trimmed = code.trim();
+export async function login(username: string, password: string) {
 
-    if (!trimmed) {
-        throw new Error("코드를 입력해주세요.");
+    if (!username || !password) {
+        throw new Error("이메일과 비밀번호를 입력해주세요.");
     }
 
-    try {
-        const res = await api.post("/auth/login", null, {
-            params: { code: trimmed },
-        });
+    const email = `${username}@cicstudio.com`;
 
-        const user = res.data;
-        console.log("user:", user);
-        console.log("role:", user.role);
-        console.log("id:", user.id);
-        if (!user) {
-            throw new Error("로그인 실패");
-        }
 
-        const auth: AuthState = {
-            userId: user.id,
-            role: user.role,
-        };
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+    });
 
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(auth));
-        emitAuthChanged();
+    if (error) throw error;
 
-        return auth;
-    } catch (error) {
-        console.error(error);
-        throw new Error("로그인 코드가 올바르지 않습니다.");
+    const token = data.session?.access_token;
+
+    if (!token) {
+        throw new Error("토큰 없음");
     }
+    console.log(localStorage.getItem("cic.token"));
+    localStorage.setItem(STORAGE_KEY, token);
+
+    return token;
 }
 
 /**
- * 로그인 상태 조회
+ * 토큰 가져오기
  */
-export function getAuthState(): AuthState | null {
-    try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return null;
+export function getToken(): string | null {
+    return localStorage.getItem(STORAGE_KEY);
+}
 
-        return JSON.parse(raw);
-    } catch {
-        return null;
-    }
+export async function getMe() {
+    const res = await api.get("/auth/me");
+    return res.data;
 }
 
 /**
  * 로그아웃
  */
-export function logout() {
+export async function logout() {
+    await supabase.auth.signOut();
     localStorage.removeItem(STORAGE_KEY);
-    emitAuthChanged();
-}
-
-/**
- * 로그인 상태 변경 이벤트 발생
- */
-function emitAuthChanged() {
-    window.dispatchEvent(new Event(AUTH_CHANGED_EVENT));
-}
-
-/**
- * 로그인 상태 변경 구독
- */
-export function subscribeAuthChanged(handler: () => void) {
-    window.addEventListener(AUTH_CHANGED_EVENT, handler);
-    return () =>
-        window.removeEventListener(AUTH_CHANGED_EVENT, handler);
 }

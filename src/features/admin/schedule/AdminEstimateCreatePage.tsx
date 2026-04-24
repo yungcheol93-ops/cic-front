@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { getAuthState } from "../../../api/auth.api.ts";
+import { useNavigate } from "react-router-dom";
 import {
     createEmptyEstimateDraft,
     getEstimateDraft,
@@ -36,9 +35,7 @@ function rowTotal(row: EstimateRow) {
 }
 
 export default function AdminEstimateCreatePage() {
-    const auth = getAuthState();
-    if (!auth) return <Navigate to="/Login" replace />;
-    if (auth.role !== "admin") return <Navigate to="/MyProject" replace />;
+
 
     const navigate = useNavigate();
     const [doc, setDoc] = useState<EstimateDoc>(() => getEstimateDraft() ?? createEmptyEstimateDraft());

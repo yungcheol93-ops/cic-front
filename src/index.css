@@ -13,6 +13,8 @@ body {
     /* 배포 환경에서 폰트가 두껍게/크게 보이는 것 방지 */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-family: "CIC-Sans", sans-serif;
+    font-weight: 300;
 }
 
 #root {
@@ -22,19 +24,19 @@ body {
 
 @font-face {
     font-family: "CIC-Sans";
-    src: url("/public/fonts/cic-sans-light.otf") format("opentype");
+    src: url("/fonts/cic-sans-light.otf") format("opentype");
     font-weight: 300;
 }
 
 @font-face {
     font-family: "CIC-Sans";
-    src: url("/public/fonts/cic-sans-regular.otf") format("opentype");
+    src: url("/fonts/cic-sans-regular.otf") format("opentype");
     font-weight: 400;
 }
 
 @font-face {
     font-family: "CIC-Sans";
-    src: url("/public/fonts/cic-sans-bold.otf") format("opentype");
+    src: url("/fonts/cic-sans-bold.otf") format("opentype");
     font-weight: 700;
 }
 

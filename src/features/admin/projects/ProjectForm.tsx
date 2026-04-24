@@ -89,9 +89,10 @@ export default function ProjectForm({ form, setForm, isEdit }: Props) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
 
                     {/* 좌측 */}
-                    <div className="space-y-3 text-sm">
+                    <div className="space-y-2 text-sm">
 
                         {[
+                            { label: "코드", key: "projectCode" },
                             { label: "완공", key: "completion" },
                             { label: "소재지", key: "location" },
                             { label: "용도", key: "type" },

@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { getAuthState } from "../../../api/auth.api.ts";
+import { useNavigate } from "react-router-dom";
 import {deleteAdminProject, getAdminProjectList, togglePublic} from "../../../api/project.api.ts";
 
 export default function AdminProjectListPage() {
-    const auth = getAuthState();
-    if (!auth) return <Navigate to="/Login" replace />;
-    if (auth.role !== "admin") return <Navigate to="/MyProject" replace />;
 
     const navigate = useNavigate();
     const [projects, setProjects] = useState<any[]>([]);

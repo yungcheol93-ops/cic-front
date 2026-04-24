@@ -1,4 +1,3 @@
-import About from "../../../public/images/about/about.png";
 
 export default function AboutPage() {
     return (
@@ -6,7 +5,7 @@ export default function AboutPage() {
 
             <section className="hidden md:flex relative flex-1 w-full max-h-[65vh] items-center justify-center bg-zinc-50 overflow-hidden group rounded-md">
                 <img
-                    src={About}
+                    src="/images/about/about.png"
                     className="w-full h-full object-contain transition-all duration-500"
                     alt="About Image"
                 />

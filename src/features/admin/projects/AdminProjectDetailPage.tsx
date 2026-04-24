@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { getAuthState } from "../../../api/auth.api.ts";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAdminProject, patchAdminProject } from "../../../api/project.api.ts";
 import {uploadImages} from "../../../api/cloudinary.project.api.ts";
 import ProjectForm from "./ProjectForm.tsx";
@@ -9,9 +8,7 @@ import type {IProjectFormState} from "../../../types/admin/project/projectForm.t
 
 
 export default function AdminProjectDetailPage() {
-    const auth = getAuthState();
-    if (!auth) return <Navigate to="/Login" replace />;
-    if (auth.role !== "admin") return <Navigate to="/MyProject" replace />;
+
 
     const navigate = useNavigate();
     const { projectId } = useParams<{ projectId: string }>();
