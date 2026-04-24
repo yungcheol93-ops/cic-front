@@ -31,7 +31,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
                 { label: "Furniture", path: "/Works/Furniture" },
             ],
         },
-        { key: "News", label: "News", path: "/News" },
+        { key: "Media", label: "Media", path: "/Media" },
         { key: "Contact", label: "Contact", path: "/Contact" },
         { key: "About", label: "About", path: "/About" },
     ];
@@ -74,7 +74,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
         const routeMainKey = useMemo(() => {
             const path = location.pathname;
             if (path.startsWith("/Works")) return "Works";
-            if (path.startsWith("/News")) return "News";
+            if (path.startsWith("/Media")) return "Media";
             if (path.startsWith("/Contact")) return "Contact";
             if (path.startsWith("/About")) return "About";
             if (path.startsWith("/Admin")) return "Admin";

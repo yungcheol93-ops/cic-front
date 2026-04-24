@@ -4,7 +4,7 @@ import Layout from "./components/layout/Layout";
 import HomePage from "./features/home/HomePage";
 import ContactPage from "./features/contact/ContactPage";
 import LoginPage from "./features/Login/LoginPage.tsx";
-import NewsPage from "./features/studio/NewsPage";
+import MediaPage from "./features/media/MediaPage";
 import FurniturePage from "./features/works/pages/FurniturePage";
 import PublicProjectPage from "./features/projects/public/PublicProjectPage.tsx";
 import PublicProjectDetailPage from "./features/projects/public/PublicProjectDetailPage.tsx";
@@ -18,6 +18,7 @@ import AboutPage from "./features/about/AboutPage.tsx";
 import AdminHomeImagesPage from "./features/admin/home/AdminHomeImagesPage.tsx";
 
 
+
 function App() {
     return (
         <Layout>
@@ -26,7 +27,7 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 {/* Studio */}
                 <Route path="/Studio/Contract" element={<ContactPage />} />
-                <Route path="/Studio/News" element={<NewsPage />} />
+                <Route path="/Media" element={<MediaPage />} />
                 {/* Login */}
                 <Route path="/Login" element={<LoginPage />} />
                 {/* Projects */}
