@@ -1,5 +1,7 @@
 // src/App.tsx
 import { Routes, Route } from "react-router-dom";
+import { useSetAtom } from "jotai";
+import { userAtom } from "./store/auth";
 import Layout from "./components/layout/Layout";
 import HomePage from "./features/home/HomePage";
 import ContactPage from "./features/contact/ContactPage";
@@ -10,17 +12,34 @@ import PublicProjectPage from "./features/projects/public/PublicProjectPage.tsx"
 import PublicProjectDetailPage from "./features/projects/public/PublicProjectDetailPage.tsx";
 import MyProjectPage from "./features/projects/user/MyProjectPage.tsx";
 import AdminProjectListPage from "./features/admin/projects/AdminProjectListPage.tsx";
-import AdminSchedulePage from "./features/projects/AdminSchedulePage.tsx";
-import AdminEstimateCreatePage from "./features/admin/schedule/AdminEstimateCreatePage.tsx";
 import AdminProjectDetailPage from "./features/admin/projects/AdminProjectDetailPage.tsx";
 import AdminProjectCreatePage from "./features/admin/projects/AdminProjectCreatePage.tsx";
 import AboutPage from "./features/about/AboutPage.tsx";
 import AdminHomeImagesPage from "./features/admin/home/AdminHomeImagesPage.tsx";
 import AdminRoute from "./routes/AdminRoute.tsx";
+import {useEffect} from "react";
+import {getMe, getToken, logout} from "./api/auth.api.ts";
 
 
 
 function App() {
+    const setUser = useSetAtom(userAtom);
+
+    useEffect(() => {
+        const token = getToken();
+
+        if (!token) return;
+
+        getMe()
+            .then((me) => {
+                setUser({ role: me.role });
+            })
+            .catch(() => {
+                logout();
+                setUser({ role: null });
+            });
+    }, [setUser]);
+
     return (
         <Layout>
             <Routes>
@@ -37,9 +56,7 @@ function App() {
                 <Route path="/Admin" element={<AdminRoute />}>
                     <Route path="HomeImage" element={<AdminHomeImagesPage />} />
                     <Route path="ProjectList" element={<AdminProjectListPage />} />
-                    <Route path="Schedule" element={<AdminSchedulePage />} />
                     <Route path="ProjectCreate" element={<AdminProjectCreatePage />} />
-                    <Route path="EstimateCreate" element={<AdminEstimateCreatePage />} />
                     <Route path="Project/:projectId" element={<AdminProjectDetailPage />}/>
 
                 </Route>
@@ -50,7 +67,7 @@ function App() {
                 <Route path="/Works/Furniture/:furnitureId" element={<FurniturePage />} />
                 {/* Works - Interior (리스트 + 디테일) */}
                 <Route path="/Works/Interior" element={<PublicProjectPage />} />
-                <Route path="/Works/Interior/:projectId" element={<PublicProjectDetailPage />} />
+                <Route path="/Works/Interior/:projectCode" element={<PublicProjectDetailPage />} />
 
                 <Route path="/Contact" element={<ContactPage />} />
 

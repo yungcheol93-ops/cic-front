@@ -14,4 +14,4 @@ export const togglePublic = (projectId: number, isPublic: boolean) =>
 export const getUserProjectList = () => api.get('/user/project');
 export const getUserProject = (projectId: number) => api.get(`/user/project/${projectId}`);
 export const getPublicProjectList = () => api.get('/public/project');
-export const getPublicProject = (projectId: number) => api.get(`/public/project/${projectId}`);
+export const getPublicProject = (projectCode: string) => api.get(`/public/project/${projectCode}`);

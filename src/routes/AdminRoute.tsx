@@ -1,37 +1,18 @@
-import { useEffect, useState } from "react";
+
 import {Navigate, Outlet} from "react-router-dom";
-import { getMe, getToken } from "../api/auth.api";
+import {useAtomValue} from "jotai";
+import {userAtom} from "../store/auth.ts";
 
 export default function AdminRoute() {
-    const [auth, setAuth] = useState<null | { role: string }>(null);
-    const [loading, setLoading] = useState(true);
+    const auth = useAtomValue(userAtom);
 
-    useEffect(() => {
-        async function fetchMe() {
-            try {
-                const token = getToken();
-                if (!token) {
-                    setAuth(null);
-                    return;
-                }
+    // 아직 초기화 전이면 로딩 처리
+    if (auth === undefined) {
+        return <div>Loading...</div>;
+    }
 
-                const me = await getMe();
-                console.log("me:", me);
-                setAuth(me);
-            } catch {
-                setAuth(null);
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchMe();
-    }, []);
-
-    if (loading) return <div>Loading...</div>;
-
-    // 로그인 안 했거나 admin 아니면 차단
-    if (!auth || auth.role !== "admin") {
+    // 관리자 아니면 차단
+    if (!auth || auth.role !== "ROLE_ADMIN") {
         return <Navigate to="/" replace />;
     }
 

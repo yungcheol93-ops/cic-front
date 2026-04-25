@@ -1,7 +1,9 @@
 // src/components/layout/LeftSidebar.tsx
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {getMe, getToken, logout} from "../../api/auth.api.ts";
+import { logout} from "../../api/auth.api.ts";
+import {userAtom} from "../../store/auth.ts";
+import {useAtomValue} from "jotai";
 
 
 type LeftSidebarProps = {
@@ -22,8 +24,9 @@ type Menu = {
 };
 
 type AuthState = {
-    role: "admin" | "user";
+    role: string | null;
 };
+
 
 function buildMenus(auth: AuthState | null): Menu[] {
     const base: Menu[] = [
@@ -42,7 +45,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
 
 
     // 로그인 했으면 관리자 메뉴 추가
-    if (auth?.role === "admin") {
+    if (auth?.role === "ROLE_ADMIN") {
         return [
             ...base,
             {
@@ -61,30 +64,13 @@ function buildMenus(auth: AuthState | null): Menu[] {
 }
 
     export default function LeftSidebar({ isHome, onClose }: LeftSidebarProps) {
-        const [auth, setAuth] = useState<AuthState | null>(null);
+        const auth = useAtomValue(userAtom);
         const menus = useMemo(() => buildMenus(auth), [auth]);
         const [hovered, setHovered] = useState<string | null>(null);
 
         const navigate = useNavigate();
         const location = useLocation();
-
-        useEffect(() => {
-            async function fetchMe() {
-                try {
-                    const token = getToken();
-                    if (!token) return;
-
-                    const me = await getMe();
-                    console.log("me:", me);
-                    setAuth(me); // { role: "admin" }
-                } catch (e) {
-                    setAuth(null);
-                }
-            }
-
-            fetchMe();
-        }, []);
-
+        console.log("auth:", auth);
 
         const routeMainKey = useMemo(() => {
             const path = location.pathname;

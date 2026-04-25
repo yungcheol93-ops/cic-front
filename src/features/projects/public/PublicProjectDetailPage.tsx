@@ -4,17 +4,17 @@ import { getPublicProject } from "../../../api/project.api.ts";
 import { optimizeImage } from "../../../utils/imageUtils.ts"; // 분리한 함수 사용
 
 export default function PublicProjectDetailPage() {
-    const { projectId } = useParams<{ projectId: string }>();
+    const { projectCode } = useParams<{ projectCode: string }>();
     const [project, setProject] = useState<any>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const images = project?.imageUrls || [];
 
     useEffect(() => {
-        if (!projectId) return;
-        getPublicProject(Number(projectId))
+        if (!projectCode) return;
+        getPublicProject(projectCode)
             .then(res => setProject(res.data))
             .catch(err => console.error("데이터 로딩 실패:", err));
-    }, [projectId]);
+    }, [projectCode]);
 
     if (!project) return <div className="flex h-screen items-center justify-center">로딩중...</div>;
     if (!images || images.length === 0) return <div className="p-10 text-center">이미지 없음</div>;

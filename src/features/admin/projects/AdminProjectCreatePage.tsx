@@ -93,14 +93,14 @@ export default function AdminProjectCreatePage() {
                 <div className="flex gap-2">
                     <button
                         type="button"
-                        className="px-4 py-2 rounded border border-zinc-300 text-zinc-700 hover:bg-zinc-100 transition"
+                        className="px-3 py-1 text-xs text-gray-600 hover:bg-gray-100 cursor-pointer"
                         onClick={() => navigate("/Admin/ProjectList")}
                     >
                         취소
                     </button>
                     <button
                         type="button"
-                        className="px-4 py-2 rounded bg-zinc-800 text-white hover:bg-zinc-700 transition disabled:opacity-50"
+                        className="px-3 py-1 text-xs bg-zinc-800 text-zinc-200 hover:bg-gray-600 cursor-pointer"
                         onClick={handleSave}
                         disabled={!form.project.projectCode}
                     >

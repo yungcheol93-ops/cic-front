@@ -11,7 +11,7 @@ const getThumbnail = (url?: string) => {
 export default function PublicProjectPage() {
     const navigate = useNavigate();
     const [projects, setProjects] = useState<any[]>([]);
-console.log(projects);
+
     useEffect(() => {
         getPublicProjectList().then(res => setProjects(res.data));
 
@@ -26,7 +26,7 @@ console.log(projects);
                             key={p.id}
                             // 1. items-center 대신 items-start를 사용하여 윗부분을 맞춤
                             className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10 items-start cursor-pointer pb-10"
-                            onClick={() => navigate(`/Works/Interior/${p.id}`)}
+                            onClick={() => navigate(`/Works/Interior/${p.projectCode}`)}
                         >
                             {/* 왼쪽 여백 */}
                             <div className="hidden md:block"></div>

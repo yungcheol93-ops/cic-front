@@ -36,7 +36,7 @@ export default function AdminHomeImagesPage() {
 
     const fetchSlides = async () => {
         const res = await getHomeImageList();
-        // 서버에서 받아올 때 orderIndex 순으로 정렬해서 세팅
+
         const sortedData = (Array.isArray(res.data) ? res.data : []).sort((a, b) => a.orderIndex - b.orderIndex);
         setSlides(sortedData);
     };

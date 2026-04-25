@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {login} from "../../api/auth.api.ts";
+import {userAtom} from "../../store/auth.ts";
+import {useSetAtom} from "jotai";
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -10,6 +12,8 @@ export default function LoginPage() {
 
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+
+    const setUser = useSetAtom(userAtom);
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -22,10 +26,11 @@ export default function LoginPage() {
             setLoading(true);
             setError(null);
 
-
-            await login(username, password);
+            const { user } = await login(username, password);
 
             //로그인 성공
+            setUser(user);
+
             navigate("/", { replace: true });
 
         } catch (err: any) {
