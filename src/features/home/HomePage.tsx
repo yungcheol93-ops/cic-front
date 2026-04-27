@@ -49,7 +49,7 @@ export default function HomePage() {
     }, [slides.length]);
 
     // 데이터 로딩 중이거나 이미지가 없을 때의 처리
-    if (isLoading) return <div className="min-h-screen bg-black"/>;
+    if (isLoading) return <div className="min-h-screen"/>;
 
     return (
         <div className="relative min-h-screen">

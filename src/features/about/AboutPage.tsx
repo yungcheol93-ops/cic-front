@@ -3,7 +3,7 @@ export default function AboutPage() {
     return (
         <div className="h-full flex flex-col pt-8 md:pt-14 pb-8 w-full max-w-[1200px] mx-auto">
 
-            <section className="hidden md:flex relative flex-1 w-full max-h-[65vh] items-center justify-center bg-zinc-50 overflow-hidden group rounded-md">
+            <section className="flex relative flex-1 w-full max-h-[65vh] items-center justify-center bg-zinc-50 overflow-hidden group rounded-md">
                 <img
                     src="/images/about/about.png"
                     className="w-full h-full object-contain transition-all duration-500"

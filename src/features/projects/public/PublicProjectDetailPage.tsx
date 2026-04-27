@@ -8,6 +8,7 @@ export default function PublicProjectDetailPage() {
     const [project, setProject] = useState<any>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const images = project?.imageUrls || [];
+    const [tab, setTab] = useState<"info" | "desc">("info");
 
     useEffect(() => {
         if (!projectCode) return;
@@ -96,29 +97,73 @@ export default function PublicProjectDetailPage() {
                 {/* ================= 하단 (고정 영역) ================= */}
                 <section className="pt-6 px-4 md:px-0 flex-shrink-0">
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-0 min-h-0">
+                    {/* ================= 모바일 ================= */}
+                    <div className="md:hidden">
 
-                        {/* 좌측 (모바일: 위 / 웹: 오른쪽) */}
-                        <div className="space-y-2 text-sm text-gray-700 order-1 md:order-2 md:text-right">
-                            <div className="font-bold">{project.projectCode}.</div>
-                            <div><span>완공 : </span>{project.completion}</div>
-                            <div><span>소재지 : </span>{project.location}</div>
-                            <div><span>용도 : </span>{project.type}</div>
-                            <div><span>작업 : </span>{project.scope}</div>
-                            <div><span>사진촬영 : </span>{project.photography}</div>
+                        {/* 탭 */}
+                        <div className="flex justify-between border-b text-sm">
+                            <button
+                                onClick={() => setTab("info")}
+                                className={`pb-2 ${tab === "info" ? "font-bold border-b border-black" : "text-gray-400"}`}
+                            >
+                                Information
+                            </button>
+
+                            <button
+                                onClick={() => setTab("desc")}
+                                className={`pb-2 ${tab === "desc" ? "font-bold border-b border-black" : "text-gray-400"}`}
+                            >
+                                Description
+                            </button>
                         </div>
 
-                        {/* description (스크롤 영역) */}
-                        <div
-                            className="text-sm text-gray-700 whitespace-pre-line leading-relaxed
-                     order-2 md:order-1
-                     max-h-[200px] md:max-h-[250px]
-                     overflow-y-auto scrollbar-hide"
-                        >
+                        {/* 내용 */}
+                        <div className="min-h-[140px]">
+
+                            {/* 정보 */}
+                            {tab === "info" && (
+                                <div className="space-y-1 text-sm text-gray-700">
+                                    <div className="font-bold">{project.projectCode}.</div>
+                                    <div>완공 : {project.completion}</div>
+                                    <div>소재지 : {project.location}</div>
+                                    <div>용도 : {project.type}</div>
+                                    <div>작업 : {project.scope}</div>
+                                    <div>사진촬영 : {project.photography}</div>
+                                </div>
+                            )}
+
+                            {/* 설명 */}
+                            {tab === "desc" && (
+                                <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed
+                        max-h-[140px] overflow-y-auto scrollbar-hide">
+                                    {project.description}
+                                </div>
+                            )}
+
+                        </div>
+                    </div>
+
+                    {/* ================= 웹 ================= */}
+                    <div className="hidden md:grid grid-cols-2 gap-0">
+
+                        {/* 좌측 (웹: 설명) */}
+                        <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed
+                                        order-2 md:order-1 max-h-[200px] overflow-y-auto scrollbar-hide">
                             {project.description}
                         </div>
 
+                        {/* 우측 (웹: 정보) */}
+                        <div className="space-y-2 text-sm text-gray-700 order-1 md:order-2 md:text-right">
+                            <div className="font-bold">{project.projectCode}.</div>
+                            <div>완공 : {project.completion}</div>
+                            <div>소재지 : {project.location}</div>
+                            <div>용도 : {project.type}</div>
+                            <div>작업 : {project.scope}</div>
+                            <div>사진촬영 : {project.photography}</div>
+                        </div>
+
                     </div>
+
                 </section>
 
             </section>

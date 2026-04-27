@@ -6,7 +6,7 @@ import Layout from "./components/layout/Layout";
 import HomePage from "./features/home/HomePage";
 import ContactPage from "./features/contact/ContactPage";
 import LoginPage from "./features/Login/LoginPage.tsx";
-import MediaPage from "./features/media/MediaPage";
+import NewsPage from "./features/news/NewsPage.tsx"
 import FurniturePage from "./features/works/pages/FurniturePage";
 import PublicProjectPage from "./features/projects/public/PublicProjectPage.tsx";
 import PublicProjectDetailPage from "./features/projects/public/PublicProjectDetailPage.tsx";
@@ -45,9 +45,7 @@ function App() {
             {/* Layout (스크롤 있음) */}
             <Route element={<Layout />}>
             {/* 메인 */}
-
-                <Route path="/Media" element={<MediaPage />} />
-
+                <Route path="/News" element={<NewsPage />} />
                 {/* Works - Furniture (리스트) */}
                 <Route path="/Works/Furniture" element={<FurniturePage />} />
                 {/* Works - Interior (리스트) */}
