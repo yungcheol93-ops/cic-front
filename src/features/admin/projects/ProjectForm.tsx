@@ -85,8 +85,8 @@ export default function ProjectForm({ form, setForm, isEdit }: Props) {
             />
 
             {/* 하단 정보 좌우 영역 */}
-            <section className="bg-white p-6 shadow-sm">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+            <section className="bg-white shadow-sm">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-0">
 
                     {/* 좌측 */}
                     <div className="space-y-2 text-sm">
@@ -139,11 +139,10 @@ export default function ProjectForm({ form, setForm, isEdit }: Props) {
                                             },
                                         }))
                                     }
-                                    maxLength={200}
-                                    className="w-full h-[200px] border p-3"
+                                    className="w-full h-[200px] border p-3 resize-none leading-relaxed"
                                 />
                                 <p className="text-right text-xs text-gray-400">
-                                    {project.description?.length || 0}/200
+                                    {project.description?.length} 자
                                 </p>
                             </>
                         ) : (

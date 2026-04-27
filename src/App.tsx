@@ -41,39 +41,48 @@ function App() {
     }, [setUser]);
 
     return (
-        <Layout>
-            <Routes>
-                {/* 메인 */}
-                <Route path="/" element={<HomePage />} />
-                {/* Studio */}
-                <Route path="/Studio/Contract" element={<ContactPage />} />
+        <Routes>
+            {/* Layout (스크롤 있음) */}
+            <Route element={<Layout />}>
+            {/* 메인 */}
+
                 <Route path="/Media" element={<MediaPage />} />
+
+                {/* Works - Furniture (리스트) */}
+                <Route path="/Works/Furniture" element={<FurniturePage />} />
+                {/* Works - Interior (리스트) */}
+                <Route path="/Works/Interior" element={<PublicProjectPage />} />
+            </Route>
+
+
+            {/* Layout (스크롤 없음) */}
+            <Route element={<Layout isScrollable={false} />}>
+                <Route path="/" element={<HomePage />} />
+
+                {/* Works - Furniture (디테일) */}
+                <Route path="/Works/Interior/:projectCode" element={<PublicProjectDetailPage />} />
+                {/* Works - Interior (디테일) */}
+                <Route path="/Works/Furniture/:furnitureId" element={<FurniturePage />} />
+
+                <Route path="/Contact" element={<ContactPage />} />
+
+                <Route path="/About" element={<AboutPage />} />
                 {/* Login */}
                 <Route path="/Login" element={<LoginPage />} />
                 {/* Projects */}
                 <Route path="/MyProject" element={<MyProjectPage />} />
-                {/* Admin */}
+            </Route>
+
+            {/* Admin */}    {/* Layout (스크롤 있음) */}
+            <Route element={<Layout />}>
                 <Route path="/Admin" element={<AdminRoute />}>
                     <Route path="HomeImage" element={<AdminHomeImagesPage />} />
                     <Route path="ProjectList" element={<AdminProjectListPage />} />
                     <Route path="ProjectCreate" element={<AdminProjectCreatePage />} />
                     <Route path="Project/:projectId" element={<AdminProjectDetailPage />}/>
-
                 </Route>
-
-
-                {/* Works - Furniture (리스트 + 디테일) */}
-                <Route path="/Works/Furniture" element={<FurniturePage />} />
-                <Route path="/Works/Furniture/:furnitureId" element={<FurniturePage />} />
-                {/* Works - Interior (리스트 + 디테일) */}
-                <Route path="/Works/Interior" element={<PublicProjectPage />} />
-                <Route path="/Works/Interior/:projectCode" element={<PublicProjectDetailPage />} />
-
-                <Route path="/Contact" element={<ContactPage />} />
-
-                <Route path="/About" element={<AboutPage />} />
-            </Routes>
-        </Layout>
+            </Route>
+        </Routes>
     );
 }
 

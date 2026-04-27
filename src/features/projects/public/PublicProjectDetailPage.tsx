@@ -30,89 +30,97 @@ export default function PublicProjectDetailPage() {
     };
 
     return (
-        <div className="w-full h-screen bg-white flex justify-center py-16">
+        <div className="w-full h-full bg-white flex justify-center overflow-hidden">
 
-            <section className="w-full max-w-[650px] h-full flex flex-col">
+            <section className="w-full max-w-[650px] h-full flex flex-col min-h-0">
 
+                {/* ================= 상단 영역 ================= */}
+                <div className="flex-1 min-h-0">
 
-            {/* ================= 모바일 ================= */}
-                <div className="block md:hidden space-y-4">
-                    {images.map((img: string, index: number) => (
-                        <img
-                            key={index}
-                            src={optimizeImage(img, 800)}
-                            className="w-full object-cover rounded-sm"
-                            alt="mobile-img"
-                            loading={index === 0 ? "eager" : "lazy"}
-                        />
-                    ))}
-                </div>
-
-                {/* ================= 웹 ================= */}
-                <div className="hidden md:flex flex-col">
-
-                    {/* 이미지 영역 (남은 공간 자동 사용) */}
-                    <div className="relative flex-1 flex items-center justify-center ">
-
-                        <img
-                            src={optimizeImage(images[currentIndex], 1200)}
-                            className="max-h-[60vh] max-w-full object-contain"
-                            alt=""
-                        />
-
-
-
-                        {/* 왼쪽 */}
-                        <div
-                            className="absolute left-0 top-0 w-1/2 h-full group/left cursor-pointer"
-                            onClick={handlePrev}
-                        >
-                            <button
-                                className="absolute left-4 top-1/2 -translate-y-1/2
-                            opacity-0 group-hover/left:opacity-100 transition
-                            text-zinc-900/40 hover:text-zinc-900"
-                            >
-                                <span className="text-5xl font-extralight">{"<"}</span>
-                            </button>
-                        </div>
-
-                        {/* 오른쪽 */}
-                        <div
-                            className="absolute right-0 top-0 w-1/2 h-full group/right cursor-pointer"
-                            onClick={handleNext}
-                        >
-                            <button
-                                className="absolute right-4 top-1/2 -translate-y-1/2
-                            opacity-0 group-hover/right:opacity-100 transition
-                            text-zinc-900/40 hover:text-zinc-900"
-                            >
-                                <span className="text-5xl font-extralight">{">"}</span>
-                            </button>
-                        </div>
+                    {/* ================= 모바일 ================= */}
+                    <div className="block md:hidden space-y-4 overflow-y-auto h-full scrollbar-hide">
+                        {images.map((img: string, index: number) => (
+                            <img
+                                key={index}
+                                src={optimizeImage(img, 800)}
+                                className="w-full object-cover rounded-sm"
+                                alt="mobile-img"
+                                loading={index === 0 ? "eager" : "lazy"}
+                            />
+                        ))}
                     </div>
 
-                </div>
-                {/* 하단 정보 (고정 영역) */}
-                <section className="py-6 px-4 md:px-0">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    {/* ================= 웹 ================= */}
+                    <div className="hidden md:flex flex-col h-full">
 
-                        {/* 좌측 */}
-                        <div className="space-y-2 text-sm text-gray-700">
-                            {/*<div><span className="text-gray-400">코드 : </span>{project.projectCode}</div>*/}
-                            <div><span className="text-gray-700">완공 : </span>{project.completion}</div>
-                            <div><span className="text-gray-700">소재지 : </span>{project.location}</div>
-                            <div><span className="text-gray-700">용도 : </span>{project.type}</div>
-                            <div><span className="text-gray-700">작업 : </span>{project.scope}</div>
-                            <div><span className="text-gray-700">사진촬영 : </span>{project.photography}</div>
+                        <div className="relative flex-1 flex items-center justify-center min-h-0">
+
+                            <img
+                                src={optimizeImage(images[currentIndex], 1000)}
+                                className="max-h-full max-w-full object-contain"
+                                alt=""
+                            />
+
+                            {/* 왼쪽 */}
+                            <div
+                                className="absolute left-0 top-0 w-1/2 h-full group/left cursor-pointer"
+                                onClick={handlePrev}
+                            >
+                                <button
+                                    className="absolute left-4 top-1/2 -translate-y-1/2
+              opacity-0 group-hover/left:opacity-100 transition
+              text-zinc-900/40 hover:text-zinc-900"
+                                >
+                                    <span className="text-5xl font-extralight">{"<"}</span>
+                                </button>
+                            </div>
+
+                            {/* 오른쪽 */}
+                            <div
+                                className="absolute right-0 top-0 w-1/2 h-full group/right cursor-pointer"
+                                onClick={handleNext}
+                            >
+                                <button
+                                    className="absolute right-4 top-1/2 -translate-y-1/2
+              opacity-0 group-hover/right:opacity-100 transition
+              text-zinc-900/40 hover:text-zinc-900"
+                                >
+                                    <span className="text-5xl font-extralight">{">"}</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                {/* ================= 하단 (고정 영역) ================= */}
+                <section className="pt-6 px-4 md:px-0 flex-shrink-0">
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-0 min-h-0">
+
+                        {/* 좌측 (모바일: 위 / 웹: 오른쪽) */}
+                        <div className="space-y-2 text-sm text-gray-700 order-1 md:order-2 md:text-right">
+                            <div className="font-bold">{project.projectCode}.</div>
+                            <div><span>완공 : </span>{project.completion}</div>
+                            <div><span>소재지 : </span>{project.location}</div>
+                            <div><span>용도 : </span>{project.type}</div>
+                            <div><span>작업 : </span>{project.scope}</div>
+                            <div><span>사진촬영 : </span>{project.photography}</div>
                         </div>
 
-                        {/* 우측 */}
-                        <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+                        {/* description (스크롤 영역) */}
+                        <div
+                            className="text-sm text-gray-700 whitespace-pre-line leading-relaxed
+                     order-2 md:order-1
+                     max-h-[200px] md:max-h-[250px]
+                     overflow-y-auto scrollbar-hide"
+                        >
                             {project.description}
                         </div>
 
                     </div>
                 </section>
+
             </section>
         </div>
     );

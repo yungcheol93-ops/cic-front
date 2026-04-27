@@ -1,11 +1,14 @@
 // src/components/layout/Layout.tsx
-import type { PropsWithChildren } from "react";
+import { Outlet } from "react-router-dom";
+
 import { useLocation } from "react-router-dom";
 import LeftSidebar from "./LeftSidebar.tsx";
 import RightSideBar from "./RightSideBar.tsx";
 import MobileHeader from "./MobileHeader";
 
-export default function Layout({ children }: PropsWithChildren) {
+
+
+export default function Layout({  isScrollable = true }) {
     const location = useLocation();
     const isHome = location.pathname === "/";
 
@@ -21,15 +24,19 @@ export default function Layout({ children }: PropsWithChildren) {
             <div className="hidden md:flex w-full h-full">
 
                 {/* 왼쪽 사이드바: vw 대신 고정 너비 사용 (화면 크기에 따라 너비 조절) */}
-                <aside className="flex-none w-[200px] lg:w-[250px] xl:w-[300px] h-full px-8 py-8 flex flex-col justify-between ">
+                <aside className="flex-none w-[200px] lg:w-[250px] xl:w-[300px] h-full px-8 pt-14 pb-8 flex flex-col justify-between ">
                     <LeftSidebar isHome={isHome} />
                 </aside>
 
                 {/* 메인 컨텐츠 영역: 남는 공간을 모두 차지(flex-1) */}
-                <main className={`flex-1 h-full relative ${
-                    isHome ? "overflow-hidden bg-transparent" : "overflow-y-auto no-scrollbar bg-white"
+                <main className={`flex-1 h-full relative pt-14 pb-8 ${
+                    isHome 
+                        ? "overflow-hidden bg-transparent"
+                        : isScrollable
+                            ? "overflow-y-auto no-scrollbar bg-white"
+                            : "overflow-hidden bg-white"
                 }`}>
-                    {children}
+                    <Outlet />
                 </main>
 
                 {/* 오른쪽 사이드바/푸터 */}
@@ -40,7 +47,7 @@ export default function Layout({ children }: PropsWithChildren) {
 
             {/* 3. 모바일 컨텐츠 영역 (헤더 높이 60px 제외) */}
             <div className="md:hidden h-[calc(100vh-60px)] overflow-y-auto">
-                {children}
+                <Outlet />
             </div>
         </div>
     );

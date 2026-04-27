@@ -96,7 +96,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
 
         return (
             <div className="flex flex-col justify-between h-full select-none">
-                <div className="pt-6">
+                <div className="">
                     {/* 로고: 해상도별 폰트 크기 최적화 */}
                     <div className="mb-6 lg:mb-8">
                         <p
