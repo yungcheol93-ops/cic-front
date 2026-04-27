@@ -77,7 +77,7 @@ export default function ContactPage() {
                                     placeholder="00만원"
                                     className="flex-1 p-2 focus:outline-none "/>
                             </div>
-                            <div className="mt-auto ">
+                            <div className="mt-auto pt-2">
                                 <div className=" gap-2 md:gap-4">
                                     <p className="text-sm mb-2">문의 내용</p>
                                     <textarea
