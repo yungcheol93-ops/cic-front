@@ -122,9 +122,16 @@ export default function ContactPage() {
                         <p className="text-sm text-gray-500">Blog</p>
                     </a>
                     <div className="space-y-2">
-                        <p className="text-sm text-gray-500">
-                            강동구 풍성로42길 22 102호
-                        </p>
+                        <a
+                            href="https://map.kakao.com/link/search/강동구 풍성로42길 22"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block"
+                        >
+                            <p className="text-sm text-gray-500">
+                                강동구 풍성로42길 22
+                            </p>
+                        </a>
                     </div>
                 </div>
             </div>
