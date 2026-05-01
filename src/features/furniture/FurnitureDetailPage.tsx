@@ -62,7 +62,7 @@ export default function FurnitureDetailPage() {
                         {furniture.width} * {furniture.height} * {furniture.volume}
                     </p>
 
-                    <p className="text-sm text-zinc-500 pt-6">
+                    <p className=" whitespace-pre-line text-sm text-zinc-500 pt-6">
                         {furniture.description}
                     </p>
 
