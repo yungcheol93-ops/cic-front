@@ -163,10 +163,10 @@ export default function AdminHomeImagesPage() {
 
                             {/* 2. 새 업로드 대기 이미지 */}
                             {uploads.map((item) => (
-                                <div key={item.id} className="relative rounded-xl overflow-hidden shadow-md ring-2 ring-blue-400 animate-pulse">
+                                <div key={item.id} className="relative  overflow-hidden ">
                                     <img src={item.preview} className="w-full h-40 object-cover opacity-70" />
                                     <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                                        <span className="text-white font-bold text-xs bg-blue-500 px-2 py-1 rounded">NEW</span>
+                                        <span className="text-white font-bold text-xs px-2 py-1 ">NEW</span>
                                     </div>
                                     <button onClick={() => setUploads(prev => prev.filter(u => u.id !== item.id))} className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"><CloseIcon /></button>
                                     {item.progress > 0 && <div className="absolute bottom-0 w-full h-1 bg-blue-500" style={{ width: `${item.progress}%` }} />}

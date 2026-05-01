@@ -1,111 +1,138 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getAdminProject, patchAdminProject } from "../../../api/project.api.ts";
-import {uploadImages} from "../../../api/cloudinary.project.api.ts";
-import ProjectForm from "./ProjectForm.tsx";
-import type {IProjectFormState} from "../../../types/admin/project/projectForm.ts";
+import FurnitureForm from "./FurnitureForm.tsx";
+import {useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {getAdminFurniture, patchAdminFurniture} from "../../../api/furniture.api.ts";
+import type {IFurnitureFormState} from "../../../types/admin/furniture/furnitureForm.ts";
+import {transformFurniture} from "./utils/furniture.transform.ts";
 import AlertModal from "../../../components/common/modal/AlertModal.tsx";
+import {uploadImages} from "../../../api/cloudinary.furniture.api.ts";
 
-
-
-export default function AdminProjectDetailPage() {
+export default function AdminFurnitureDetailPage() {
     const navigate = useNavigate();
-    const { projectId } = useParams<{ projectId: string }>();
-    const [form, setForm] = useState<IProjectFormState>({
-        project: {
+    const { furnitureId } = useParams<{ furnitureId: string }>();
+
+    const [isEdit, setIsEdit] = useState(false);
+    const [form, setForm] = useState<IFurnitureFormState>({
+        furniture: {
             id: 0,
-            projectCode: "",
-            completion: "",
-            location: "",
-            type: "",
-            scope: "",
-            photography: "",
+            furnitureCode: "",
+            title: "",
+            width: "",
+            height: "",
+            volume: "",
             description: "",
             images: [],
             isPublic: true,
-            status:"COMPLETED"
+            status: "COMPLETED"
         },
         thumbnail: null,
     });
 
-    const [isEdit, setIsEdit] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    useEffect(() => {
-        if (!projectId) return;
 
-        getAdminProject(Number(projectId)).then(res => {
+    // 데이터 가져오기
+    useEffect(() => {
+        if (!furnitureId) return;
+
+        getAdminFurniture(Number(furnitureId)).then(res => {
+            // const data = transformFurniture(res.data);
+            // console.log(res.data);
+            // setForm(data);
             setForm({
-                project: res.data,
+                furniture: res.data,
                 thumbnail: {
                     imageUrl: res.data.thumbnailUrl,
                 },
             });
         });
-    }, [projectId]);
+
+    }, [furnitureId]);
+
+    if (!form.furniture.id) return <div className="p-10">로딩중...</div>;
 
 
-    //  로딩 방어
-    if (!form.project.id) return <div className="p-10">로딩중...</div>;
-
-
-    //  저장
     const handleSave = async () => {
-        const { project, thumbnail } = form;
+        const { furniture, thumbnail } = form;
 
         try {
             //  새로 추가된 파일만 추출
-            let thumbnailUrl = project.thumbnailUrl;
-            const newFiles = project.images.filter((img: any) => img.file);
+            let thumbnailUrl = furniture.thumbnailUrl;
+            const newFiles = furniture.images.filter((img: any) => img.file);
 
             //  Cloudinary 업로드
             if (thumbnail?.file) {
                 thumbnailUrl = await uploadImages(thumbnail.file);
             }
-
             const uploadedUrls = await Promise.all(
                 newFiles.map((img: any) => uploadImages(img.file))
             );
+            let uploadIndex = 0;
+
+
+            const imagesPayload = furniture.images.map((img: any, index: number) => {
+                if (typeof img.id === "number") {
+                    return {
+                        id: img.id,
+                        imageUrl: img.imageUrl,
+                        orderIndex: index,
+                    };
+                }
+
+                const url = uploadedUrls[uploadIndex++];
+
+                return {
+                    id: null,
+                    imageUrl: url,
+                    orderIndex: index,
+                };
+            });
 
             if (!thumbnail) {
                 thumbnailUrl = undefined;
             }
             // 기존 이미지 id
-            const existingImageIds = project.images
-                .filter((img: any) => typeof img.id === "number")
-                .map((img: any) => img.id);
+            // const existingImageIds = furniture.images
+            //     .filter((img: any) => typeof img.id === "number")
+            //     .map((img: any) => img.id);
+            //
+            // //  순서
+            // const orders = furniture.images.map((_: any, index: number) => index);
+            //
 
-            //  순서
-            const orders = project.images.map((_: any, index: number) => index);
-
-            //  patch 요청
-            await patchAdminProject(Number(project.id), {
-                projectCode:project.projectCode,
-                completion: project.completion,
-                location: project.location,
-                type: project.type,
-                scope: project.scope,
-                photography: project.photography,
-                description:project.description,
-                status: project.status,
-                isPublic: project.isPublic,
-                thumbnailUrl:thumbnailUrl,
-
-                existingImageIds,
-                orders,
-                newImageUrls: uploadedUrls,
+            await patchAdminFurniture(Number(furnitureId), {
+                    furnitureCode:furniture.furnitureCode,
+                    title: furniture.title,
+                    width: furniture.width,
+                    height: furniture.height,
+                    volume: furniture.volume,
+                    description:furniture.description,
+                    status: furniture.status,
+                    isPublic: furniture.isPublic,
+                    thumbnailUrl:thumbnailUrl,
+                    images: imagesPayload,
+                    // existingImageIds,
+                    // orders,
+                    // newImageUrls: uploadedUrls,
             });
 
             setIsEdit(false);
             setError("수정 완료");
-
-        } catch (e) {
-            console.error(e);
+        } catch {
             setError("수정 실패");
         }
     };
 
+    //수정 취소
+    const handleCancel = async () => {
+        const res = await getAdminFurniture(Number(furnitureId));
+        setForm(transformFurniture(res.data));
+        setIsEdit(false);
+    };
+
+
     return (
-        <div className="h-full min-h-screen px-4 md:px-16 py-6 md:py-10">
+        <div className="h-full min-h-screen">
+
             <section className="flex items-center justify-between bg-white border px-5 py-2 mb-2 shadow-sm">
 
                 {/* 좌측 */}
@@ -120,7 +147,7 @@ export default function AdminProjectDetailPage() {
                             </button>
 
                             <button
-                                onClick={() => navigate("/admin/project/list")}
+                                onClick={() => navigate("/admin/furniture/list")}
                                 className="px-3 py-1 border text-xs text-gray-600 hover:bg-gray-100"
                             >
                                 목록
@@ -136,14 +163,14 @@ export default function AdminProjectDetailPage() {
                             </button>
 
                             <button
-                                onClick={() => setIsEdit(false)}
+                                onClick={handleCancel}
                                 className="px-3 py-1 bg-red-500 text-white text-xs hover:bg-red-600"
                             >
                                 취소
                             </button>
 
                             <button
-                                onClick={() => navigate("/admin/project/list")}
+                                onClick={() => navigate("/admin/furniture/list")}
                                 className="px-3 py-1 border text-xs text-gray-600 hover:bg-gray-100"
                             >
                                 목록
@@ -161,37 +188,38 @@ export default function AdminProjectDetailPage() {
                             onClick={() =>
                                 setForm((prev) => ({
                                     ...prev,
-                                    project: {
-                                        ...prev.project,
-                                        isPublic: !prev.project.isPublic,
+                                    furniture: {
+                                        ...prev.furniture,
+                                        isPublic: !prev.furniture.isPublic,
                                     },
                                 }))
                             }
                             className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition
-                            ${form.project.isPublic ? "bg-green-500" : "bg-gray-300"}`}
+                            ${form.furniture.isPublic ? "bg-green-500" : "bg-gray-300"}`}
                         >
                             <div
                                 className={`w-4 h-4 bg-white rounded-full transition
-                            ${form.project.isPublic ? "translate-x-6" : ""}`}
+                            ${form.furniture.isPublic ? "translate-x-6" : ""}`}
                             />
                         </div>
                     ) : (
                         <span
                             className={`px-3 py-1 text-xs rounded-full font-medium
                     ${
-                                form.project.isPublic
+                                form.furniture.isPublic
                                     ? "bg-green-100 text-green-700"
                                     : "bg-gray-200 text-gray-600"
                             }`}
                         >
-                            {form.project.isPublic ? "공개" : "비공개"}
+                            {form.furniture.isPublic ? "공개" : "비공개"}
                         </span>
                     )}
 
                 </div>
 
             </section>
-            <ProjectForm
+
+            <FurnitureForm
                 form={form}
                 setForm={setForm}
                 isEdit={isEdit}

@@ -1,20 +1,25 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {deleteAdminProject, getAdminProjectList, togglePublic} from "../../../api/project.api.ts";
+import {deleteAdminFurniture, getAdminFurnitureList, togglePublic} from "../../../api/furniture.api.ts";
+import {getThumbnail} from "../../../utils/imageUtils.ts";
 
-export default function AdminProjectListPage() {
+
+export default function AdminFurnitureListPage() {
 
     const navigate = useNavigate();
-    const [projects, setProjects] = useState<any[]>([]);
+    const [furnitures, setFurnitures] = useState<any[]>([]);
 
     useEffect(() => {
-        getAdminProjectList().then(res => setProjects(res.data));
+        getAdminFurnitureList().then(res => {
+            console.log(res.data);
+            setFurnitures(res.data);
+        });
     }, []);
 
     const handleToggle = async (id: number, current: boolean) => {
         await togglePublic(id, !current);
-        const res = await getAdminProjectList();
-        setProjects(res.data);
+        const res = await getAdminFurnitureList();
+        setFurnitures(res.data);
     };
 
     const handleDelete = async (id: number) => {
@@ -22,10 +27,10 @@ export default function AdminProjectListPage() {
         if (!confirmDelete) return;
 
         try {
-            await deleteAdminProject(id);
+            await deleteAdminFurniture(id);
 
             // 리스트 갱신
-            setProjects((prev) => prev.filter((p) => p.id !== id));
+            setFurnitures((prev) => prev.filter((p) => p.id !== id));
 
         } catch (e) {
             console.error(e);
@@ -37,61 +42,70 @@ export default function AdminProjectListPage() {
         <div className="h-full min-h-screen px-16">
             <div className="flex items-start justify-between gap-6 mb-6">
                 <h1 className="text-md md:text-3xl font-cic font-light uppercase">
-                    프로젝트 리스트
+                    가구 리스트
                 </h1>
                 <button
                     type="button"
                     className="px-3 py-1.5 bg-zinc-900 text-white rounded text-xs hover:bg-zinc-800 transition-colors"
-                    onClick={() => navigate("/admin/project/create")}
+                    onClick={() => navigate("/admin/furniture/create")}
                 >
-                    프로젝트 등록
+                    가구 등록
                 </button>
             </div>
 
             <div className="space-y-6">
                 <div className="space-y-4">
-                    {projects.map((p) => (
+                    {furnitures.map((f) => (
                         <section
-                            key={p.id}
-                            className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-start cursor-pointer py-6"
-                            onClick={() => navigate(`/Admin/Project/${p.id}`)}
+                            key={f.id}
+                            className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10 items-start cursor-pointer pb-10"
+                            onClick={() => navigate(`/admin/furniture/${f.id}`)}
                         >
-                            {/* 이미지 */}
-                            <img
-                                src={p.thumbnailUrl}
-                                className="w-full h-[200px] md:h-[240px] object-cover rounded"
-                                alt={p.projectCode}
-                            />
+                            {/* 왼쪽 여백 */}
+                            <div className="hidden md:block"></div>
+                            {/* 중앙 이미지 */}
+                            <div className="w-full aspect-square overflow-hidden bg-zinc-50">
+                                <img
+                                    src={getThumbnail(f.thumbnailUrl)}
+                                    loading="lazy"
+                                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                    alt={f.furnitureCode}
+                                />
+                            </div>
 
                             {/* 텍스트 */}
-                            <div className="w-full text-left rounded p-2 md:p-4 flex flex-col justify-between gap-4 hover:bg-zinc-50 transition">
+                            <div className="w-full text-left p-2 md:p-4 flex flex-col justify-between gap-4 hover:bg-zinc-50 transition">
 
                                 <div className="flex flex-col justify-center space-y-2 md:space-y-2">
-                                    <p className="text-sm md:text-md text-zinc-700">{p.projectCode}.</p>
-                                    <p className="text-sm md:text-md text-zinc-700">{p.completion}</p>
-
+                                    <p className="text-sm md:text-md text-zinc-700">{f.furnitureCode}.</p>
+                                    <p className="text-sm md:text-md text-zinc-700">{f.title}</p>
+                                    <div className="flex text-xs md:text-sm text-zinc-800 leading-none">
+                                        <p className="text-xs text-zinc-500">{f.width}*</p>
+                                        <p className="text-xs text-zinc-500">{f.height}*</p>
+                                        <p className="text-xs text-zinc-500">{f.volume}</p>
+                                    </div>
                                     <div className="flex items-center gap-2 mt-2">
 
                                         {/* 공개 토글 */}
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                handleToggle(p.id, p.isPublic);
+                                                handleToggle(f.id, f.isPublic);
                                             }}
                                             className={`px-2 py-1 text-xs rounded ${
-                                                p.isPublic
+                                                f.isPublic
                                                     ? "bg-green-100 text-green-700"
                                                     : "bg-gray-200 text-gray-600"
                                             }`}
                                         >
-                                            {p.isPublic ? "공개" : "비공개"}
+                                            {f.isPublic ? "공개" : "비공개"}
                                         </button>
 
                                         {/* 삭제 */}
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                handleDelete(p.id);
+                                                handleDelete(f.id);
                                             }}
                                             className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded"
                                         >

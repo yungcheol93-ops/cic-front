@@ -1,5 +1,6 @@
-import ImageUploader from "./ImageUploader.tsx";
+import ImageUploader from "../../../components/common/image-manager/ImageUploader.tsx";
 import type {IProjectFormState} from "../../../types/admin/project/projectForm.ts";
+import {getThumbnail} from "../../../utils/imageUtils.ts";
 
 interface Props {
     form: IProjectFormState;
@@ -25,10 +26,10 @@ export default function ProjectForm({ form, setForm, isEdit }: Props) {
 
             {/* 썸네일 */}
             <section className="border p-2 bg-white shadow-sm">
-                <div className="relative w-full bg-gray-100">
+                <div className="relative  flex items-center justify-center bg-gray-100">
 
                     {thumbnailSrc ? (
-                        <img src={thumbnailSrc} className="w-full object-cover" />
+                        <img src={getThumbnail(thumbnailSrc)} className=" object-cover" />
                     ) : (
                         <div className="h-[200px] flex items-center justify-center text-gray-400">
                             썸네일 없음
@@ -82,6 +83,7 @@ export default function ProjectForm({ form, setForm, isEdit }: Props) {
                     setForm((prev) => ({ ...prev, thumbnail: thumb }))
                 }
                 isEdit={isEdit}
+                viewType="slider"
             />
 
             {/* 하단 정보 좌우 영역 */}

@@ -1,8 +1,9 @@
-import ThumbnailUploader from "./ThumbnailUploader";
-import ImageGallery from "./ImageGallery";
-import SortableImageList from "./SortableImageList";
+import ThumbnailUploader from "./ThumbnailUploader.tsx";
+import ImageGallerySlider from "./ImageGallerySlider.tsx";
+import SortableImageList from "./SortableImageList.tsx";
 import { useState } from "react";
 import type {IProjectImage} from "../../../types/admin/project/IProjectImage.ts";
+import ImageGalleryVertical from "./ImageGalleryVertical.tsx";
 
 interface Props {
     images: IProjectImage[];
@@ -10,6 +11,7 @@ interface Props {
     thumbnail: any;
     setThumbnail: (thumb: any) => void;
     isEdit?: boolean;
+    viewType?: "slider" | "vertical"; //좌우 슬라이드(인테리어), 세로 나열(가구)
 }
 
 export default function ImageUploader({
@@ -18,13 +20,14 @@ export default function ImageUploader({
                                           thumbnail,
                                           setThumbnail,
                                           isEdit = true,
+                                          viewType
                                       }: Props) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     // 이미지 업로드
     const handleImageUpload = (files: FileList) => {
         const newImages = Array.from(files).map((file, index) => ({
-            id: `temp-${Date.now()}-${index}`,
+            // id: Date.now() + index,
             file,
             preview: URL.createObjectURL(file),
         }));
@@ -56,13 +59,23 @@ export default function ImageUploader({
             />
 
             {/* 메인 이미지 */}
-            <ImageGallery
+
+            {viewType === "slider" ? (
+                <ImageGallerySlider
+                    images={images}
+                    currentIndex={currentIndex}
+                    setCurrentIndex={setCurrentIndex}
+                    onRemove={handleRemoveImage}
+                    isEdit={isEdit}
+                />
+                ) : (
+                <ImageGalleryVertical
                 images={images}
-                currentIndex={currentIndex}
-                setCurrentIndex={setCurrentIndex}
                 onRemove={handleRemoveImage}
                 isEdit={isEdit}
-            />
+                />
+            )}
+
             <div className="flex justify-end mb-2 mt-2">
             {/* 업로드 버튼 */}
             {isEdit && (

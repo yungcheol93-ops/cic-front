@@ -7,10 +7,9 @@ import HomePage from "./features/home/HomePage";
 import ContactPage from "./features/contact/ContactPage";
 import LoginPage from "./features/Login/LoginPage.tsx";
 import NewsPage from "./features/news/NewsPage.tsx"
-import FurniturePage from "./features/works/pages/FurniturePage";
+import FurniturePage from './features/furniture/FurniturePage.tsx'
 import PublicProjectPage from "./features/projects/public/PublicProjectPage.tsx";
 import PublicProjectDetailPage from "./features/projects/public/PublicProjectDetailPage.tsx";
-import MyProjectPage from "./features/projects/user/MyProjectPage.tsx";
 import AdminProjectListPage from "./features/admin/projects/AdminProjectListPage.tsx";
 import AdminProjectDetailPage from "./features/admin/projects/AdminProjectDetailPage.tsx";
 import AdminProjectCreatePage from "./features/admin/projects/AdminProjectCreatePage.tsx";
@@ -19,6 +18,10 @@ import AdminHomeImagesPage from "./features/admin/home/AdminHomeImagesPage.tsx";
 import AdminRoute from "./routes/AdminRoute.tsx";
 import {useEffect} from "react";
 import {getMe, getToken, logout} from "./api/auth.api.ts";
+import AdminFurnitureListPage from "./features/admin/furniture/AdminFurnitureListPage.tsx";
+import FurnitureDetailPage from "./features/furniture/FurnitureDetailPage.tsx";
+import AdminFurnitureDetailPage from "./features/admin/furniture/AdminFurnitureDetailPage.tsx";
+import AdminFurnitureCreatePage from "./features/admin/furniture/AdminFurnitureCreatePage.tsx";
 
 
 
@@ -45,39 +48,45 @@ function App() {
             {/* Layout (스크롤 있음) */}
             <Route element={<Layout />}>
             {/* 메인 */}
-                <Route path="/News" element={<NewsPage />} />
-                {/* Works - Furniture (리스트) */}
-                <Route path="/Works/Furniture" element={<FurniturePage />} />
+                <Route path="/news" element={<NewsPage />} />
+                {/* Works - FurniturePage (리스트) */}
+                <Route path="/works/furniture" element={<FurniturePage />} />
                 {/* Works - Interior (리스트) */}
-                <Route path="/Works/Interior" element={<PublicProjectPage />} />
+                <Route path="/works/interior" element={<PublicProjectPage />} />
             </Route>
 
 
             {/* Layout (스크롤 없음) */}
             <Route element={<Layout isScrollable={false} />}>
                 <Route path="/" element={<HomePage />} />
-
-                {/* Works - Furniture (디테일) */}
-                <Route path="/Works/Interior/:projectCode" element={<PublicProjectDetailPage />} />
+                {/* Works - FurniturePage (디테일) */}
+                <Route path="/works/interior/:projectCode" element={<PublicProjectDetailPage />} />
                 {/* Works - Interior (디테일) */}
-                <Route path="/Works/Furniture/:furnitureId" element={<FurniturePage />} />
+                <Route path="/works/furniture/:furnitureCode" element={<FurnitureDetailPage />} />
 
-                <Route path="/Contact" element={<ContactPage />} />
+                <Route path="/contact" element={<ContactPage />} />
 
-                <Route path="/About" element={<AboutPage />} />
+                <Route path="/about" element={<AboutPage />} />
                 {/* Login */}
-                <Route path="/Login" element={<LoginPage />} />
-                {/* Projects */}
-                <Route path="/MyProject" element={<MyProjectPage />} />
+                <Route path="/login" element={<LoginPage />} />
+
             </Route>
 
             {/* Admin */}    {/* Layout (스크롤 있음) */}
             <Route element={<Layout />}>
-                <Route path="/Admin" element={<AdminRoute />}>
-                    <Route path="HomeImage" element={<AdminHomeImagesPage />} />
-                    <Route path="ProjectList" element={<AdminProjectListPage />} />
-                    <Route path="ProjectCreate" element={<AdminProjectCreatePage />} />
+                <Route path="/admin" element={<AdminRoute />}>
+                    <Route path="homeImage" element={<AdminHomeImagesPage />} />
+                    <Route path="project/list" element={<AdminProjectListPage />} />
+                    <Route path="project/create" element={<AdminProjectCreatePage />} />
                     <Route path="Project/:projectId" element={<AdminProjectDetailPage />}/>
+                    <Route path="furniture/list" element={<AdminFurnitureListPage />} />
+                </Route>
+            </Route>
+            {/* Admin */}    {/* Layout (스크롤 없음) */}
+            <Route element={<Layout isScrollable={false} />}>
+                <Route path="/admin" element={<AdminRoute />}>
+                    <Route path="furniture/create" element={<AdminFurnitureCreatePage />} />
+                    <Route path="furniture/:furnitureId" element={<AdminFurnitureDetailPage />}/>
                 </Route>
             </Route>
         </Routes>

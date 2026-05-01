@@ -1,5 +1,7 @@
 //이미지 슬라이드, 삭제
-export default function ImageGallery({
+import {optimizeImage} from "../../../utils/imageUtils.ts";
+
+export default function ImageGallerySlider({
                                          images,
                                          currentIndex,
                                          setCurrentIndex,
@@ -9,11 +11,11 @@ export default function ImageGallery({
     const current = images[currentIndex];
 
     return (
-        <div className="hidden md:flex relative flex-1 w-full max-h-[75vh] items-center justify-center bg-zinc-50 overflow-hidden">   {/* 메인 이미지 */}
+        <div className="hidden md:flex relative flex-1 w-full  items-center justify-center bg-zinc-50 overflow-hidden">   {/* 메인 이미지 */}
             {current ? (
                 <img
-                    src={current.imageUrl || current.preview || undefined}
-                    className="w-full h-full object-contain"
+                    src={optimizeImage(current.imageUrl || current.preview || undefined)}
+                    className="w-full h-full object-contain max-h-[75vh]"
                     alt={`Project Image ${currentIndex + 1}`}
                     fetchPriority="high"
                 />

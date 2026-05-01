@@ -34,13 +34,13 @@ function buildMenus(auth: AuthState | null): Menu[] {
             key: "Works",
             label: "Works",
             sub: [
-                { label: "Interior", path: "/Works/Interior" },
-                { label: "Furniture", path: "/Works/Furniture" },
+                { label: "Interior", path: "/works/interior" },
+                { label: "Furniture", path: "/works/furniture" },
             ],
         },
-        { key: "Contact", label: "Contact", path: "/Contact" },
-        { key: "About", label: "About", path: "/About" },
-        { key: "News", label: "News", path: "/News" },
+        { key: "Contact", label: "Contact", path: "/contact" },
+        { key: "About", label: "About", path: "/about" },
+        { key: "News", label: "News", path: "/news" },
     ];
 
 
@@ -52,9 +52,10 @@ function buildMenus(auth: AuthState | null): Menu[] {
                 key: "Admin",
                 label: "Admin",
                 sub: [
-                    { label: "HomeImage", path: "/Admin/HomeImage" },
-                    { label: "ProjectList", path: "/Admin/ProjectList" },
-                    // { label: "일정표", path: "/Admin/Schedule" },
+                    { label: "HomeImage", path: "/admin/HomeImage" },
+                    { label: "ProjectList", path: "/admin/project/list" },
+                    { label: "FurnitureList", path: "/admin/furniture/list" },
+
                 ],
             },
             { key: "Logout", label: "Logout", path: "/Login" },

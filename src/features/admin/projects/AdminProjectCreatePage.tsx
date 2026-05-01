@@ -76,7 +76,7 @@ export default function AdminProjectCreatePage() {
                 formData
             );
 
-            navigate("/Admin/ProjectList", { replace: true });
+            navigate("/admin/project/list", { replace: true });
 
 
         } catch (e) {
@@ -85,7 +85,7 @@ export default function AdminProjectCreatePage() {
         }
     }
     return (
-        <div className="h-full min-h-screen px-16 py-16">
+        <div className="h-full min-h-screen px-16">
             <div className="flex items-start justify-between gap-6 mb-10">
                 <h1 className="text-3xl font-cic font-light uppercase">
                     프로젝트 등록
@@ -94,7 +94,7 @@ export default function AdminProjectCreatePage() {
                     <button
                         type="button"
                         className="px-3 py-1 text-xs text-gray-600 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => navigate("/Admin/ProjectList")}
+                        onClick={() => navigate("/admin/project/list")}
                     >
                         취소
                     </button>

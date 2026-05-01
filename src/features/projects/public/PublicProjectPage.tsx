@@ -2,12 +2,8 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getPublicProjectList} from "../../../api/project.api.ts";
+import {getThumbnail} from "../../../utils/imageUtils.ts";
 
-//썸네일 리스트는 저해상도
-const getThumbnail = (url?: string) => {
-    if (!url) return "https://via.placeholder.com/800x600?text=No+Image";
-    return url.replace("/upload/", "/upload/f_auto,q_auto,w_800/");
-};
 export default function PublicProjectPage() {
     const navigate = useNavigate();
     const [projects, setProjects] = useState<any[]>([]);
