@@ -10,14 +10,25 @@ export default function PublicProjectDetailPage() {
     const [projectList, setProjectList] = useState<any[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const images = project?.imageUrls || [];
+    const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
 
     useEffect(() => {
         if (!projectCode) return;
 
+        setIsLoading(true);
+        setProject(null);
+        setCurrentIndex(0);
+
         // 상세 데이터 먼저 로드 (속도 최적화)
         getPublicProject(projectCode).then(res => {
             setProject(res.data);
-            setCurrentIndex(0);
+
+            // 만약 프로젝트에 이미지가 없다면 바로 로딩 해제
+            if (!res.data.imageUrls || res.data.imageUrls.length === 0) {
+                setIsLoading(false);
+            }
+        }).catch(() => {
+            setIsLoading(false);
         });
 
         // 리스트는 모바일에서만 필요하므로 조건부 호출
@@ -26,14 +37,19 @@ export default function PublicProjectDetailPage() {
         }
     }, [projectCode]);
 
+    const handleImageLoad = () => {
+        setIsLoading(false);
+    };
+
     // 모바일 전용: 현재 프로젝트 이후의 리스트 필터링
     const nextProjects = useMemo(() => {
         const index = projectList.findIndex(p => p.projectCode === projectCode);
         return projectList.slice(index + 1);
     }, [projectList, projectCode]);
 
-    if (!project) return <div className="flex h-screen items-center justify-center">로딩중...</div>;
-
+    if (!project) return <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
+        <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
+    </div>;
     const handlePrev = (e: React.MouseEvent) => {
         e.stopPropagation();
         setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -44,8 +60,15 @@ export default function PublicProjectDetailPage() {
         setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     };
 
+
     return (
         <div className="w-full min-h-screen bg-white flex justify-center overflow-x-hidden">
+            {isLoading && (
+                <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
+                    <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
+                </div>
+            )}
+
             <section className="w-full max-w-[650px] flex flex-col px-4 md:px-0">
 
                 {/* ================= 이미지 영역 ================= */}
@@ -59,6 +82,7 @@ export default function PublicProjectDetailPage() {
                                 className="w-full object-cover rounded-sm"
                                 alt="mobile-img"
                                 loading={index === 0 ? "eager" : "lazy"}
+                                onLoad={index === 0 ? handleImageLoad : undefined}
                             />
                         ))}
                     </div>
@@ -73,6 +97,7 @@ export default function PublicProjectDetailPage() {
                                     className="max-w-full max-h-full object-contain"
                                     alt="project-img"
                                     fetchPriority="high"
+                                    onLoad={handleImageLoad}
                                 />
                             )}
                             {/* 좌우 내비게이션 컨트롤 */}

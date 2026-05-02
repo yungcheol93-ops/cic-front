@@ -9,14 +9,26 @@ export default function FurnitureDetailPage() {
     const [furniture, setFurniture] = useState<any>(null);
     const [furnitureList, setFurnitureList] = useState<any[]>([]);
     const images = furniture?.imageUrls || [];
+    const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+
 
     useEffect(() => {
         if (!furnitureCode) return;
 
+        setIsLoading(true);
+        setFurniture(null);
+
         // 상세 데이터 로드
         getPublicFurniture(furnitureCode).then(res => {
             setFurniture(res.data);
+
+            if (!res.data.imageUrls || res.data.imageUrls.length === 0) {
+                setIsLoading(false);
+            }
+        }).catch(() => {
+            setIsLoading(false);
         });
+
 
         // 모바일 리스트 데이터 로드
         if (window.innerWidth < 768) {
@@ -24,16 +36,29 @@ export default function FurnitureDetailPage() {
         }
     }, [furnitureCode]);
 
+    const handleImageLoad = () => {
+        setIsLoading(false);
+    };
+
+
     // 모바일 전용: 현재 가구 이후의 리스트 필터링
     const nextFurnitures = useMemo(() => {
         const index = furnitureList.findIndex(f => f.furnitureCode === furnitureCode);
         return furnitureList.slice(index + 1);
     }, [furnitureList, furnitureCode]);
 
-    if (!furniture) return <div className="flex h-screen items-center justify-center">로딩중...</div>;
+    if (!furniture) return <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
+        <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
+    </div>;
 
     return (
         <div className="w-full flex flex-col md:flex-row bg-white">
+            {isLoading && (
+                <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
+                    <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
+
+                </div>
+            )}
 
             {/* ================= 1. 이미지 영역 ================= */}
             {/* 웹: 3/4 너비, 자체 스크롤 / 모바일: 세로 나열 */}
@@ -46,6 +71,7 @@ export default function FurnitureDetailPage() {
                             src={optimizeImage(img, 800)}
                             className="w-full object-cover rounded-sm"
                             alt="mobile-img"
+                            oonLoad={index === 0 ? handleImageLoad : undefined}
                             loading={index === 0 ? "eager" : "lazy"}
                         />
                     ))}
@@ -59,6 +85,7 @@ export default function FurnitureDetailPage() {
                             src={optimizeImage(img, 1000)}
                             className="w-full max-w-[500px] object-cover"
                             alt="furniture"
+                            onLoad={handleImageLoad}
                         />
                     ))}
                 </div>
