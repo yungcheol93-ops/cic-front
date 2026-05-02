@@ -1,9 +1,12 @@
 import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
+import AlertModal from "../../components/common/modal/AlertModal.tsx";
 
 export default function ContactPage() {
     const formRef = useRef<HTMLFormElement>(null);
     const [isSending, setIsSending] = useState(false);
+    const [statusMessage, setStatusMessage] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -16,11 +19,11 @@ export default function ContactPage() {
                 formRef.current!,
                 import.meta.env.VITE_EMAILJS_KEY    // 공개 키
             );
-            alert("상담 문의가 성공적으로 전송되었습니다.");
+            setStatusMessage("상담 문의가 성공적으로 전송되었습니다.");
             formRef.current?.reset(); // 폼 초기화
         } catch (error) {
             console.error(error);
-            alert("전송에 실패했습니다. 다시 시도해주세요.");
+            setError("전송에 실패했습니다. 다시 시도해주세요.");
         } finally {
             setIsSending(false);
         }
@@ -37,7 +40,7 @@ export default function ContactPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-6">
 
                 {/*  좌측 (2) - 폼 */}
-                <div className="md:col-span-2">
+                <div className="md:col-span-2 order-2 md:order-1">
                     <form ref={formRef} onSubmit={handleSubmit}  className="max-w-lg flex flex-col">
                         <div className="space-y-0 md:space-y-4 text-sm order-1 md:order-2 text-left">
                             <div className="flex items-center gap-2 md:gap-4">
@@ -102,39 +105,78 @@ export default function ContactPage() {
                 </div>
 
                 {/* 우측 (1) - SNS 영역 */}
-                <div className="space-y-4">
-
-                    {/* 인스타 */}
-                    <a
-                        href="https://www.instagram.com/cic_studio_/"
-                        target="_blank"
-                        className="block"
-                    >
-                        <p className="text-sm text-gray-500">Instagram</p>
-                    </a>
-
-                    {/* 블로그 */}
-                    <a
-                        href="https://blog.naver.com/cic_studio"
-                        target="_blank"
-                        className="block "
-                    >
-                        <p className="text-sm text-gray-500">Blog</p>
-                    </a>
-                    <div className="space-y-2">
+                <div className="space-y-4 order-1 md:order-2">
+                    <div className="space-y-1">
+                        <p className="text-sm gap-2">
+                            <span className="w-5">CIC Studio</span>
+                        </p>
+                        <p className="text-sm   gap-2">
+                            <span className="w-5">씨아이씨스튜디오</span>
+                        </p>
+                    </div>
+                    <div className="space-y-1">
                         <a
                             href="https://map.kakao.com/link/search/강동구 풍성로42길 22"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="block"
                         >
-                            <p className="text-sm text-gray-500">
-                                강동구 풍성로42길 22
+                            <p className="text-sm  ">
+                                서울시 강동구 풍성로42길 22, 102
                             </p>
+                        </a>
+                    </div>
+                    <div className="space-y-1">
+                        <a href="tel:024769116" className="flex gap-2 text-sm ">
+                            <span className="w-5">T.</span>
+                            <span>02-476-9116</span>
+
+                        </a>
+
+                        <a href="tel:01082346833" className="flex gap-2 text-sm ">
+                            <span className="w-5">M.</span>
+                            <span>010-8234-6833</span>
+                        </a>
+                        <a href="tel:01073237527" className="flex gap-2 text-sm ">
+                            <span className="w-5"></span>
+                            <span>010-7323-7527</span>
+                        </a>
+                        <a href="mailto:cicstudio@cicworks.com" className="flex gap-2 text-sm ">
+                            <span className="w-5">E.</span>
+                            <span>cicstudio@cicworks.com</span>
+                        </a>
+                    </div>
+                    <div className="space-y-1">
+                        {/* 인스타 */}
+                        <a
+                            href="https://www.instagram.com/cic_studio_/"
+                            target="_blank"
+                            className="block"
+                        >
+                            <p className="text-sm ">Instagram</p>
+                        </a>
+
+                        {/* 블로그 */}
+                        <a
+                            href="https://blog.naver.com/cic_studio"
+                            target="_blank"
+                            className="block "
+                        >
+                            <p className="text-sm ">Blog</p>
                         </a>
                     </div>
                 </div>
             </div>
+            <AlertModal
+                open={!!statusMessage}
+                message={statusMessage || ""}
+                onClose={() => setStatusMessage(null)}
+            />
+            <AlertModal
+                open={!!error}
+                message={error || ""}
+                onClose={() => setError(null)}
+            />
         </div>
     );
 }
