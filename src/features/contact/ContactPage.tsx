@@ -155,7 +155,8 @@ export default function ContactPage() {
                         >
                             <p className="text-sm ">Instagram</p>
                         </a>
-
+                    </div>
+                    <div className="space-y-1">
                         {/* 블로그 */}
                         <a
                             href="https://blog.naver.com/cic_studio"
