@@ -1,12 +1,12 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ProjectForm from "./ProjectForm.tsx";
 import type {IProjectFormState} from "../../../types/admin/project/projectForm.ts";
 import {uploadImages} from "../../../api/cloudinary.project.api.ts";
+import AlertModal from "../../../components/common/modal/AlertModal.tsx";
+import {createAdminProject} from "../../../api/project.api.ts";
 
 export default function AdminProjectCreatePage() {
-
     const navigate = useNavigate();
 
     const [form, setForm] = useState<IProjectFormState>({
@@ -26,19 +26,16 @@ export default function AdminProjectCreatePage() {
         thumbnail: null,
     });
 
+    const [loading, setLoading] = useState(false);
+    const [statusMessage, setStatusMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-
 
     const handleSave = async () => {
         const { project, thumbnail } = form;
 
-        if (!project.projectCode) {
-            setError("프로젝트 코드를 입력해주세요.");
-            return;
-        }
-
         try {
-            const formData = new FormData();
+            setLoading(true);
+            setStatusMessage("업로드 중...");
 
             // 썸네일 업로드
             let thumbnailUrl = null;
@@ -47,12 +44,11 @@ export default function AdminProjectCreatePage() {
             }
 
             // 이미지 업로드
-            const newFiles = project.images.filter((img: any) => img.file);
-            const uploadedUrls = await Promise.all(
-                newFiles.map((img: any) => uploadImages(img.file))
-            );
+            const imageUrls = project.images
+                .map((img: any) => img.imageUrl)
+                .filter((url) => !!url);
 
-            // DTO
+
             const dto = {
                 projectCode: project.projectCode,
                 completion: project.completion,
@@ -62,19 +58,11 @@ export default function AdminProjectCreatePage() {
                 photography: project.photography,
                 description: project.description,
                 thumbnailUrl,
-                imageUrls: uploadedUrls,
+                imageUrls,
                 isPublic: project.isPublic,
             };
 
-            formData.append(
-                "dto",
-                new Blob([JSON.stringify(dto)], { type: "application/json" })
-            );
-
-            await axios.post(
-                import.meta.env.VITE_API_URL + "/api/admin/project",
-                formData
-            );
+            await createAdminProject(dto);
 
             navigate("/admin/project/list", { replace: true });
 
@@ -82,8 +70,11 @@ export default function AdminProjectCreatePage() {
         } catch (e) {
             setError("저장 중 오류 발생");
             console.error(e);
+        }finally {
+            setLoading(false);
         }
-    }
+    };
+
     return (
         <div className="h-full min-h-screen px-16">
             <div className="flex items-start justify-between gap-6 mb-10">
@@ -102,9 +93,9 @@ export default function AdminProjectCreatePage() {
                         type="button"
                         className="px-3 py-1 text-xs bg-zinc-800 text-zinc-200 hover:bg-gray-600 cursor-pointer"
                         onClick={handleSave}
-                        disabled={!form.project.projectCode}
+                        disabled={loading}
                     >
-                        저장
+                        {loading ? "저장중..." : "저장"}
                     </button>
                 </div>
             </div>
@@ -114,7 +105,16 @@ export default function AdminProjectCreatePage() {
                 setForm={setForm}
                 isEdit={true}
             />
-            {error && <p className="text-red-500 mt-4">{error}</p>}
+            <AlertModal
+                open={!!statusMessage}
+                message={statusMessage || ""}
+                onClose={() => setStatusMessage(null)}
+            />
+            <AlertModal
+                open={!!error}
+                message={error || ""}
+                onClose={() => setError(null)}
+            />
         </div>
     );
 }

@@ -1,13 +1,6 @@
 
 export interface IImageItem {
-    id: number;
-    url: string;
-    orderIndex: number;
-}
-
-export interface UploadItem {
-    id: number;
-    file: File;
-    preview: string;
-    orderIndex: number;
+    id?: string | number;
+    imageUrl: string;
+    publicId: string;
 }

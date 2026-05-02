@@ -3,9 +3,8 @@ import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {getAdminFurniture, patchAdminFurniture} from "../../../api/furniture.api.ts";
 import type {IFurnitureFormState} from "../../../types/admin/furniture/furnitureForm.ts";
-import {transformFurniture} from "./utils/furniture.transform.ts";
 import AlertModal from "../../../components/common/modal/AlertModal.tsx";
-import {uploadImages} from "../../../api/cloudinary.furniture.api.ts";
+import {uploadImages, deleteImage } from "../../../api/cloudinary.furniture.api.ts";
 
 export default function AdminFurnitureDetailPage() {
     const navigate = useNavigate();
@@ -27,7 +26,9 @@ export default function AdminFurnitureDetailPage() {
         },
         thumbnail: null,
     });
-
+    const [deletedImages, setDeletedImages] = useState<string[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [statusMessage, setStatusMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     // 데이터 가져오기
@@ -35,9 +36,6 @@ export default function AdminFurnitureDetailPage() {
         if (!furnitureId) return;
 
         getAdminFurniture(Number(furnitureId)).then(res => {
-            // const data = transformFurniture(res.data);
-            // console.log(res.data);
-            // setForm(data);
             setForm({
                 furniture: res.data,
                 thumbnail: {
@@ -48,56 +46,42 @@ export default function AdminFurnitureDetailPage() {
 
     }, [furnitureId]);
 
-    if (!form.furniture.id) return <div className="p-10">로딩중...</div>;
+    useEffect(() => {
+        if (!loading) {
+            setStatusMessage(null);
+        }
+    }, [loading]);
 
+    if (!form.furniture.id) {
+        return (
+            <div className="flex items-center justify-center h-[60vh]">
+                <div className="flex flex-col items-center gap-3">
+                    <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
+                    <p className="text-sm text-gray-500">데이터 불러오는 중...</p>
+                </div>
+            </div>
+        );
+    }
 
-    const handleSave = async () => {
+  const handleSave = async () => {
         const { furniture, thumbnail } = form;
 
         try {
+            setLoading(true);
+            setStatusMessage("업로드 중...");
+
             //  새로 추가된 파일만 추출
             let thumbnailUrl = furniture.thumbnailUrl;
-            const newFiles = furniture.images.filter((img: any) => img.file);
 
-            //  Cloudinary 업로드
+
+            //  썸네일 Cloudinary 업로드
             if (thumbnail?.file) {
                 thumbnailUrl = await uploadImages(thumbnail.file);
             }
-            const uploadedUrls = await Promise.all(
-                newFiles.map((img: any) => uploadImages(img.file))
-            );
-            let uploadIndex = 0;
 
-
-            const imagesPayload = furniture.images.map((img: any, index: number) => {
-                if (typeof img.id === "number") {
-                    return {
-                        id: img.id,
-                        imageUrl: img.imageUrl,
-                        orderIndex: index,
-                    };
-                }
-
-                const url = uploadedUrls[uploadIndex++];
-
-                return {
-                    id: null,
-                    imageUrl: url,
-                    orderIndex: index,
-                };
-            });
-
-            if (!thumbnail) {
-                thumbnailUrl = undefined;
-            }
-            // 기존 이미지 id
-            // const existingImageIds = furniture.images
-            //     .filter((img: any) => typeof img.id === "number")
-            //     .map((img: any) => img.id);
-            //
-            // //  순서
-            // const orders = furniture.images.map((_: any, index: number) => index);
-            //
+            const imageUrls = furniture.images
+                .map((img: any) => img.imageUrl)
+                .filter((url) => !!url);
 
             await patchAdminFurniture(Number(furnitureId), {
                     furnitureCode:furniture.furnitureCode,
@@ -108,31 +92,38 @@ export default function AdminFurnitureDetailPage() {
                     description:furniture.description,
                     status: furniture.status,
                     isPublic: furniture.isPublic,
-                    thumbnailUrl:thumbnailUrl,
-                    images: imagesPayload,
-                    // existingImageIds,
-                    // orders,
-                    // newImageUrls: uploadedUrls,
+                    thumbnailUrl,
+                    imageUrls
+
             });
 
+            // Cloudinary 삭제
+            await Promise.all(deletedImages.map((url) => deleteImage(url)));
+
             setIsEdit(false);
-            setError("수정 완료");
-        } catch {
+            setDeletedImages([]); // 초기화
+            setStatusMessage("저장 완료");
+        } catch (e){
+            console.error(e);
             setError("수정 실패");
+        }finally {
+            setLoading(false);
         }
-    };
+  };
+
 
     //수정 취소
     const handleCancel = async () => {
-        const res = await getAdminFurniture(Number(furnitureId));
-        setForm(transformFurniture(res.data));
+        // const res = await getAdminFurniture(Number(furnitureId));
+        // setForm(transformFurniture(res.data));
         setIsEdit(false);
     };
 
 
-    return (
-        <div className="h-full min-h-screen">
 
+    return (
+
+        <div className="h-full min-h-screen">
             <section className="flex items-center justify-between bg-white border px-5 py-2 mb-2 shadow-sm">
 
                 {/* 좌측 */}
@@ -157,9 +148,10 @@ export default function AdminFurnitureDetailPage() {
                         <>
                             <button
                                 onClick={handleSave}
+                                disabled={loading}
                                 className="px-3 py-1 bg-blue-600 text-white text-xs hover:bg-blue-700"
                             >
-                                저장
+                                {loading ? "저장중..." : "저장"}
                             </button>
 
                             <button
@@ -178,6 +170,8 @@ export default function AdminFurnitureDetailPage() {
                         </>
                     )}
                 </div>
+
+
                 {/* 우측 공개 상태 */}
                 <div className="flex items-center gap-3">
 
@@ -223,6 +217,12 @@ export default function AdminFurnitureDetailPage() {
                 form={form}
                 setForm={setForm}
                 isEdit={isEdit}
+                setDeletedImages={setDeletedImages}
+            />
+            <AlertModal
+                open={!!statusMessage}
+                message={statusMessage || ""}
+                onClose={() => setStatusMessage(null)}
             />
             <AlertModal
                 open={!!error}

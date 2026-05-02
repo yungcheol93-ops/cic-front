@@ -8,7 +8,10 @@ export default function AdminProjectListPage() {
     const [projects, setProjects] = useState<any[]>([]);
 
     useEffect(() => {
-        getAdminProjectList().then(res => setProjects(res.data));
+        getAdminProjectList().then(res => {
+            console.log(res.data);
+            setProjects(res.data);
+        });
     }, []);
 
     const handleToggle = async (id: number, current: boolean) => {

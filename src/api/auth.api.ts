@@ -17,6 +17,7 @@ const STORAGE_KEY = "cic.auth";
  */
 export async function login(username: string, password: string): Promise<LoginResponse> {
 
+
     const email = `${username}@cicstudio.com`;
 
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -59,4 +60,5 @@ export async function getMe() {
 export async function logout() {
     await supabase.auth.signOut();
     localStorage.removeItem(STORAGE_KEY);
+
 }

@@ -8,6 +8,7 @@ export default function ImageGallerySlider({
                                          onRemove,
                                          isEdit,
                                      }: any) {
+
     const current = images[currentIndex];
 
     return (
@@ -53,9 +54,10 @@ export default function ImageGallerySlider({
             {/* 삭제 */}
             {isEdit && current && (
                 <button
-                    onClick={() => onRemove(current.id)}
-                    className="absolute top-3 right-3 bg-black/70 text-white text-xs px-3 py-1 rounded z-10"
-                    // className="absolute top-2 right-2 bg-black text-white px-2 py-1"
+                    onClick={() => {
+                        onRemove(currentIndex)
+                    }}
+                    className="absolute top-3 right-3 bg-black/70 text-white text-xs px-3 py-1 rounded z-30"
                 >
                     삭제
                 </button>

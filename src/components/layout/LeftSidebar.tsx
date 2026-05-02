@@ -124,10 +124,10 @@ function buildMenus(auth: AuthState | null): Menu[] {
                                     <button
                                         key={menu.key}
                                         onMouseEnter={() => setHovered(menu.key)}
-                                        onClick={() => {
+                                        onClick={async () => {
                                             if (menu.key === "Logout") {
-                                                logout();
-                                                handleNavigate("/Login");
+                                                await logout();
+                                                handleNavigate("/");
                                                 return;
                                             }
                                             if (menu.path) handleNavigate(menu.path);

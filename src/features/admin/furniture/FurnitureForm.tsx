@@ -2,15 +2,16 @@ import type {IFurnitureFormState} from "../../../types/admin/furniture/furniture
 import ImageUploader from "../../../components/common/image-manager/ImageUploader.tsx";
 import {getThumbnail} from "../../../utils/imageUtils.ts";
 import {useState} from "react";
-
+import { uploadImages as uploadFurniture } from "../../../api/cloudinary.furniture.api.ts";
 
 interface Props {
     form: IFurnitureFormState
     setForm: React.Dispatch<React.SetStateAction<IFurnitureFormState>>;
     isEdit: boolean;
+    setDeletedImages?: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export default function FurnitureForm({ form, setForm, isEdit }: Props) {
+export default function FurnitureForm({ form, setForm, isEdit, setDeletedImages }: Props) {
     const { furniture, thumbnail } = form;
     const [isThumbnailDeleted, setIsThumbnailDeleted] = useState(false);
 
@@ -86,7 +87,13 @@ export default function FurnitureForm({ form, setForm, isEdit }: Props) {
                     setImages={(images) =>
                         setForm((prev): IFurnitureFormState => ({
                             ...prev,
-                            furniture: { ...prev.furniture, images },
+                            furniture: {
+                                ...prev.furniture,
+                                images:
+                                    typeof images === "function"
+                                        ? images(prev.furniture.images)
+                                        : images,
+                            },
                         }))
                     }
                     thumbnail={thumbnail}
@@ -95,6 +102,8 @@ export default function FurnitureForm({ form, setForm, isEdit }: Props) {
                     }
                     isEdit={isEdit}
                     viewType="vertical"
+                    uploadFn={uploadFurniture}
+                    setDeletedImages={setDeletedImages || (() => {})}
                 />
 
             </div>

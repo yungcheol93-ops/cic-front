@@ -2,16 +2,18 @@ import ThumbnailUploader from "./ThumbnailUploader.tsx";
 import ImageGallerySlider from "./ImageGallerySlider.tsx";
 import SortableImageList from "./SortableImageList.tsx";
 import { useState } from "react";
-import type {IProjectImage} from "../../../types/admin/project/IProjectImage.ts";
 import ImageGalleryVertical from "./ImageGalleryVertical.tsx";
+import type {IImageItem} from "../../../types/image/Image.type.ts";
 
 interface Props {
-    images: IProjectImage[];
-    setImages: (images: IProjectImage[]) => void;
+    images: IImageItem[];
+    setImages: React.Dispatch<React.SetStateAction<IImageItem[]>>;
     thumbnail: any;
     setThumbnail: (thumb: any) => void;
     isEdit?: boolean;
     viewType?: "slider" | "vertical"; //좌우 슬라이드(인테리어), 세로 나열(가구)
+    uploadFn: (file: File) => Promise<string>;
+    setDeletedImages: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export default function ImageUploader({
@@ -20,32 +22,69 @@ export default function ImageUploader({
                                           thumbnail,
                                           setThumbnail,
                                           isEdit = true,
-                                          viewType
+                                          viewType,
+                                          uploadFn,
+                                          setDeletedImages
                                       }: Props) {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isUploading, setIsUploading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     // 이미지 업로드
-    const handleImageUpload = (files: FileList) => {
-        const newImages = Array.from(files).map((file, index) => ({
-            // id: Date.now() + index,
-            file,
-            preview: URL.createObjectURL(file),
+    const handleImageUpload = async  (files: FileList) => {
+        if (!files || files.length === 0) return;
+
+        try {
+            setIsUploading(true);
+        const fileArray = Array.from(files);
+
+        // 병렬 업로드
+        const uploadedUrls = await Promise.all(
+            fileArray.map((file) => uploadFn(file))
+        );
+        const newImages = uploadedUrls.map((url) => ({
+            id: crypto.randomUUID(),
+            imageUrl: url,
         }));
 
-        setImages([...images, ...newImages]);
-    };
+        setImages((prev) => [...prev, ...newImages]);
 
+        }   catch {
+        setError("이미지 업로드에 실패했습니다.");
+        } finally {
+            setIsUploading(false); // 로딩 종료
+        }
+    };
     // 삭제
-    const handleRemoveImage = (id: string | number) => {
-        const newImages = images.filter((img) => img.id !== id);
+    const handleRemoveImage = (index: number) => {
+        const removed = images[index];
+
+        if (!removed) {
+            console.warn("삭제할 이미지가 배열에 없습니다.");
+            return;
+        }
+
+        //  Cloudinary 삭제용 저장
+        if (removed?.imageUrl && typeof setDeletedImages === 'function') {
+            setDeletedImages((prev) => {
+                if (prev.includes(removed.imageUrl)) return prev;
+                return [...prev, removed.imageUrl];
+            });
+        }
+
+        const newImages = images.filter((_, i) => i !== index);
         setImages(newImages);
-        setCurrentIndex((prev) =>
-            newImages.length === 0 ? 0 : Math.min(prev, newImages.length - 1)
+
+        setCurrentIndex((prev) =>{
+            if (newImages.length === 0) return 0;
+            if (index < prev) return prev - 1; // 앞에서 삭제
+            return Math.min(prev, newImages.length - 1);
+            }
         );
     };
 
     // 정렬
-    const handleReorder = (newImages: IProjectImage[]) => {
+    const handleReorder = (newImages: IImageItem[]) => {
         setImages(newImages);
     };
 
@@ -68,7 +107,7 @@ export default function ImageUploader({
                     onRemove={handleRemoveImage}
                     isEdit={isEdit}
                 />
-                ) : (
+            ) : (
                 <ImageGalleryVertical
                 images={images}
                 onRemove={handleRemoveImage}
@@ -78,17 +117,33 @@ export default function ImageUploader({
 
             <div className="flex justify-end mb-2 mt-2">
             {/* 업로드 버튼 */}
-            {isEdit && (
-                <label className="inline-flex items-center gap-2 px-4 bg-black text-white cursor-pointer hover:bg-gray-800 transition">
-                    + 이미지 추가
-                    <input
-                        type="file"
-                        multiple
-                        hidden
-                        onChange={(e) => handleImageUpload(e.target.files!)}
-                    />
-                </label>
-            )}
+                {isEdit && (
+                    <label
+                        className={`inline-flex items-center gap-2 px-4 py-2 text-white transition
+                            ${isUploading
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-black cursor-pointer hover:bg-gray-800"
+                        }`}
+                    >
+                        {/* 업로드 중일 때 아이콘/텍스트 변경 */}
+                        {isUploading ? (
+                            <>
+                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                업로드 중...
+                            </>
+                        ) : (
+                            <>+ 이미지 추가</>
+                        )}
+
+                        <input
+                            type="file"
+                            multiple
+                            hidden
+                            disabled={isUploading} // 업로드 중 클릭 방지
+                            onChange={(e) => handleImageUpload(e.target.files!)}
+                        />
+                    </label>
+                )}
             </div>
             {/* 정렬 리스트 */}
             <SortableImageList

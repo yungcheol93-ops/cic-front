@@ -46,7 +46,7 @@ export default function Layout({  isScrollable = true }) {
             </div>
 
             {/* 3. 모바일 컨텐츠 영역 (헤더 높이 60px 제외) */}
-            <div className="md:hidden h-[calc(100vh-60px)] overflow-y-auto">
+            <div id="mobile-container" className="md:hidden h-[calc(100vh-60px)] overflow-y-auto">
                 <Outlet />
             </div>
         </div>

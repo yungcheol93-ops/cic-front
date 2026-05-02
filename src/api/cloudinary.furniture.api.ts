@@ -1,3 +1,6 @@
+import api from "./axiosInstance.ts";
+import {extractPublicId} from "../utils/cloudinary.util.ts";
+
 export const uploadImages = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
@@ -15,4 +18,13 @@ export const uploadImages = async (file: File) => {
 
     const data = await res.json();
     return data.secure_url;
+};
+
+
+export const deleteImage = async (imageUrl: string) => {
+    const publicId = extractPublicId(imageUrl);
+
+    if (!publicId) return;
+
+    await api.post("/admin/cloudinary/delete", { publicId });
 };

@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {createAdminFurniture} from "../../../api/furniture.api.ts";
 import type {IFurnitureFormState} from "../../../types/admin/furniture/furnitureForm.ts";
 import AlertModal from "../../../components/common/modal/AlertModal.tsx";
+import {uploadImages} from "../../../api/cloudinary.furniture.api.ts";
 
 export default function AdminFurnitureCreatePage() {
     const navigate = useNavigate();
@@ -23,25 +24,49 @@ export default function AdminFurnitureCreatePage() {
         },
         thumbnail: null,
     });
-
+    const [loading, setLoading] = useState(false);
+    const [statusMessage, setStatusMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const handleSave = async () => {
-
-        if (!form.furniture.furnitureCode) {
-            setError("프로젝트 코드를 입력해주세요.");
-            return;
-        }
+        const { furniture, thumbnail } = form;
 
         try {
+            setLoading(true);
+            setStatusMessage("업로드 중...");
 
-            await createAdminFurniture(form);
+            // 썸네일 업로드
+            let thumbnailUrl = null;
+            if (thumbnail?.file) {
+                thumbnailUrl = await uploadImages(thumbnail.file);
+            }
+
+            // 이미지 업로드
+            const imageUrls = furniture.images
+                .map((img: any) => img.imageUrl)
+                .filter((url) => !!url);
+
+            const dto = {
+                furnitureCode:furniture.furnitureCode,
+                title: furniture.title,
+                width: furniture.width,
+                height: furniture.height,
+                volume: furniture.volume,
+                description:furniture.description,
+                thumbnailUrl,
+                imageUrls,
+                isPublic: furniture.isPublic,
+            };
+
+            await createAdminFurniture(dto);
 
             navigate("/admin/furniture/list", { replace: true });
 
         } catch (e) {
             setError("저장 중 오류 발생");
             console.error(e);
+        }finally {
+            setLoading(false);
         }
     };
 
@@ -65,9 +90,9 @@ export default function AdminFurnitureCreatePage() {
                         type="button"
                         className="px-3 py-1 text-xs bg-zinc-800 text-zinc-200 hover:bg-gray-600 cursor-pointer"
                         onClick={handleSave}
-
+                        disabled={loading}
                     >
-                        저장
+                        {loading ? "저장중..." : "저장"}
                     </button>
                 </div>
             </div>
@@ -76,6 +101,11 @@ export default function AdminFurnitureCreatePage() {
                 form={form}
                 setForm={setForm}
                 isEdit={true}
+            />
+            <AlertModal
+                open={!!statusMessage}
+                message={statusMessage || ""}
+                onClose={() => setStatusMessage(null)}
             />
             <AlertModal
                 open={!!error}

@@ -14,7 +14,7 @@ export default function PublicProjectPage() {
     }, []);
 
     return (
-        <div className="h-full min-h-screen py-16">
+        <div className="h-full min-h-screen">
             <div className="space-y-6">
                 <div className="space-y-4">
                     {projects.map((p) => (

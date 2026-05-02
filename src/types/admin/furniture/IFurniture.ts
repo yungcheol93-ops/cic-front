@@ -1,4 +1,4 @@
-import type {IIFurnitureImage} from "./IIFurnitureImage.ts";
+import type {IImageItem} from "../../image/Image.type.ts";
 
 export interface IFurniture {
     id: number;
@@ -14,5 +14,5 @@ export interface IFurniture {
     thumbnailUrl?: string;
     status:string;
     isPublic:boolean;
-    images: IIFurnitureImage[];
+    images: IImageItem[];
 }

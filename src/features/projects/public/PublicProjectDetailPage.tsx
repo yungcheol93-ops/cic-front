@@ -1,27 +1,41 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { getPublicProject } from "../../../api/project.api.ts";
-import { optimizeImage } from "../../../utils/imageUtils.ts"; // 분리한 함수 사용
+import { useState, useEffect, useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { getPublicProject, getPublicProjectList } from "../../../api/project.api.ts";
+import { optimizeImage } from "../../../utils/imageUtils.ts";
 
 export default function PublicProjectDetailPage() {
     const { projectCode } = useParams<{ projectCode: string }>();
+    const navigate = useNavigate();
     const [project, setProject] = useState<any>(null);
+    const [projectList, setProjectList] = useState<any[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const images = project?.imageUrls || [];
-    const [tab, setTab] = useState<"info" | "desc">("info");
 
     useEffect(() => {
         if (!projectCode) return;
-        getPublicProject(projectCode)
-            .then(res => setProject(res.data))
-            .catch(err => console.error("데이터 로딩 실패:", err));
+
+        // 상세 데이터 먼저 로드 (속도 최적화)
+        getPublicProject(projectCode).then(res => {
+            setProject(res.data);
+            setCurrentIndex(0);
+        });
+
+        // 리스트는 모바일에서만 필요하므로 조건부 호출
+        if (window.innerWidth < 768) {
+            getPublicProjectList().then(res => setProjectList(res.data));
+        }
     }, [projectCode]);
 
+    // 모바일 전용: 현재 프로젝트 이후의 리스트 필터링
+    const nextProjects = useMemo(() => {
+        const index = projectList.findIndex(p => p.projectCode === projectCode);
+        return projectList.slice(index + 1);
+    }, [projectList, projectCode]);
+
     if (!project) return <div className="flex h-screen items-center justify-center">로딩중...</div>;
-    if (!images || images.length === 0) return <div className="p-10 text-center">이미지 없음</div>;
 
     const handlePrev = (e: React.MouseEvent) => {
-        e.stopPropagation(); // 이벤트 버블링 방지
+        e.stopPropagation();
         setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     };
 
@@ -31,15 +45,13 @@ export default function PublicProjectDetailPage() {
     };
 
     return (
-        <div className="w-full h-full bg-white flex justify-center overflow-hidden">
+        <div className="w-full min-h-screen bg-white flex justify-center overflow-x-hidden">
+            <section className="w-full max-w-[650px] flex flex-col px-4 md:px-0">
 
-            <section className="w-full max-w-[650px] h-full flex flex-col min-h-0">
-
-                {/* ================= 상단 영역 ================= */}
-                <div className="flex-1 min-h-0">
-
-                    {/* ================= 모바일 ================= */}
-                    <div className="block md:hidden space-y-4 overflow-y-auto h-full scrollbar-hide">
+                {/* ================= 이미지 영역 ================= */}
+                <div className="w-full">
+                    {/* 모바일: 세로 나열 (스크롤 형식) */}
+                    <div className="block md:hidden space-y-4">
                         {images.map((img: string, index: number) => (
                             <img
                                 key={index}
@@ -51,120 +63,91 @@ export default function PublicProjectDetailPage() {
                         ))}
                     </div>
 
-                    {/* ================= 웹 ================= */}
-                    <div className="hidden md:flex flex-col h-full">
-
-                        <div className="relative flex-1 flex items-center justify-center min-h-0">
-
-                            <img
-                                src={optimizeImage(images[currentIndex], 1000)}
-                                className="max-h-full max-w-full object-contain"
-                                alt=""
-                            />
-
-                            {/* 왼쪽 */}
-                            <div
-                                className="absolute left-0 top-0 w-1/2 h-full group/left cursor-pointer"
-                                onClick={handlePrev}
-                            >
-                                <button
-                                    className="absolute left-4 top-1/2 -translate-y-1/2
-              opacity-0 group-hover/left:opacity-100 transition
-              text-zinc-900/40 hover:text-zinc-900"
-                                >
-                                    <span className="text-5xl font-extralight">{"<"}</span>
-                                </button>
+                    {/* 웹: 슬라이더 (높이 고정, 너비 가변, 이미지 교체 방식) */}
+                    <div className="hidden md:block">
+                        <div className="relative w-full h-[60vh] flex items-center justify-center bg-white">
+                            {images.length > 0 && (
+                                <img
+                                    // key를 제거하여 이미지 전환 시 깜빡임 방지 및 속도 유지
+                                    src={optimizeImage(images[currentIndex], 1000)}
+                                    className="max-w-full max-h-full object-contain"
+                                    alt="project-img"
+                                    fetchPriority="high"
+                                />
+                            )}
+                            {/* 좌우 내비게이션 컨트롤 */}
+                            <div className="absolute inset-0 flex">
+                                <div className="flex-1 cursor-pointer group" onClick={handlePrev}>
+                                    <button className="absolute left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition text-5xl font-extralight text-zinc-400 hover:text-zinc-900">{"<"}</button>
+                                </div>
+                                <div className="flex-1 cursor-pointer group" onClick={handleNext}>
+                                    <button className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition text-5xl font-extralight text-zinc-400 hover:text-zinc-900">{">"}</button>
+                                </div>
                             </div>
-
-                            {/* 오른쪽 */}
-                            <div
-                                className="absolute right-0 top-0 w-1/2 h-full group/right cursor-pointer"
-                                onClick={handleNext}
-                            >
-                                <button
-                                    className="absolute right-4 top-1/2 -translate-y-1/2
-              opacity-0 group-hover/right:opacity-100 transition
-              text-zinc-900/40 hover:text-zinc-900"
-                                >
-                                    <span className="text-5xl font-extralight">{">"}</span>
-                                </button>
-                            </div>
-
                         </div>
                     </div>
                 </div>
 
-                {/* ================= 하단 (고정 영역) ================= */}
-                <section className="pt-6 px-4 md:px-0 flex-shrink-0">
-
-                    {/* ================= 모바일 ================= */}
-                    <div className="md:hidden">
-
-                        {/* 탭 */}
-                        <div className="flex justify-between border-b text-sm">
-                            <button
-                                onClick={() => setTab("info")}
-                                className={`pb-2 ${tab === "info" ? "font-bold border-b border-black" : "text-gray-400"}`}
-                            >
-                                Information
-                            </button>
-
-                            <button
-                                onClick={() => setTab("desc")}
-                                className={`pb-2 ${tab === "desc" ? "font-bold border-b border-black" : "text-gray-400"}`}
-                            >
-                                Description
-                            </button>
+                {/* ================= 상세 정보 영역 ================= */}
+                <section className="py-20 md:py-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+                        {/* [웹 우측] 프로젝트 스펙: 스크롤 없이 고정 */}
+                        <div className="text-sm md:text-right md:order-2">
+                            <div className=" mb-2">{project.projectCode}.</div>
+                            <div className="space-y-0.5 text-gray-700">
+                                <div className="grid grid-cols-[60px_1fr] md:block">
+                                    <span className="md:hidden">완공 :</span> <span>{project.completion}</span>
+                                </div>
+                                <div className="grid grid-cols-[60px_1fr] md:block">
+                                    <span className="md:hidden">소재지 :</span> <span>{project.location}</span>
+                                </div>
+                                <div className="grid grid-cols-[60px_1fr] md:block">
+                                    <span className="md:hidden">용도 :</span> <span>{project.type}</span>
+                                </div>
+                                <div className="grid grid-cols-[60px_1fr] md:block">
+                                    <span className="md:hidden">작업 :</span> <span>{project.scope}</span>
+                                </div>
+                                <div className="grid grid-cols-[60px_1fr] md:block">
+                                    <span className="md:hidden">촬영 :</span> <span>{project.photography}</span>
+                                </div>
+                            </div>
                         </div>
 
-                        {/* 내용 */}
-                        <div className="min-h-[140px]">
 
-                            {/* 정보 */}
-                            {tab === "info" && (
-                                <div className="space-y-1 text-sm text-gray-700">
-                                    <div className="font-bold">{project.projectCode}.</div>
-                                    <div>완공 : {project.completion}</div>
-                                    <div>소재지 : {project.location}</div>
-                                    <div>용도 : {project.type}</div>
-                                    <div>작업 : {project.scope}</div>
-                                    <div>사진촬영 : {project.photography}</div>
-                                </div>
-                            )}
-
-                            {/* 설명 */}
-                            {tab === "desc" && (
-                                <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed
-                        max-h-[140px] overflow-y-auto scrollbar-hide">
-                                    {project.description}
-                                </div>
-                            )}
-
-                        </div>
-                    </div>
-
-                    {/* ================= 웹 ================= */}
-                    <div className="hidden md:grid grid-cols-2 gap-0">
-
-                        {/* 좌측 (웹: 설명) */}
-                        <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed
-                                        order-2 md:order-1 max-h-[200px] overflow-y-auto scrollbar-hide">
+                        {/* [웹 좌측] 설명 영역: 고정 높이와 개별 스크롤 부여 */}
+                        <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed md:order-1
+                                        md:h-[25vh] md:overflow-y-auto md:pr-4 scrollbar-hide">
                             {project.description}
                         </div>
 
-                        {/* 우측 (웹: 정보) */}
-                        <div className="space-y-2 text-sm text-gray-700 order-1 md:order-2 md:text-right">
-                            <div className="font-bold">{project.projectCode}.</div>
-                            <div>완공 : {project.completion}</div>
-                            <div>소재지 : {project.location}</div>
-                            <div>용도 : {project.type}</div>
-                            <div>작업 : {project.scope}</div>
-                            <div>사진촬영 : {project.photography}</div>
-                        </div>
 
                     </div>
-
                 </section>
+
+                {/* ================= 모바일 전용: 다음 프로젝트 리스트 ================= */}
+                {nextProjects.length > 0 && (
+                    <section className="py-20 space-y-10 md:hidden border-t border-gray-200">
+                        <div className="space-y-16">
+                            {nextProjects.map((np) => (
+                                <div
+                                    key={np.id}
+                                    className="cursor-pointer"
+                                    onClick={() => navigate(`/Works/Interior/${np.projectCode}`)}
+                                >
+                                    <img
+                                        src={optimizeImage(np.thumbnailUrl, 700)}
+                                        className="w-full"
+                                        alt={np.projectCode}
+                                    />
+                                    <div className="mt-4 text-left">
+                                        <p className="text-sm font-medium tracking-tight">{np.projectCode}.</p>
+                                        <p className="text-sm text-gray-500 mt-0.5">{np.completion}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                )}
 
             </section>
         </div>

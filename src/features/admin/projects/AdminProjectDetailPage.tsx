@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAdminProject, patchAdminProject } from "../../../api/project.api.ts";
-import {uploadImages} from "../../../api/cloudinary.project.api.ts";
+import {uploadImages, deleteImage} from "../../../api/cloudinary.project.api.ts";
 import ProjectForm from "./ProjectForm.tsx";
 import type {IProjectFormState} from "../../../types/admin/project/projectForm.ts";
 import AlertModal from "../../../components/common/modal/AlertModal.tsx";
 
-
-
 export default function AdminProjectDetailPage() {
     const navigate = useNavigate();
     const { projectId } = useParams<{ projectId: string }>();
+
     const [form, setForm] = useState<IProjectFormState>({
         project: {
             id: 0,
@@ -28,8 +27,12 @@ export default function AdminProjectDetailPage() {
         thumbnail: null,
     });
 
+    const [deletedImages, setDeletedImages] = useState<string[]>([]);
     const [isEdit, setIsEdit] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [statusMessage, setStatusMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+
     useEffect(() => {
         if (!projectId) return;
 
@@ -45,37 +48,42 @@ export default function AdminProjectDetailPage() {
 
 
     //  로딩 방어
-    if (!form.project.id) return <div className="p-10">로딩중...</div>;
+    useEffect(() => {
+        if (!loading) {
+            setStatusMessage(null);
+        }
+    }, [loading]);
 
+    if (!form.project.id) {
+        return (
+            <div className="flex items-center justify-center h-[60vh]">
+                <div className="flex flex-col items-center gap-3">
+                    <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
+                    <p className="text-sm text-gray-500">데이터 불러오는 중...</p>
+                </div>
+            </div>
+        );
+    }
 
     //  저장
     const handleSave = async () => {
         const { project, thumbnail } = form;
 
         try {
+            setLoading(true);
+            setStatusMessage("업로드 중...");
+
             //  새로 추가된 파일만 추출
             let thumbnailUrl = project.thumbnailUrl;
-            const newFiles = project.images.filter((img: any) => img.file);
 
             //  Cloudinary 업로드
             if (thumbnail?.file) {
                 thumbnailUrl = await uploadImages(thumbnail.file);
             }
 
-            const uploadedUrls = await Promise.all(
-                newFiles.map((img: any) => uploadImages(img.file))
-            );
-
-            if (!thumbnail) {
-                thumbnailUrl = undefined;
-            }
-            // 기존 이미지 id
-            const existingImageIds = project.images
-                .filter((img: any) => typeof img.id === "number")
-                .map((img: any) => img.id);
-
-            //  순서
-            const orders = project.images.map((_: any, index: number) => index);
+            const imageUrls = project.images
+                .map((img: any) => img.imageUrl)
+                .filter((url) => !!url);
 
             //  patch 요청
             await patchAdminProject(Number(project.id), {
@@ -88,19 +96,20 @@ export default function AdminProjectDetailPage() {
                 description:project.description,
                 status: project.status,
                 isPublic: project.isPublic,
-                thumbnailUrl:thumbnailUrl,
-
-                existingImageIds,
-                orders,
-                newImageUrls: uploadedUrls,
+                thumbnailUrl,
+                imageUrls
             });
 
-            setIsEdit(false);
-            setError("수정 완료");
+            await Promise.all(deletedImages.map((url) => deleteImage(url)));
 
-        } catch (e) {
-            console.error(e);
+            setIsEdit(false);
+            setDeletedImages([]); // 초기화
+            setStatusMessage("저장 완료");
+
+        } catch {
             setError("수정 실패");
+        }finally {
+            setLoading(false);
         }
     };
 
@@ -195,6 +204,12 @@ export default function AdminProjectDetailPage() {
                 form={form}
                 setForm={setForm}
                 isEdit={isEdit}
+                setDeletedImages={setDeletedImages}
+            />
+            <AlertModal
+                open={!!statusMessage}
+                message={statusMessage || ""}
+                onClose={() => setStatusMessage(null)}
             />
             <AlertModal
                 open={!!error}

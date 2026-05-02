@@ -1,26 +1,35 @@
 import ImageUploader from "../../../components/common/image-manager/ImageUploader.tsx";
 import type {IProjectFormState} from "../../../types/admin/project/projectForm.ts";
 import {getThumbnail} from "../../../utils/imageUtils.ts";
-
+import { uploadImages as uploadProject } from "../../../api/cloudinary.project.api.ts";
+import {useState} from "react";
 interface Props {
     form: IProjectFormState;
     setForm: React.Dispatch<React.SetStateAction<IProjectFormState>>;
     isEdit: boolean;
+    setDeletedImages?: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export default function ProjectForm({ form, setForm, isEdit }: Props) {
+export default function ProjectForm({ form, setForm, isEdit, setDeletedImages }: Props) {
     const { project, thumbnail } = form;
+    const [isThumbnailDeleted, setIsThumbnailDeleted] = useState(false);
 
-    const thumbnailSrc =
-        thumbnail?.preview || thumbnail?.imageUrl || project.thumbnailUrl;
+    const thumbnailSrc = (() => {
+        if (thumbnail?.preview || thumbnail?.imageUrl) {
+            return thumbnail.preview || thumbnail.imageUrl;
+        }
+        if (isThumbnailDeleted) return null;
+        return project.thumbnailUrl;
+    })();
+
 
     const removeThumbnail = () => {
         setForm((prev) => ({
             ...prev,
             thumbnail: null,
         }));
+        setIsThumbnailDeleted(true);
     };
-
     return (
         <div className="space-y-4">
 
@@ -29,7 +38,9 @@ export default function ProjectForm({ form, setForm, isEdit }: Props) {
                 <div className="relative  flex items-center justify-center bg-gray-100">
 
                     {thumbnailSrc ? (
-                        <img src={getThumbnail(thumbnailSrc)} className=" object-cover" />
+                        <img
+                            src={getThumbnail(thumbnailSrc)}
+                             className=" object-cover" />
                     ) : (
                         <div className="h-[200px] flex items-center justify-center text-gray-400">
                             썸네일 없음
@@ -53,6 +64,7 @@ export default function ProjectForm({ form, setForm, isEdit }: Props) {
                                             preview: URL.createObjectURL(file),
                                         },
                                     }));
+                                    setIsThumbnailDeleted(false);
                                 }}
                             />
                         </label>
@@ -73,9 +85,15 @@ export default function ProjectForm({ form, setForm, isEdit }: Props) {
             <ImageUploader
                 images={project.images}
                 setImages={(images) =>
-                    setForm((prev) => ({
+                    setForm((prev): IProjectFormState => ({
                         ...prev,
-                        project: { ...prev.project, images },
+                        project: {
+                            ...prev.project,
+                            images:
+                                typeof images === "function"
+                                    ? images(prev.project.images)
+                                    : images,
+                        },
                     }))
                 }
                 thumbnail={thumbnail}
@@ -84,6 +102,8 @@ export default function ProjectForm({ form, setForm, isEdit }: Props) {
                 }
                 isEdit={isEdit}
                 viewType="slider"
+                uploadFn={uploadProject}
+                setDeletedImages={setDeletedImages || (() => {})}
             />
 
             {/* 하단 정보 좌우 영역 */}

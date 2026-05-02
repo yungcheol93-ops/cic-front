@@ -1,5 +1,5 @@
 // src/App.tsx
-import { Routes, Route } from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 import { useSetAtom } from "jotai";
 import { userAtom } from "./store/auth";
 import Layout from "./components/layout/Layout";
@@ -22,6 +22,7 @@ import AdminFurnitureListPage from "./features/admin/furniture/AdminFurnitureLis
 import FurnitureDetailPage from "./features/furniture/FurnitureDetailPage.tsx";
 import AdminFurnitureDetailPage from "./features/admin/furniture/AdminFurnitureDetailPage.tsx";
 import AdminFurnitureCreatePage from "./features/admin/furniture/AdminFurnitureCreatePage.tsx";
+import ScrollToTop from "./components/layout/ScrollToTop.tsx";
 
 
 
@@ -44,31 +45,33 @@ function App() {
     }, [setUser]);
 
     return (
-        <Routes>
+        <>
+            <ScrollToTop />
+                <Routes>
             {/* Layout (스크롤 있음) */}
             <Route element={<Layout />}>
             {/* 메인 */}
                 <Route path="/news" element={<NewsPage />} />
                 {/* Works - FurniturePage (리스트) */}
                 <Route path="/works/furniture" element={<FurniturePage />} />
+
                 {/* Works - Interior (리스트) */}
                 <Route path="/works/interior" element={<PublicProjectPage />} />
+
             </Route>
 
 
             {/* Layout (스크롤 없음) */}
             <Route element={<Layout isScrollable={false} />}>
                 <Route path="/" element={<HomePage />} />
-                {/* Works - FurniturePage (디테일) */}
-                <Route path="/works/interior/:projectCode" element={<PublicProjectDetailPage />} />
-                {/* Works - Interior (디테일) */}
-                <Route path="/works/furniture/:furnitureCode" element={<FurnitureDetailPage />} />
-
                 <Route path="/contact" element={<ContactPage />} />
-
                 <Route path="/about" element={<AboutPage />} />
                 {/* Login */}
                 <Route path="/login" element={<LoginPage />} />
+                {/* Works - Interior (디테일) */}
+                <Route path="/works/furniture/:furnitureCode" element={<FurnitureDetailPage />} />
+                {/* Works - FurniturePage (디테일) */}
+                <Route path="/works/interior/:projectCode" element={<PublicProjectDetailPage />} />
 
             </Route>
 
@@ -90,6 +93,7 @@ function App() {
                 </Route>
             </Route>
         </Routes>
+        </>
     );
 }
 

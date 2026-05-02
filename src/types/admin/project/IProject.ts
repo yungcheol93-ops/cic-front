@@ -1,4 +1,4 @@
-import type {IProjectImage} from "./IProjectImage.ts";
+import type {IImageItem} from "../../image/Image.type.ts";
 
 export interface IProject {
     id?: number;
@@ -15,5 +15,5 @@ export interface IProject {
     thumbnailUrl?: string;
     status:string;
     isPublic:boolean;
-    images: IProjectImage[];
+    images: IImageItem[];
 }
