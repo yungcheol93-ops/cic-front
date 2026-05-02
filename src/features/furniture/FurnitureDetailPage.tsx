@@ -71,8 +71,8 @@ export default function FurnitureDetailPage() {
                             src={optimizeImage(img, 800)}
                             className="w-full object-cover rounded-sm"
                             alt="mobile-img"
-                            oonLoad={index === 0 ? handleImageLoad : undefined}
                             loading={index === 0 ? "eager" : "lazy"}
+                            onLoad={index === 0 ? handleImageLoad : undefined}
                         />
                     ))}
                 </div>

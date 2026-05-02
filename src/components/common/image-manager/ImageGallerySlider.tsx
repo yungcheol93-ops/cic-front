@@ -54,10 +54,12 @@ export default function ImageGallerySlider({
             {/* 삭제 */}
             {isEdit && current && (
                 <button
-                    onClick={() => {
-                        onRemove(currentIndex)
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onRemove(currentIndex);
                     }}
-                    className="absolute top-3 right-3 bg-black/70 text-white text-xs px-3 py-1 rounded z-30"
+                    className="absolute top-3 right-3 bg-black/70 text-white text-xs px-3 py-1 z-50 "
                 >
                     삭제
                 </button>
