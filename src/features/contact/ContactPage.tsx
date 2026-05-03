@@ -30,20 +30,23 @@ export default function ContactPage() {
     };
 
     return (
-        <div className="px-4 md:px-16 space-y-6 md:space-y-10 h-full">
+        <div className="px-4 space-y-6 md:space-y-10 h-full">
             {/* 제목 */}
-            <section className="text-center space-y-3 md:space-y-4">
-                <h1 className="text-2xl md:text-3xl font-light tracking-wide">CONTACT</h1>
+            <section className="hidden md:block text-center space-y-4">
+                <h1 className="text-3xl font-light tracking-wide">
+                    CONTACT
+                </h1>
             </section>
 
             {/* 핵심: 2:1 레이아웃 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 md:gap-20">
 
                 {/*  좌측 (2) - 폼 */}
                 <div className="md:col-span-2 order-2 md:order-1">
-                    <form ref={formRef} onSubmit={handleSubmit}  className="max-w-lg flex flex-col">
-                        <div className="space-y-0 md:space-y-4 text-sm order-1 md:order-2 text-left">
-                            <div className="flex items-center gap-2 md:gap-4">
+                    <form ref={formRef} onSubmit={handleSubmit}
+                          className="max-w-md flex flex-col mt-24 md:mt-0 min-h-[70vh]">
+                        <div className="space-y-0 md:space-y-2 text-sm order-1 md:order-2 text-left">
+                            <div className="flex items-center gap-2 md:gap-4 text-sm">
                                 <span className="w-24 shrink-0">고객명 :</span>
                                 <input
                                 name="user_name"
@@ -51,15 +54,15 @@ export default function ContactPage() {
                                 placeholder="고객명"
                                 className="flex-1 p-2 focus:outline-none "/>
                             </div>
-                            <div className="flex items-center gap-2 md:gap-4">
-                                <span className="w-24 shrink-0">연락처 :</span>
+                            <div className="flex items-center gap-2 md:gap-4 ">
+                                <span className="w-24 shrink-0 ">연락처 :</span>
                                 <input
                                     name="user_contact"
                                     required
                                     placeholder="010-1234-5678"
                                     className="flex-1 p-2 focus:outline-none "/>
                             </div>
-                            <div className="flex items-center gap-2 md:gap-4">
+                            <div className="flex items-center gap-2 md:gap-4 ">
                                 <span className="w-24 shrink-0">공사 예정지 :</span>
                                 <input
                                     name="location"
@@ -80,7 +83,7 @@ export default function ContactPage() {
                                     placeholder="00만원"
                                     className="flex-1 p-2 focus:outline-none "/>
                             </div>
-                            <div className="mt-auto pt-2">
+                            <div className="mt-auto md:pt-4">
                                 <div className=" gap-2 md:gap-4">
                                     <p className="text-sm mb-2">문의 내용</p>
                                     <textarea
@@ -105,7 +108,12 @@ export default function ContactPage() {
                 </div>
 
                 {/* 우측 (1) - SNS 영역 */}
-                <div className="space-y-4 order-1 md:order-2">
+                <div className="order-1 md:order-2 md:min-h-0 flex flex-col justify-start pt-10 md:pt-0 space-y-6">
+                    {/* 모바일 CONTACT */}
+                    <h1 className="text-2xl font-light tracking-wide text-center md:hidden pb-16">
+                        CONTACT
+                    </h1>
+
                     <div className="space-y-1">
                         <p className="text-sm gap-2">
                             <span className="w-5">CIC Studio</span>

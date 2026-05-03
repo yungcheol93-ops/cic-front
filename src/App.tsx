@@ -23,6 +23,7 @@ import FurnitureDetailPage from "./features/furniture/FurnitureDetailPage.tsx";
 import AdminFurnitureDetailPage from "./features/admin/furniture/AdminFurnitureDetailPage.tsx";
 import AdminFurnitureCreatePage from "./features/admin/furniture/AdminFurnitureCreatePage.tsx";
 import ScrollToTop from "./components/layout/ScrollToTop.tsx";
+import AdminAboutPage from "./features/admin/about/AdminAboutPage.tsx";
 
 
 
@@ -90,6 +91,7 @@ function App() {
                 <Route path="/admin" element={<AdminRoute />}>
                     <Route path="furniture/create" element={<AdminFurnitureCreatePage />} />
                     <Route path="furniture/:furnitureId" element={<AdminFurnitureDetailPage />}/>
+                    <Route path="about" element={<AdminAboutPage />} />
                 </Route>
             </Route>
         </Routes>

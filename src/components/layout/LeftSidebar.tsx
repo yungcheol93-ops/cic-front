@@ -55,7 +55,7 @@ function buildMenus(auth: AuthState | null): Menu[] {
                     { label: "HomeImage", path: "/admin/HomeImage" },
                     { label: "ProjectList", path: "/admin/project/list" },
                     { label: "FurnitureList", path: "/admin/furniture/list" },
-
+                    { label: "About", path: "/admin/about" },
                 ],
             },
             { key: "Logout", label: "Logout", path: "/Login" },
@@ -81,7 +81,6 @@ function buildMenus(auth: AuthState | null): Menu[] {
             if (path.startsWith("/About")) return "About";
             if (path.startsWith("/Admin")) return "Admin";
             if (path.startsWith("/Login")) return "Login";
-            if (path.startsWith("/MyProject")) return "MyProject";
             return null;
         }, [location.pathname]);
 

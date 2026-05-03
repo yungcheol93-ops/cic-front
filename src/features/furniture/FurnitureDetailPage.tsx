@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { getPublicFurniture, getPublicFurnitureList } from "../../api/furniture.api.ts";
 import { optimizeImage } from "../../utils/imageUtils.ts";
 
@@ -8,9 +8,9 @@ export default function FurnitureDetailPage() {
     const navigate = useNavigate();
     const [furniture, setFurniture] = useState<any>(null);
     const [furnitureList, setFurnitureList] = useState<any[]>([]);
-    const images = furniture?.imageUrls || [];
     const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
 
+    const images = furniture?.imageUrls || [];
 
     useEffect(() => {
         if (!furnitureCode) return;
@@ -34,6 +34,7 @@ export default function FurnitureDetailPage() {
         if (window.innerWidth < 768) {
             getPublicFurnitureList().then(res => setFurnitureList(res.data));
         }
+
     }, [furnitureCode]);
 
     const handleImageLoad = () => {
@@ -41,11 +42,6 @@ export default function FurnitureDetailPage() {
     };
 
 
-    // 모바일 전용: 현재 가구 이후의 리스트 필터링
-    const nextFurnitures = useMemo(() => {
-        const index = furnitureList.findIndex(f => f.furnitureCode === furnitureCode);
-        return furnitureList.slice(index + 1);
-    }, [furnitureList, furnitureCode]);
 
     if (!furniture) return <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
         <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
@@ -112,23 +108,23 @@ export default function FurnitureDetailPage() {
                 </div>
 
                 {/* ================= 3. 모바일 전용 하단 리스트 ================= */}
-                {nextFurnitures.length > 0 && (
+                {furnitureList.length > 0 && (
                     <section className="mt-20 space-y-10 md:hidden border-t border-zinc-100 pt-10">
                         <div className="space-y-16">
-                            {nextFurnitures.map((nf) => (
+                            {furnitureList.map((fl) => (
                                 <div
-                                    key={nf.id}
+                                    key={fl.id}
                                     className="cursor-pointer"
-                                    onClick={() => navigate(`/works/furniture/${nf.furnitureCode}`)}
+                                    onClick={() => navigate(`/works/furniture/${fl.furnitureCode}`)}
                                 >
                                     <img
-                                        src={optimizeImage(nf.thumbnailUrl, 700)}
+                                        src={optimizeImage(fl.thumbnailUrl, 700)}
                                         className="w-full"
-                                        alt={nf.furnitureCode}
+                                        alt={fl.furnitureCode}
                                     />
                                     <div className="mt-4 text-left">
-                                        <p className="text-sm font-medium tracking-tight text-zinc-800">{nf.furnitureCode}.</p>
-                                        <p className="text-xs text-zinc-500 mt-1">{nf.title}</p>
+                                        <p className="text-sm font-medium tracking-tight text-zinc-800">{fl.furnitureCode}.</p>
+                                        <p className="text-xs text-zinc-500 mt-1">{fl.title}</p>
                                     </div>
                                 </div>
                             ))}

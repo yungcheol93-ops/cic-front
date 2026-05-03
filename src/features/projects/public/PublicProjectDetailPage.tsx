@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPublicProject, getPublicProjectList } from "../../../api/project.api.ts";
 import { optimizeImage } from "../../../utils/imageUtils.ts";
@@ -41,11 +41,6 @@ export default function PublicProjectDetailPage() {
         setIsLoading(false);
     };
 
-    // 모바일 전용: 현재 프로젝트 이후의 리스트 필터링
-    const nextProjects = useMemo(() => {
-        const index = projectList.findIndex(p => p.projectCode === projectCode);
-        return projectList.slice(index + 1);
-    }, [projectList, projectCode]);
 
     if (!project) return <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
         <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
@@ -115,9 +110,9 @@ export default function PublicProjectDetailPage() {
 
                 {/* ================= 상세 정보 영역 ================= */}
                 <section className="py-20 md:py-10">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
                         {/* [웹 우측] 프로젝트 스펙: 스크롤 없이 고정 */}
-                        <div className="text-sm md:text-right md:order-2">
+                        <div className="text-sm md:text-right md:order-2 md:col-span-1">
                             <div className=" mb-2">{project.projectCode}.</div>
                             <div className="space-y-0.5 text-gray-700">
                                 <div className="grid grid-cols-[60px_1fr] md:block">
@@ -141,7 +136,7 @@ export default function PublicProjectDetailPage() {
 
                         {/* [웹 좌측] 설명 영역: 고정 높이와 개별 스크롤 부여 */}
                         <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed md:order-1
-                                        md:h-[25vh] md:overflow-y-auto md:pr-4 scrollbar-hide">
+                                        md:col-span-2 md:h-[25vh] md:overflow-y-auto md:pr-4 scrollbar-hide">
                             {project.description}
                         </div>
 
@@ -150,23 +145,23 @@ export default function PublicProjectDetailPage() {
                 </section>
 
                 {/* ================= 모바일 전용: 다음 프로젝트 리스트 ================= */}
-                {nextProjects.length > 0 && (
+                {projectList.length > 0 && (
                     <section className="py-20 space-y-10 md:hidden border-t border-gray-200">
                         <div className="space-y-16">
-                            {nextProjects.map((np) => (
+                            {projectList.map((pl) => (
                                 <div
-                                    key={np.id}
+                                    key={pl.id}
                                     className="cursor-pointer"
-                                    onClick={() => navigate(`/Works/Interior/${np.projectCode}`)}
+                                    onClick={() => navigate(`/Works/Interior/${pl.projectCode}`)}
                                 >
                                     <img
-                                        src={optimizeImage(np.thumbnailUrl, 700)}
+                                        src={optimizeImage(pl.thumbnailUrl, 700)}
                                         className="w-full"
-                                        alt={np.projectCode}
+                                        alt={pl.projectCode}
                                     />
                                     <div className="mt-4 text-left">
-                                        <p className="text-sm font-medium tracking-tight">{np.projectCode}.</p>
-                                        <p className="text-sm text-gray-500 mt-0.5">{np.completion}</p>
+                                        <p className="text-sm font-medium tracking-tight">{pl.projectCode}.</p>
+                                        <p className="text-sm text-gray-500 mt-0.5">{pl.completion}</p>
                                     </div>
                                 </div>
                             ))}
