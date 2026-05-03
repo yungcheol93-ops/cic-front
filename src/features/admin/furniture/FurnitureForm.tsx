@@ -13,72 +13,13 @@ interface Props {
 
 export default function FurnitureForm({ form, setForm, isEdit, setDeletedImages }: Props) {
     const { furniture, thumbnail } = form;
-    const [isThumbnailDeleted, setIsThumbnailDeleted] = useState(false);
 
-    const thumbnailSrc = (() => {
-        if (thumbnail?.preview || thumbnail?.imageUrl) {
-            return thumbnail.preview || thumbnail.imageUrl;
-        }
-        if (isThumbnailDeleted) return null;
-        return furniture.thumbnailUrl;
-    })();
-
-    const removeThumbnail = () => {
-        setForm((prev) => ({
-            ...prev,
-            thumbnail: null,
-        }));
-        setIsThumbnailDeleted(true);
-    };
 
     return (
          <div className="w-full h-[calc(100vh-120px)] flex gap-6">
 
             {/* 왼쪽 - 이미지 영역 */}
             <div className="w-2/3 h-full overflow-y-auto space-y-6 pr-2 no-scrollbar">
-                <div className="relative flex items-center justify-center ">
-                {/* 썸네일 */}
-                {thumbnailSrc ? (
-                    <img
-                        src={getThumbnail(thumbnailSrc)}
-                        className=" object-cover" />
-                ) : (
-                    <div className="h-[200px] flex items-center justify-center text-gray-400">
-                        썸네일 없음
-                    </div>
-                )}
-
-                {isEdit && (
-                    <label className="absolute inset-0 bg-black/40 flex items-center justify-center text-white opacity-0 hover:opacity-100 cursor-pointer">
-                        업로드
-                        <input
-                            type="file"
-                            hidden
-                            onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (!file) return;
-
-                                setForm((prev) => ({
-                                    ...prev,
-                                    thumbnail: {
-                                        file,
-                                        preview: URL.createObjectURL(file),
-                                    },
-                                }));
-                                setIsThumbnailDeleted(false);
-                            }}
-                        />
-                    </label>
-                )}
-                {isEdit && thumbnail && thumbnailSrc && (
-                    <button
-                        onClick={removeThumbnail}
-                        className="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1"
-                    >
-                        삭제
-                    </button>
-                )}
-            </div>
 
 
                 {/* 이미지 리스트 */}

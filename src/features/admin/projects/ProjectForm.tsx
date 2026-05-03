@@ -2,7 +2,6 @@ import ImageUploader from "../../../components/common/image-manager/ImageUploade
 import type {IProjectFormState} from "../../../types/admin/project/projectForm.ts";
 import {getThumbnail} from "../../../utils/imageUtils.ts";
 import { uploadImages as uploadProject } from "../../../api/cloudinary.project.api.ts";
-import {useState} from "react";
 interface Props {
     form: IProjectFormState;
     setForm: React.Dispatch<React.SetStateAction<IProjectFormState>>;
@@ -12,74 +11,18 @@ interface Props {
 
 export default function ProjectForm({ form, setForm, isEdit, setDeletedImages }: Props) {
     const { project, thumbnail } = form;
-    const [isThumbnailDeleted, setIsThumbnailDeleted] = useState(false);
+
 
     const thumbnailSrc = (() => {
         if (thumbnail?.preview || thumbnail?.imageUrl) {
             return thumbnail.preview || thumbnail.imageUrl;
         }
-        if (isThumbnailDeleted) return null;
+
         return project.thumbnailUrl;
     })();
 
-
-    const removeThumbnail = () => {
-        setForm((prev) => ({
-            ...prev,
-            thumbnail: null,
-        }));
-        setIsThumbnailDeleted(true);
-    };
     return (
         <div className="space-y-4">
-
-            {/* 썸네일 */}
-            <section className="border p-2 bg-white shadow-sm">
-                <div className="relative  flex items-center justify-center bg-gray-100">
-
-                    {thumbnailSrc ? (
-                        <img
-                            src={getThumbnail(thumbnailSrc)}
-                             className=" object-cover" />
-                    ) : (
-                        <div className="h-[200px] flex items-center justify-center text-gray-400">
-                            썸네일 없음
-                        </div>
-                    )}
-
-                    {isEdit && (
-                        <label className="absolute inset-0 bg-black/40 flex items-center justify-center text-white opacity-0 hover:opacity-100 cursor-pointer">
-                            업로드
-                            <input
-                                type="file"
-                                hidden
-                                onChange={(e: any) => {
-                                    const file = e.target.files?.[0];
-                                    if (!file) return;
-
-                                    setForm((prev) => ({
-                                        ...prev,
-                                        thumbnail: {
-                                            file,
-                                            preview: URL.createObjectURL(file),
-                                        },
-                                    }));
-                                    setIsThumbnailDeleted(false);
-                                }}
-                            />
-                        </label>
-                    )}
-
-                    {isEdit && thumbnail && thumbnailSrc && (
-                        <button
-                            onClick={removeThumbnail}
-                            className="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1"
-                        >
-                            삭제
-                        </button>
-                    )}
-                </div>
-            </section>
 
             {/* 이미지 */}
             <ImageUploader
