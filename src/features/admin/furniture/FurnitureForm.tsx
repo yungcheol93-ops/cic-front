@@ -1,7 +1,5 @@
 import type {IFurnitureFormState} from "../../../types/admin/furniture/furnitureForm.ts";
 import ImageUploader from "../../../components/common/image-manager/ImageUploader.tsx";
-import {getThumbnail} from "../../../utils/imageUtils.ts";
-import {useState} from "react";
 import { uploadImages as uploadFurniture } from "../../../api/cloudinary.furniture.api.ts";
 
 interface Props {

@@ -1,6 +1,5 @@
 import ImageUploader from "../../../components/common/image-manager/ImageUploader.tsx";
 import type {IProjectFormState} from "../../../types/admin/project/projectForm.ts";
-import {getThumbnail} from "../../../utils/imageUtils.ts";
 import { uploadImages as uploadProject } from "../../../api/cloudinary.project.api.ts";
 interface Props {
     form: IProjectFormState;
@@ -12,14 +11,6 @@ interface Props {
 export default function ProjectForm({ form, setForm, isEdit, setDeletedImages }: Props) {
     const { project, thumbnail } = form;
 
-
-    const thumbnailSrc = (() => {
-        if (thumbnail?.preview || thumbnail?.imageUrl) {
-            return thumbnail.preview || thumbnail.imageUrl;
-        }
-
-        return project.thumbnailUrl;
-    })();
 
     return (
         <div className="space-y-4">
