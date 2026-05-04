@@ -14,8 +14,8 @@ export const getCroppedImg = async (imageSrc: string, pixelCrop: any): Promise<B
 
     if (!ctx) throw new Error("Canvas context를 생성할 수 없습니다.");
 
-    canvas.width = pixelCrop.width;
-    canvas.height = pixelCrop.height;
+    canvas.width = Math.ceil(pixelCrop.width);
+    canvas.height = Math.ceil(pixelCrop.height);
 
     ctx.drawImage(
         image,
@@ -25,15 +25,15 @@ export const getCroppedImg = async (imageSrc: string, pixelCrop: any): Promise<B
         pixelCrop.height,
         0,
         0,
-        pixelCrop.width,
-        pixelCrop.height
+        canvas.width,
+        canvas.height
     );
 
     return new Promise((resolve, reject) => {
         canvas.toBlob((blob) => {
             if (!blob) reject(new Error("Canvas가 비어있습니다."));
             else resolve(blob);
-        }, "image/jpeg");
+        }, "image/jpeg",0.85);
     });
 };
 /**
