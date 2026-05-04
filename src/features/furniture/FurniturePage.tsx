@@ -17,7 +17,7 @@ export default function FurniturePage() {
     }, []);
 
     return (
-        <div className="h-full min-h-screen pt-24">
+        <div className="h-full min-h-screen">
             <div className="space-y-6">
                 <div className="space-y-4">
                     {furnitures.map((f) => (
@@ -26,6 +26,8 @@ export default function FurniturePage() {
                             className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10 items-start cursor-pointer pb-10"
                             onClick={() => navigate(`/Works/Furniture/${f.furnitureCode}`)}
                         >
+                            {/* 오른쪽 여백 */}
+                            <div className="hidden md:block"></div>
                             {/* 중앙 이미지 */}
                             <div className="w-full aspect-square overflow-hidden bg-zinc-50">
                                 <img
@@ -56,8 +58,7 @@ export default function FurniturePage() {
                                 </div>
                             </div>
 
-                            {/* 오른쪽 여백 */}
-                            <div className="hidden md:block"></div>
+
                         </section>
                     ))}
                 </div>
