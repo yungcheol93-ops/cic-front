@@ -8,7 +8,7 @@ export interface IFurniture {
     title: string;
     width: string;
     height: string;
-    volume: string;
+    depth: string;
     description: string;
 
     thumbnailUrl?: string;

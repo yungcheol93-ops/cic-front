@@ -81,8 +81,9 @@ export default function AdminFurnitureListPage() {
                                     <p className="text-sm md:text-md text-zinc-700">{f.title}</p>
                                     <div className="flex text-xs md:text-sm text-zinc-800 leading-none">
                                         <p className="text-xs text-zinc-500">{f.width}*</p>
-                                        <p className="text-xs text-zinc-500">{f.height}*</p>
-                                        <p className="text-xs text-zinc-500">{f.volume}</p>
+                                        <p className="text-xs text-zinc-500">{f.depth}*</p>
+                                        <p className="text-xs text-zinc-500">{f.height}</p>
+
                                     </div>
                                     <div className="flex items-center gap-2 mt-2">
 

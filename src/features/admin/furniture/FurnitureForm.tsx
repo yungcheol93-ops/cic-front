@@ -59,8 +59,8 @@ export default function FurnitureForm({ form, setForm, isEdit, setDeletedImages 
                             { label: "code", key: "furnitureCode" },
                             { label: "title", key: "title" },
                             { label: "width", key: "width" },
+                            { label: "depth", key: "depth" },
                             { label: "height", key: "height" },
-                            { label: "volume", key: "volume" },
                         ].map(({ label, key }) => (
                             <div key={key}>
                                 <span className="text-gray-400">{label} : </span>

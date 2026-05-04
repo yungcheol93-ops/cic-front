@@ -110,7 +110,7 @@ export default function AdminHomeImagesPage() {
     };
 
     return (
-        <div className="p-10 space-y-10">
+        <div className=" space-y-10">
             <div className="flex justify-between items-center border-b pb-5">
                 <div>
                     <h1 className="text-2xl font-bold">홈 이미지 관리</h1>

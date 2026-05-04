@@ -98,7 +98,7 @@ export default function FurnitureDetailPage() {
                         {furniture.title}
                     </p>
                     <p className="text-sm text-zinc-500">
-                        {furniture.width} * {furniture.height} * {furniture.volume}
+                        {furniture.width} * {furniture.height} * {furniture.depth}
                     </p>
 
                     {/* 웹에서는 설명글이 길어질 경우 대비하여 개별 스크롤 가능하게 설정 */}

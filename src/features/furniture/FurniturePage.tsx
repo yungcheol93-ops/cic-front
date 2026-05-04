@@ -26,9 +26,6 @@ export default function FurniturePage() {
                             className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10 items-start cursor-pointer pb-10"
                             onClick={() => navigate(`/Works/Furniture/${f.furnitureCode}`)}
                         >
-                            {/* 왼쪽 여백 */}
-                            <div className="hidden md:block"></div>
-
                             {/* 중앙 이미지 */}
                             <div className="w-full aspect-square overflow-hidden bg-zinc-50">
                                 <img
@@ -53,10 +50,14 @@ export default function FurniturePage() {
 
                                 <div className="flex text-xs md:text-sm text-zinc-800 leading-none">
                                     <p className="text-xs text-zinc-500">{f.width}*</p>
-                                    <p className="text-xs text-zinc-500">{f.height}*</p>
-                                    <p className="text-xs text-zinc-500">{f.volume}</p>
+                                    <p className="text-xs text-zinc-500">{f.depth}*</p>
+                                    <p className="text-xs text-zinc-500">{f.height}</p>
+
                                 </div>
                             </div>
+
+                            {/* 오른쪽 여백 */}
+                            <div className="hidden md:block"></div>
                         </section>
                     ))}
                 </div>
