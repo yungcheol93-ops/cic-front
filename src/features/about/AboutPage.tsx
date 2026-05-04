@@ -38,7 +38,7 @@ export default function AboutPage() {
                         alt="About"
                     />
                 ) : (
-                    /* 2. 데이터는 왔지만 이미지 URL이 없을 때 보여줄 회색 사각형 */
+
                     <div className="w-full h-full bg-zinc-200 flex items-center justify-center text-zinc-400">
                         No Image Available
                     </div>

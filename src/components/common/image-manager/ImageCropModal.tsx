@@ -9,6 +9,7 @@ interface Props {
     onClose: () => void;
 }
 
+
 export default function ImageCropModal({ image, onCropComplete, onClose }: Props) {
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
