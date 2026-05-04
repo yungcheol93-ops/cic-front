@@ -33,7 +33,7 @@ export const getCroppedImg = async (imageSrc: string, pixelCrop: any): Promise<B
         canvas.toBlob((blob) => {
             if (!blob) reject(new Error("Canvas가 비어있습니다."));
             else resolve(blob);
-        }, "image/jpeg",0.85);
+        }, "image/jpeg", 0.85);
     });
 };
 /**

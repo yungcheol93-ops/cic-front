@@ -20,7 +20,6 @@ export default function ImageCropModal({ image, onCropComplete, onClose }: Props
         document.body.style.overflow = "hidden";
 
         return () => {
-            // 모달 닫힐 때 복구
             document.body.style.overflow = originalStyle;
         };
     }, []);
