@@ -90,6 +90,7 @@ export default function ImageUploader({
 
     return (
         <div className="space-y-1">
+
             {/* 썸네일 */}
             <ThumbnailUploader
                 thumbnail={thumbnail}

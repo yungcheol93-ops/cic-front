@@ -17,7 +17,7 @@ export default function FurniturePage() {
     }, []);
 
     return (
-        <div className="h-full min-h-screen">
+        <div className="h-full min-h-screen pt-24">
             <div className="space-y-6">
                 <div className="space-y-4">
                     {furnitures.map((f) => (
