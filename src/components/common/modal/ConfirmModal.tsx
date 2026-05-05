@@ -30,7 +30,7 @@ export default function ConfirmModal({
                         onClick={onConfirm}
                         className="px-3 py-1 text-xs bg-red-500 text-white rounded"
                     >
-                        취소
+                        삭제
                     </button>
                 </div>
             </div>
