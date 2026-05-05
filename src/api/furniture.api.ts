@@ -6,8 +6,6 @@ export const getAdminFurniture = (furnitureId: number) => api.get(`/admin/furnit
 export const createAdminFurniture = (dto: any) => api.post(`/admin/furniture`, dto);
 export const patchAdminFurniture = (furnitureId: number, dto: any) => api.patch(`/admin/furniture/${furnitureId}`, dto);
 export const deleteAdminFurniture = (furnitureId: number) => api.patch(`/admin/furniture/${furnitureId}/delete`);
-export const restoreFurniture = (furnitureId: number) => api.patch(`/admin/furniture/${furnitureId}/restore`);
-export const getDeletedFurnitures = () => api.get('/admin/furniture/trash');
 export const togglePublic = (furnitureId: number, isPublic: boolean) =>
     api.patch(`/admin/furniture/${furnitureId}/public`, null, { params: { isPublic } });
 export const updateFurnitureOrder = (dto: { id: number; displayOrder: number }[]) => api.patch(`/admin/furniture/order`,dto);
