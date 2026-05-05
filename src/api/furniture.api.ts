@@ -10,6 +10,7 @@ export const restoreFurniture = (furnitureId: number) => api.patch(`/admin/furni
 export const getDeletedFurnitures = () => api.get('/admin/furniture/trash');
 export const togglePublic = (furnitureId: number, isPublic: boolean) =>
     api.patch(`/admin/furniture/${furnitureId}/public`, null, { params: { isPublic } });
+export const updateFurnitureOrder = (dto: { id: number; displayOrder: number }[]) => api.patch(`/admin/furniture/order`,dto);
 
 // 사용자/공개 관련
 export const getPublicFurnitureList = () => api.get('/public/furniture');

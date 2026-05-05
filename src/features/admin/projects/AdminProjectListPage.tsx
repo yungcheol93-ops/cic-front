@@ -1,62 +1,143 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {deleteAdminProject, getAdminProjectList, togglePublic} from "../../../api/project.api.ts";
+import {
+    deleteAdminProject,
+    getAdminProjectList,
+    togglePublic,
+    updateProjectOrder,
+} from "../../../api/project.api.ts";
+import SortableList from "../../../components/common/displayOrder/SortableList.tsx";
+import AlertModal from "../../../components/common/modal/AlertModal.tsx";
+import ConfirmModal from "../../../components/common/modal/ConfirmModal.tsx";
 
 export default function AdminProjectListPage() {
-
     const navigate = useNavigate();
+
     const [projects, setProjects] = useState<any[]>([]);
+    const [deleteId, setDeleteId] = useState<number | null>(null);
+    const [isEditOrder, setIsEditOrder] = useState(false);
+    const [tempList, setTempList] = useState<any[]>([]);
+    const [statusMessage, setStatusMessage] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        getAdminProjectList().then(res => {
-            console.log(res.data);
+        getAdminProjectList().then((res) => {
             setProjects(res.data);
         });
     }, []);
 
+    // 공개 토글
     const handleToggle = async (id: number, current: boolean) => {
         await togglePublic(id, !current);
         const res = await getAdminProjectList();
         setProjects(res.data);
     };
 
-    const handleDelete = async (id: number) => {
-        const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
-        if (!confirmDelete) return;
+    // 삭제
+    const handleDeleteClick = (id: number) => {
+        setDeleteId(id);
+    };
 
-        try {
-            await deleteAdminProject(id);
+    const handleConfirmDelete = async () => {
+        if (!deleteId) return;
 
-            // 리스트 갱신
-            setProjects((prev) => prev.filter((p) => p.id !== id));
+        await deleteAdminProject(deleteId);
+        setProjects((prev) => prev.filter((p) => p.id !== deleteId));
+        setDeleteId(null);
+        setStatusMessage("삭제 완료");
+    };
 
-        } catch (e) {
-            console.error(e);
-            alert("삭제 실패");
-        }
+    // 순서 저장
+    const handleOrderChange = async (newList: any[]) => {
+        const dto = newList.map((item, index) => ({
+            id: item.id,
+            displayOrder: index + 1,
+        }));
+
+        await updateProjectOrder(dto);
+        setProjects(newList);
+        setTempList([]);
+        setStatusMessage("순서 변경 완료");
+        setIsEditOrder(false);
     };
 
     return (
         <div className="h-full min-h-screen px-16">
-            <div className="flex items-start justify-between gap-6 mb-6">
+            {/* 상단 */}
+            <div className="flex items-center justify-between mb-6">
                 <h1 className="text-md md:text-3xl font-cic font-light uppercase">
                     프로젝트 리스트
                 </h1>
-                <button
-                    type="button"
-                    className="px-3 py-1.5 bg-zinc-900 text-white rounded text-xs hover:bg-zinc-800 transition-colors"
-                    onClick={() => navigate("/admin/project/create")}
-                >
-                    프로젝트 등록
-                </button>
+
+                <div className="flex gap-2">
+                    {!isEditOrder ? (
+                        <>
+                            <button
+                                onClick={() => {
+                                    setIsEditOrder(true);
+                                    setTempList(projects);
+                                }}
+                                className="px-3 py-1.5 bg-zinc-200 text-xs rounded hover:bg-zinc-300"
+                            >
+                                순서 변경
+                            </button>
+
+                            <button
+                                onClick={() => navigate("/admin/project/create")}
+                                className="px-3 py-1.5 bg-zinc-900 text-white text-xs rounded"
+                            >
+                                프로젝트 등록
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <button
+                                onClick={() => {
+                                    setIsEditOrder(false);
+                                }}
+                                className="px-3 py-1.5 bg-gray-200 text-xs rounded"
+                            >
+                                취소
+                            </button>
+
+                            <button
+                                onClick={() => handleOrderChange(tempList)}
+                                className="px-3 py-1.5 bg-black text-white text-xs rounded"
+                            >
+                                저장
+                            </button>
+                        </>
+                    )}
+                </div>
             </div>
 
-            <div className="space-y-6">
-                <div className="space-y-4">
-                    {projects.map((p) => (
+            {/* 리스트 */}
+            <div className="space-y-4">
+
+                {isEditOrder ? (
+                    <SortableList
+                        items={tempList}
+                        getId={(p) => p.id}
+                        onChangeOrder={(newList) => setTempList(newList)}
+                        renderItem={(p) => (
+                            <section className="grid grid-cols-1 md:grid-cols-2 gap-6 py-6 bg-white cursor-grab border rounded">
+                                <img
+                                    src={p.thumbnailUrl}
+                                    className="w-full h-[200px] object-cover rounded"
+                                />
+                                <div>
+                                    <p>{p.projectCode}</p>
+                                    <p>{p.completion}</p>
+                                </div>
+                            </section>
+                        )}
+                    />
+                ) : (
+
+                    projects.map((p) => (
                         <section
                             key={p.id}
-                            className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-start cursor-pointer py-6"
+                            className="grid grid-cols-1 md:grid-cols-2 gap-6 py-6 cursor-pointer"
                             onClick={() => navigate(`/Admin/Project/${p.id}`)}
                         >
                             {/* 이미지 */}
@@ -67,14 +148,12 @@ export default function AdminProjectListPage() {
                             />
 
                             {/* 텍스트 */}
-                            <div className="w-full text-left rounded p-2 md:p-4 flex flex-col justify-between gap-4 hover:bg-zinc-50 transition">
+                            <div className="p-2 md:p-4 flex flex-col justify-between gap-4 hover:bg-zinc-50">
+                                <div className="space-y-2">
+                                    <p>{p.projectCode}.</p>
+                                    <p>{p.completion}</p>
 
-                                <div className="flex flex-col justify-center space-y-2 md:space-y-2">
-                                    <p className="text-sm md:text-md text-zinc-700">{p.projectCode}.</p>
-                                    <p className="text-sm md:text-md text-zinc-700">{p.completion}</p>
-
-                                    <div className="flex items-center gap-2 mt-2">
-
+                                    <div className="flex gap-2 mt-2">
                                         {/* 공개 토글 */}
                                         <button
                                             onClick={(e) => {
@@ -94,21 +173,35 @@ export default function AdminProjectListPage() {
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                handleDelete(p.id);
+                                                handleDeleteClick(p.id);
                                             }}
                                             className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded"
                                         >
                                             삭제
                                         </button>
-
                                     </div>
                                 </div>
                             </div>
                         </section>
-                    ))}
-                </div>
+                    ))
+                )}
             </div>
+            <AlertModal
+                open={!!statusMessage}
+                message={statusMessage || ""}
+                onClose={() => setStatusMessage(null)}
+            />
+            <ConfirmModal
+                open={deleteId !== null}
+                message="정말 삭제하시겠습니까?"
+                onCancel={() => setDeleteId(null)}
+                onConfirm={handleConfirmDelete}
+            />
+            <AlertModal
+                open={!!error}
+                message={error || ""}
+                onClose={() => setError(null)}
+            />
         </div>
     );
 }
-

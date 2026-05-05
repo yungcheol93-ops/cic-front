@@ -71,7 +71,6 @@ function buildMenus(auth: AuthState | null): Menu[] {
 
         const navigate = useNavigate();
         const location = useLocation();
-        console.log("auth:", auth);
 
         const routeMainKey = useMemo(() => {
             const path = location.pathname;
