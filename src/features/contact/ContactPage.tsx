@@ -8,6 +8,10 @@ export default function ContactPage() {
     const [statusMessage, setStatusMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
+
+    const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSending(true);
@@ -39,102 +43,46 @@ export default function ContactPage() {
             </section>
 
             {/* 핵심: 2:1 레이아웃 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 md:gap-20">
+            <div className="grid grid-cols-1 md:grid-cols-3 md:gap-20 md:items-stretch pt-10">
 
-                {/*  좌측 (2) - 폼 */}
-                <div className="md:col-span-2 order-2 md:order-1">
-                    <form ref={formRef} onSubmit={handleSubmit}
-                          className="max-w-md flex flex-col mt-24 md:mt-0 min-h-[70vh]">
-                        <div className="space-y-0 md:space-y-2 text-sm order-1 md:order-2 text-left">
-                            <div className="flex items-center gap-2 md:gap-4 text-sm">
-                                <span className="w-24 shrink-0">고객명 :</span>
-                                <input
-                                name="user_name"
-                                required
-                                placeholder="고객명"
-                                className="flex-1 p-2 focus:outline-none "/>
-                            </div>
-                            <div className="flex items-center gap-2 md:gap-4 ">
-                                <span className="w-24 shrink-0 ">연락처 :</span>
-                                <input
-                                    name="user_contact"
-                                    required
-                                    placeholder="010-1234-5678"
-                                    className="flex-1 p-2 focus:outline-none "/>
-                            </div>
-                            <div className="flex items-center gap-2 md:gap-4 ">
-                                <span className="w-24 shrink-0">공사 예정지 :</span>
-                                <input
-                                    name="location"
-                                    placeholder="서울시 강동구"
-                                    className="flex-1 p-2 focus:outline-none "/>
-                            </div>
-                            <div className="flex items-center gap-2 md:gap-4">
-                                <span className="w-24 shrink-0">공사 시기 :</span>
-                                <input
-                                    name="period"
-                                    placeholder="2026.12"
-                                    className="flex-1 p-2 focus:outline-none "/>
-                            </div>
-                            <div className="flex items-center gap-2 md:gap-4">
-                                <span className="w-24 shrink-0">예산 :</span>
-                                <input
-                                    name="budget"
-                                    placeholder="00만원"
-                                    className="flex-1 p-2 focus:outline-none "/>
-                            </div>
-                            <div className="mt-auto md:pt-4">
-                                <div className=" gap-2 md:gap-4">
-                                    <p className="text-sm mb-2">문의 내용</p>
-                                    <textarea
-                                        name="message"
-                                        required
-                                        placeholder="문의 내용은 자유롭게 적어주시면 됩니다."
-                                        className="w-full border border-gray-300 p-2 h-40 md:h-56"
-                                    />
-                                </div>
-                                <div className="flex justify-center md:mt-1">
-                                    <button
-                                        type="submit"
-                                        disabled={isSending}
-                                        className="w-full md:w-auto px-10 py-3 bg-black text-white  hover:bg-gray-800 disabled:bg-gray-400 active:scale-[0.98] transition"
-                                    >
-                                        {isSending ? "전송 중..." : "상담 문의하기"}
-                                    </button>
-                                </div>
-                             </div>
-                        </div>
-                    </form>
+                {/* 좌측 (2) - 이미지 */}
+                <div className="hidden md:flex md:col-span-2 order-2 md:order-1">
+                    <img
+                        src="/images/contact/contact.png"
+                        alt="contact"
+                        className="w-full h-auto max-h-[350px] object-contain"
+                    />
                 </div>
 
                 {/* 우측 (1) - SNS 영역 */}
-                <div className="order-1 md:order-2 md:min-h-0 flex flex-col justify-start pt-10 md:pt-0 space-y-6">
+                <div className="order-1 md:order-2 md:min-h-0 flex flex-col ">
+                {/*<div className="order-1 md:order-2 md:min-h-0 flex flex-col justify-start">*/}
                     {/* 모바일 CONTACT */}
                     <h1 className="text-2xl font-light tracking-wide text-center md:hidden pb-16">
-                        CONTACT
+                            CONTACT
                     </h1>
 
-                    <div className="space-y-1">
+                    <div className="space-y-2">
                         <p className="text-sm gap-2">
                             <span className="w-5">CIC Studio</span>
                         </p>
-                        <p className="text-sm   gap-2">
+                        <p className="text-sm gap-2">
                             <span className="w-5">씨아이씨스튜디오</span>
                         </p>
                     </div>
-                    <div className="space-y-1">
+                    <div className=" pt-6">
                         <a
                             href="https://map.kakao.com/link/search/강동구 풍성로42길 22"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="block"
                         >
-                            <p className="text-sm  ">
+                            <p className="text-sm">
                                 서울시 강동구 풍성로42길 22, 102
                             </p>
                         </a>
                     </div>
-                    <div className="space-y-1">
+                    <div className="space-y-2 pt-6">
                         <a href="tel:024769116" className="flex gap-2 text-sm ">
                             <span className="w-5">T.</span>
                             <span>02-476-9116</span>
@@ -154,7 +102,7 @@ export default function ContactPage() {
                             <span>cicstudio@cicworks.com</span>
                         </a>
                     </div>
-                    <div className="space-y-1">
+                    <div className=" pt-6">
                         {/* 인스타 */}
                         <a
                             href="https://www.instagram.com/cic_studio_/"
@@ -164,7 +112,7 @@ export default function ContactPage() {
                             <p className="text-sm ">Instagram</p>
                         </a>
                     </div>
-                    <div className="space-y-1">
+                    <div className=" pt-6">
                         {/* 블로그 */}
                         <a
                             href="https://blog.naver.com/cic_studio"
@@ -174,8 +122,99 @@ export default function ContactPage() {
                             <p className="text-sm ">Blog</p>
                         </a>
                     </div>
+                    <div className="flex pt-6">
+                        <button
+                            type="button"
+                            onClick={() => setIsContactModalOpen(true)}
+                            className="text-sm underline underline-offset-4 hover:opacity-70 transition"
+                        >
+                            Project Inquiry
+                        </button>
+                    </div>
                 </div>
             </div>
+            {isContactModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+                    <div className="bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 relative">
+                        <button
+                            type="button"
+                            onClick={() => setIsContactModalOpen(false)}
+                            className="absolute top-4 right-4 text-2xl"
+                        >
+                            ×
+                        </button>
+
+                        <form
+                            ref={formRef}
+                            onSubmit={async (e) => {
+                                await handleSubmit(e);
+                                setIsContactModalOpen(false);
+                            }}
+                            className="space-y-4"
+                        >
+                                <div className="space-y-0 md:space-y-2 text-sm order-1 md:order-2 text-left">
+                                    <div className="flex items-center gap-2 md:gap-4 text-sm">
+                                        <span className="w-24 shrink-0">고객명 :</span>
+                                        <input
+                                            name="user_name"
+                                            required
+                                            placeholder="고객명"
+                                            className="flex-1 p-2 focus:outline-none "/>
+                                    </div>
+                                    <div className="flex items-center gap-2 md:gap-4 ">
+                                        <span className="w-24 shrink-0 ">연락처 :</span>
+                                        <input
+                                            name="user_contact"
+                                            required
+                                            placeholder="010-1234-5678"
+                                            className="flex-1 p-2 focus:outline-none "/>
+                                    </div>
+                                    <div className="flex items-center gap-2 md:gap-4 ">
+                                        <span className="w-24 shrink-0">공사 예정지 :</span>
+                                        <input
+                                            name="location"
+                                            placeholder="서울시 강동구"
+                                            className="flex-1 p-2 focus:outline-none "/>
+                                    </div>
+                                    <div className="flex items-center gap-2 md:gap-4">
+                                        <span className="w-24 shrink-0">공사 시기 :</span>
+                                        <input
+                                            name="period"
+                                            placeholder="2026.12"
+                                            className="flex-1 p-2 focus:outline-none "/>
+                                    </div>
+                                    <div className="flex items-center gap-2 md:gap-4">
+                                        <span className="w-24 shrink-0">예산 :</span>
+                                        <input
+                                            name="budget"
+                                            placeholder="00만원"
+                                            className="flex-1 p-2 focus:outline-none "/>
+                                    </div>
+                                    <div className="mt-auto md:pt-4">
+                                        <div className=" gap-2 md:gap-4">
+                                            <p className="text-sm mb-2">문의 내용</p>
+                                            <textarea
+                                                name="message"
+                                                required
+                                                placeholder="문의 내용은 자유롭게 적어주시면 됩니다."
+                                                className="w-full border border-gray-300 p-2 h-40 md:h-56"
+                                            />
+                                        </div>
+                                        <div className="flex justify-center md:mt-1">
+                                            <button
+                                                type="submit"
+                                                disabled={isSending}
+                                                className="w-full md:w-auto px-10 py-3 bg-black text-white  hover:bg-gray-800 disabled:bg-gray-400 active:scale-[0.98] transition"
+                                            >
+                                                {isSending ? "전송 중..." : "상담 문의하기"}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                    </div>
+                </div>
+            )}
             <AlertModal
                 open={!!statusMessage}
                 message={statusMessage || ""}
