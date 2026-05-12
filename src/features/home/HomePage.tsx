@@ -78,7 +78,7 @@ export default function HomePage() {
                 ) : (
                     <div className="absolute inset-0 bg-gray-800"/>
                 )}
-                <div className="absolute inset-0 bg-black/35"/>
+                <div className="absolute inset-0 bg-black/25"/>
             </div>
         </div>
     );
