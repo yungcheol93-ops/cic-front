@@ -13,7 +13,7 @@ export default function Layout({  isScrollable = true }) {
     const isHome = location.pathname === "/";
 
     return (
-        <div className={`w-full h-screen overflow-hidden ${isHome ? "bg-transparent" : "bg-white"}`}>
+        <div className={`w-full h-screen overflow-hidden ${isHome ? "" : "bg-white"}`}>
 
             {/* 1. 모바일 헤더 (768px 미만에서만 보임) */}
             <header className="md:hidden h-[60px] flex items-center">
@@ -31,7 +31,7 @@ export default function Layout({  isScrollable = true }) {
                 {/* 메인 컨텐츠 영역: 남는 공간을 모두 차지(flex-1) */}
                 <main className={`flex-1 h-full relative pt-14 pb-8 ${
                     isHome 
-                        ? "overflow-hidden bg-transparent"
+                        ? "overflow-hidden"
                         : isScrollable
                             ? "overflow-y-auto no-scrollbar bg-white"
                             : "overflow-hidden bg-white"

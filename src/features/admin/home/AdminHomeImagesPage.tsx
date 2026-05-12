@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { getHomeImageList, postHomeImages, deleteHomeImage,putHomeImages } from "../../../api/home.api"; // delete API 추가 가정
 import { uploadImages } from "../../../api/cloudinary.home.api.ts";
 import AlertModal from "../../../components/common/modal/AlertModal.tsx";
+import {optimizeHomeImage} from "../../../utils/imageUtils.ts";
 
 type Slide = {
     id: number;
@@ -20,11 +21,6 @@ type UploadItem = {
     id: number;
 };
 
-const optimize = (url?: string) => {
-    if (!url) return "/images/no-image.png";
-    if (!url.includes("/upload/")) return url;
-    return url.replace("/upload/", "/upload/f_auto,q_auto,w_1920,c_limit/");
-};
 
 export default function AdminHomeImagesPage() {
     const [slides, setSlides] = useState<Slide[]>([]);
@@ -172,7 +168,7 @@ export default function AdminHomeImagesPage() {
                                 <SortableCard
                                     key={slide.id}
                                     id={slide.id}
-                                    imageUrl={optimize(slide.imageUrl)}
+                                    imageUrl={optimizeHomeImage(slide.imageUrl)}
                                     index={index}
                                     isEditing={isEditing}
                                     onDelete={() => {

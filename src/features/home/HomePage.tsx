@@ -1,7 +1,7 @@
 // src/features/home/pages/HomePage.tsx
 import { useEffect, useState } from "react";
 import {getHomeImage} from "../../api/home.api.ts";
-import {optimizeImage} from "../../utils/imageUtils.ts";
+import {optimizeHomeImage} from "../../utils/imageUtils.ts";
 
 
 type Slide = {
@@ -12,11 +12,13 @@ type Slide = {
 };
 
 
+
 export default function HomePage() {
 
     const [slides, setSlides] = useState<Slide[]>([]);
     const [index, setIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+
 
     useEffect(() => {
         const fetchSlides = async () => {
@@ -60,7 +62,7 @@ export default function HomePage() {
                         return (
                             <img
                                 key={slide.id}
-                                src={optimizeImage(slide.imageUrl)}
+                                src={optimizeHomeImage(slide.imageUrl)}
                                 alt=""
                                 // 첫 번째 이미지는 즉시 로드(eager), 나머지는 천천히(lazy)
                                 loading={isFirst ? "eager" : "lazy"}

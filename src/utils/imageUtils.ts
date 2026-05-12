@@ -62,3 +62,13 @@ export const optimizeImage = (url?: string, width: number = 700) => {
         `/upload/f_auto,q_auto:best,w_${width},c_limit,dpr_auto/`
     );
 };
+
+export const optimizeHomeImage = (url?: string) => {
+    if (!url) return "/images/no-image.png";
+    if (!url.includes("/upload/")) return url;
+
+    return url.replace(
+        "/upload/",
+        "/upload/f_auto,q_auto,w_3840,c_limit/"
+    );
+};
