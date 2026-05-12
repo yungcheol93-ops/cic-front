@@ -46,9 +46,11 @@ export default function AdminFurnitureListPage() {
 
     // 순서 저장
     const handleOrderChange = async (newList: any[]) => {
+        const total = newList.length;
+
         const dto = newList.map((item, index) => ({
             id: item.id,
-            displayOrder: index + 1,
+            displayOrder: total - index,
         }));
 
         await updateFurnitureOrder(dto);
