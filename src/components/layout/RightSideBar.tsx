@@ -8,7 +8,7 @@ export default function RightSideBar({ isHome }: { isHome: boolean }) {
             */}
             <div className="lg:pl-12 grid text-right">
                 <div className="text-xs md:text-xs  space-y-1">
-                    <p className="font-medium">씨아이씨스튜디오</p>
+                    <p className="font-medium">CIC</p>
                     <p>서울 강동구 풍성로 42길 22, 102</p>
                     <p>T. 02-476-9116</p>
                     <p>E. cicstudio@cicworks.com</p>

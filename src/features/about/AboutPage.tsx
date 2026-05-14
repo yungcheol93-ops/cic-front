@@ -46,7 +46,7 @@ export default function AboutPage() {
             </section>
 
             {/* 브랜드 소개 */}
-            <section className="absolute bottom-0 mt-6 mb-10 text-right px-2 md:px-0 w-full">
+            <section className="absolute bottom-0 mt-6 mb-10 text-center px-2 md:px-0 w-full">
                 <p className="text-gray-600 leading-relaxed whitespace-pre-line text-sm">
                     {data?.content }
                 </p>
