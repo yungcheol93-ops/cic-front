@@ -53,8 +53,8 @@ export default function AboutPage() {
             </section>
 
             {/* 브랜드 소개 */}
-            <section className="mt-[15px] mb-10 px-4 md:px-0 w-full">
-                <p className="text-gray-600 leading-relaxed whitespace-pre-line text-sm md:text-base text-center">
+            <section className="mt-10 mb-10 px-4 md:px-0 w-full">
+                <p className="text-gray-600 leading-relaxed whitespace-pre-line text-sm text-center">
                     {data?.content}
                 </p>
             </section>
