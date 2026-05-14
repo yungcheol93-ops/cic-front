@@ -14,39 +14,45 @@ export default function Layout({  isScrollable = true }) {
 
     return (
         <div className={`w-full h-screen overflow-hidden ${isHome ? "" : "bg-white"}`}>
-
-            {/* 1. 모바일 헤더 (768px 미만에서만 보임) */}
+            {/* 모바일 헤더 */}
             <header className="md:hidden h-[60px] flex items-center">
                 <MobileHeader isHome={isHome} />
             </header>
 
-            {/* 2. 데스크탑 레이아웃 (768px 이상에서만 flex로 작동) */}
+            {/* 데스크탑 레이아웃 */}
             <div className="hidden md:flex w-full h-full">
-
-                {/* 왼쪽 사이드바: vw 대신 고정 너비 사용 (화면 크기에 따라 너비 조절) */}
-                <aside className="flex-none w-[180px] lg:w-[220px] xl:w-[270px] h-full px-8 pt-14 pb-8 flex flex-col justify-between ">
+                {/* 왼쪽 사이드바 */}
+                <aside className="flex-none w-[180px] lg:w-[220px] xl:w-[270px] h-full px-8 pt-14 pb-8 flex flex-col justify-between">
                     <LeftSidebar isHome={isHome} />
                 </aside>
 
-                {/* 메인 컨텐츠 영역: 남는 공간을 모두 차지(flex-1) */}
-                <main className={`flex-1 h-full relative pt-14 pb-8 ${
-                    isHome 
-                        ? "overflow-hidden"
-                        : isScrollable
-                            ? "overflow-y-auto no-scrollbar bg-white"
-                            : "overflow-hidden bg-white"
-                }`}>
-                    <Outlet />
+                {/* 메인 콘텐츠 */}
+                <main
+                    className={`flex-1 h-full relative pt-14 pb-8 ${
+                        isHome
+                            ? "overflow-hidden"
+                            : isScrollable
+                                ? "overflow-y-auto no-scrollbar bg-white"
+                                : "overflow-hidden bg-white"
+                    }`}
+                >
+                    {/* 콘텐츠 최대 너비 제한 + 화면 기준 중앙 정렬 */}
+                    <div className="w-full max-w-[1200px] mx-auto h-full">
+                        <Outlet />
+                    </div>
                 </main>
 
-                {/* 오른쪽 사이드바/푸터 */}
-                <footer className="flex-none w-[180px] lg:w-[220px] xl:w-[270px] h-full px-6 py-8 flex flex-col justify-end ">
+                {/* 오른쪽 사이드바 */}
+                <footer className="flex-none w-[180px] lg:w-[220px] xl:w-[270px] h-full px-6 py-8 flex flex-col justify-end">
                     <RightSideBar isHome={isHome} />
                 </footer>
             </div>
 
-            {/* 3. 모바일 컨텐츠 영역 (헤더 높이 60px 제외) */}
-            <div id="mobile-container" className="md:hidden h-[calc(100vh-60px)] overflow-y-auto">
+            {/* 모바일 콘텐츠 */}
+            <div
+                id="mobile-container"
+                className="md:hidden h-[calc(100vh-60px)] overflow-y-auto"
+            >
                 <Outlet />
             </div>
         </div>
