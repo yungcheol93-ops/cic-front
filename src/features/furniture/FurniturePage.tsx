@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getPublicFurnitureList} from "../../api/furniture.api.ts";
 import {getThumbnail} from "../../utils/imageUtils.ts";
+import SEO from "../../components/seo/SEO.tsx";
 
 
 
@@ -18,6 +19,11 @@ export default function FurniturePage() {
 
     return (
         <div className="h-full min-h-screen">
+            <SEO
+                title="Furniture"
+                description="CIC Studio의 가구 작업물을 소개합니다. 공간에 맞는 맞춤 제작 가구 디자인을 확인하세요."
+                url="/works/furniture"
+            />
             <div className="space-y-6">
                 <div className="space-y-4">
                     {furnitures.map((f) => (

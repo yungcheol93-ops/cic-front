@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getPublicProjectList} from "../../../api/project.api.ts";
 import {getThumbnail, isVideoUrl} from "../../../utils/imageUtils.ts";
+import SEO from "../../../components/seo/SEO.tsx";
 
 export default function PublicProjectPage() {
     const navigate = useNavigate();
@@ -15,6 +16,11 @@ export default function PublicProjectPage() {
 
     return (
         <div className="h-full min-h-screen">
+            <SEO
+                title="Interior"
+                description="CIC Studio의 인테리어 프로젝트를 소개합니다. 주거공간부터 상업공간까지 다양한 인테리어 디자인 포트폴리오를 확인하세요."
+                url="/works/interior"
+            />
             <div className="space-y-6">
                 <div className="space-y-4">
                     {projects.map((p) => (

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import AlertModal from "../../components/common/modal/AlertModal.tsx";
+import SEO from "../../components/seo/SEO.tsx";
 
 export default function ContactPage() {
     const formRef = useRef<HTMLFormElement>(null);
@@ -35,11 +36,16 @@ export default function ContactPage() {
 
     return (
         <div className="px-4 space-y-6 md:space-y-10 h-full">
+            <SEO
+                title="Contact"
+                description="CIC Studio에 문의하세요. 서울 강동구 풍성로42길 22에 위치한 씨아이씨스튜디오입니다. 전화: 02-476-9116, 이메일: cicstudio@cicworks.com"
+                url="/contact"
+            />
             {/* 제목 */}
-            <section className="hidden md:block text-center space-y-4">
-                <h1 className="text-3xl font-light tracking-wide">
+            <section className="hidden md:block text-center space-y-4" aria-hidden="true">
+                <p className="text-3xl font-light tracking-wide">
                     CONTACT
-                </h1>
+                </p>
             </section>
 
             {/* 핵심: 2:1 레이아웃 */}
@@ -49,17 +55,16 @@ export default function ContactPage() {
                 <div className="hidden md:flex md:col-span-2 order-2 md:order-1">
                     <img
                         src="/images/contact/contact.png"
-                        alt="contact"
+                        alt="CIC Studio 연락처 안내"
                         className="w-full h-auto max-h-[350px] object-contain"
                     />
                 </div>
 
                 {/* 우측 (1) - SNS 영역 */}
                 <div className="order-1 md:order-2 md:min-h-0 flex flex-col ">
-                {/*<div className="order-1 md:order-2 md:min-h-0 flex flex-col justify-start">*/}
-                    {/* 모바일 CONTACT */}
-                    <h1 className="text-2xl font-light tracking-wide text-center md:hidden pb-16">
-                            CONTACT
+                    {/* CONTACT 제목 - 페이지의 유일한 H1 */}
+                    <h1 className="text-2xl font-light tracking-wide text-center md:text-3xl md:text-left pb-16 md:pb-4 md:hidden">
+                        CONTACT
                     </h1>
 
                     <div className="space-y-2">

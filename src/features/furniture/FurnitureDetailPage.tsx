@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getPublicFurniture, getPublicFurnitureList } from "../../api/furniture.api.ts";
 import { optimizeImage } from "../../utils/imageUtils.ts";
+import SEO from "../../components/seo/SEO.tsx";
 
 export default function FurnitureDetailPage() {
     const { furnitureCode } = useParams<{ furnitureCode: string }>();
@@ -49,6 +50,13 @@ export default function FurnitureDetailPage() {
 
     return (
         <div className="w-full flex flex-col md:flex-row bg-white">
+            <SEO
+                title={`${furnitureCode}`}
+                description={furniture.description ? furniture.description.slice(0, 120) : `CIC Studio 가구 ${furnitureCode}: ${furniture.title}`}
+                image={images[0]}
+                url={`/works/furniture/${furnitureCode}`}
+                type="article"
+            />
             {isLoading && (
                 <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
                     <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />

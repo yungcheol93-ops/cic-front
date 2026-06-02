@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAbout } from "../../api/about.api.ts";
+import SEO from "../../components/seo/SEO.tsx";
 
 export default function AboutPage() {
     const [data, setData] = useState<any>(null);
@@ -29,6 +30,12 @@ export default function AboutPage() {
 
     return (
         <div className="w-full mx-auto pb-8">
+            <SEO
+                title="About"
+                description="CIC Studio(씨아이씨스튜디오)를 소개합니다. 공간과 사람을 연결하는 인테리어 디자인 스튜디오입니다."
+                image={data?.imageUrl}
+                url="/about"
+            />
             {/* 이미지 영역 */}
             <section className="w-full flex items-center justify-center bg-zinc-50 overflow-hidden rounded-md min-h-[300px] max-h-[65vh]">
                 {data?.imageUrl ? (

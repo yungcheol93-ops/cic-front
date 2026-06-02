@@ -2,6 +2,30 @@
 import { useEffect, useState } from "react";
 import {getHomeImage} from "../../api/home.api.ts";
 import {optimizeHomeImage} from "../../utils/imageUtils.ts";
+import SEO from "../../components/seo/SEO.tsx";
+
+const HOME_JSON_LD = {
+    "@context": "https://schema.org",
+    "@type": "InteriorDesigner",
+    "name": "CIC Studio",
+    "alternateName": "씨아이씨스튜디오",
+    "url": "https://www.cicworks.com",
+    "logo": "https://www.cicworks.com/images/favicon/favicon.svg",
+    "description": "서울 강동구에 위치한 인테리어 디자인 스튜디오로, 공간 설계부터 가구 제작까지 총체적인 디자인 솔루션을 제공합니다.",
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "풍성로42길 22, 102",
+        "addressLocality": "강동구",
+        "addressRegion": "서울",
+        "addressCountry": "KR"
+    },
+    "telephone": "02-476-9116",
+    "email": "cicstudio@cicworks.com",
+    "sameAs": [
+        "https://www.instagram.com/cic_studio_/",
+        "https://blog.naver.com/cic_studio"
+    ]
+};
 
 
 type Slide = {
@@ -55,6 +79,7 @@ export default function HomePage() {
 
     return (
         <div className="relative min-h-screen">
+            <SEO url="/" jsonLd={HOME_JSON_LD} />
             <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
                 {slides.length > 0 ? (
                     slides.map((slide, i) => {

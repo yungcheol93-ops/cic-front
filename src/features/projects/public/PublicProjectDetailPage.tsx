@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPublicProject, getPublicProjectList } from "../../../api/project.api.ts";
 import { optimizeImage, isVideoUrl } from "../../../utils/imageUtils.ts";
+import SEO from "../../../components/seo/SEO.tsx";
 
 export default function PublicProjectDetailPage() {
     const { projectCode } = useParams<{ projectCode: string }>();
@@ -58,6 +59,13 @@ export default function PublicProjectDetailPage() {
 
     return (
         <div className="w-full min-h-screen bg-white flex justify-center overflow-x-hidden">
+            <SEO
+                title={`${project.projectCode}`}
+                description={project.description ? project.description.slice(0, 120) : `CIC Studio 인테리어 프로젝트 ${project.projectCode}. ${project.location || ""} ${project.type || ""}`}
+                image={images[0]}
+                url={`/works/interior/${projectCode}`}
+                type="article"
+            />
             {isLoading && (
                 <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
                     <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
