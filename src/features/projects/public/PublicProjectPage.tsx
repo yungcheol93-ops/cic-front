@@ -2,7 +2,7 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getPublicProjectList} from "../../../api/project.api.ts";
-import {getThumbnail} from "../../../utils/imageUtils.ts";
+import {getThumbnail, isVideoUrl} from "../../../utils/imageUtils.ts";
 
 export default function PublicProjectPage() {
     const navigate = useNavigate();
@@ -29,12 +29,23 @@ export default function PublicProjectPage() {
 
                             {/* 중앙 이미지 */}
                             <div className="w-full aspect-square overflow-hidden bg-zinc-50">
-                                <img
-                                    src={getThumbnail(p.thumbnailUrl)}
-                                    loading="lazy"
-                                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                                    alt={p.projectCode}
-                                />
+                                {isVideoUrl(p.thumbnailUrl) ? (
+                                    <video
+                                        src={p.thumbnailUrl}
+                                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                    />
+                                ) : (
+                                    <img
+                                        src={getThumbnail(p.thumbnailUrl)}
+                                        loading="lazy"
+                                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                        alt={p.projectCode}
+                                    />
+                                )}
                             </div>
 
                             {/* 오른쪽 텍스트 영역: 이미지 윗선과 맞춤 */}

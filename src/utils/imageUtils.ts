@@ -72,3 +72,8 @@ export const optimizeHomeImage = (url?: string) => {
         "/upload/f_auto,q_auto,w_3840,c_limit/"
     );
 };
+
+export const isVideoUrl = (url?: string): boolean => {
+    if (!url) return false;
+    return url.includes("/video/upload/") || /\.(mp4|webm|mov|avi|mkv|m4v)(\?.*)?$/i.test(url);
+};

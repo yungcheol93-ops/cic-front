@@ -8,6 +8,7 @@ import {
 } from "../../../api/project.api.ts";
 import SortableList from "../../../components/common/displayOrder/SortableList.tsx";
 import AlertModal from "../../../components/common/modal/AlertModal.tsx";
+import { isVideoUrl } from "../../../utils/imageUtils.ts";
 import ConfirmModal from "../../../components/common/modal/ConfirmModal.tsx";
 
 export default function AdminProjectListPage() {
@@ -123,10 +124,21 @@ export default function AdminProjectListPage() {
                         onChangeOrder={(newList) => setTempList(newList)}
                         renderItem={(p) => (
                             <section className="grid grid-cols-1 md:grid-cols-2 gap-6 py-6 bg-white cursor-grab border rounded">
-                                <img
-                                    src={p.thumbnailUrl}
-                                    className="w-full h-[200px] object-cover rounded"
-                                />
+                                {isVideoUrl(p.thumbnailUrl) ? (
+                                    <video
+                                        src={p.thumbnailUrl}
+                                        className="w-full h-[200px] object-cover rounded"
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                    />
+                                ) : (
+                                    <img
+                                        src={p.thumbnailUrl}
+                                        className="w-full h-[200px] object-cover rounded"
+                                    />
+                                )}
                                 <div>
                                     <p>{p.projectCode}</p>
                                     <p>{p.completion}</p>
@@ -143,11 +155,22 @@ export default function AdminProjectListPage() {
                             onClick={() => navigate(`/Admin/Project/${p.id}`)}
                         >
                             {/* 이미지 */}
-                            <img
-                                src={p.thumbnailUrl}
-                                className="w-full h-[200px] md:h-[240px] object-cover rounded"
-                                alt={p.projectCode}
-                            />
+                            {isVideoUrl(p.thumbnailUrl) ? (
+                                <video
+                                    src={p.thumbnailUrl}
+                                    className="w-full h-[200px] md:h-[240px] object-cover rounded"
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                />
+                            ) : (
+                                <img
+                                    src={p.thumbnailUrl}
+                                    className="w-full h-[200px] md:h-[240px] object-cover rounded"
+                                    alt={p.projectCode}
+                                />
+                            )}
 
                             {/* 텍스트 */}
                             <div className="p-2 md:p-4 flex flex-col justify-between gap-4 hover:bg-zinc-50">

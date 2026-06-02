@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPublicProject, getPublicProjectList } from "../../../api/project.api.ts";
-import { optimizeImage } from "../../../utils/imageUtils.ts";
+import { optimizeImage, isVideoUrl } from "../../../utils/imageUtils.ts";
 
 export default function PublicProjectDetailPage() {
     const { projectCode } = useParams<{ projectCode: string }>();
@@ -154,11 +154,22 @@ export default function PublicProjectDetailPage() {
                                     className="cursor-pointer"
                                     onClick={() => navigate(`/Works/Interior/${pl.projectCode}`)}
                                 >
-                                    <img
-                                        src={optimizeImage(pl.thumbnailUrl, 700)}
-                                        className="w-full"
-                                        alt={pl.projectCode}
-                                    />
+                                    {isVideoUrl(pl.thumbnailUrl) ? (
+                                        <video
+                                            src={pl.thumbnailUrl}
+                                            className="w-full"
+                                            autoPlay
+                                            muted
+                                            loop
+                                            playsInline
+                                        />
+                                    ) : (
+                                        <img
+                                            src={optimizeImage(pl.thumbnailUrl, 700)}
+                                            className="w-full"
+                                            alt={pl.projectCode}
+                                        />
+                                    )}
                                     <div className="mt-4 text-left">
                                         <p className="text-sm font-medium tracking-tight">{pl.projectCode}.</p>
                                         <p className="text-sm text-gray-500 mt-0.5">{pl.completion}</p>
